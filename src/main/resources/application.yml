@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: template
+  datasource:
+    url: jdbc:mysql://localhost:3306/template
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    baseline-version: 0
+    enabled: true
+    baseline-on-migrate: true
