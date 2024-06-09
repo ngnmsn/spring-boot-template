@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
-    <head>
-        <meta charset="UTF-8" />
-        <title>template</title>
-    </head>
-    <body>
-        <form method="post" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
-            <label>text1<br>
-                <input type="text" name="text1" th:field="*{text1}">
-            </label><br>
-            <input type="submit" value="検索">
-        </form>
-        <table>
-            <tr><th>id</th><th>text1</th><th>num1</th></tr>
-            <tr th:each="sampleResult : ${sampleResults}">
-                <td th:text="${sampleResult.id}"></td>
-                <td th:text="${sampleResult.text1}"></td>
-                <td th:text="${sampleResult.num1}"></td>
-            </tr>
-        </table>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <title>template</title>
+</head>
+<body>
+<form method="post" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
+    <label>text1<br>
+        <input type="text" name="text1" th:field="*{text1}">
+    </label><br>
+    <input type="submit" value="検索">
+</form>
+<table>
+    <tr><th>id</th><th>text1</th><th>num1</th></tr>
+    <tr th:each="sampleResult : ${sampleResults}">
+        <td><a th:text="${sampleResult.id}" th:href="@{/sample/{id}(id=${sampleResult.id})}"></a></td>
+        <td th:text="${sampleResult.text1}"></td>
+        <td th:text="${sampleResult.num1}"></td>
+    </tr>
+</table>
+</body>
 </html>

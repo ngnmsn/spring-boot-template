@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <title>template</title>
+</head>
+<body>
+    <div th:object="${sampleResult}">
+        <label>ID</label>
+        <p th:text="${sampleResult.id}"></p>
+        <label>TEXT1</label>
+        <p th:text="${sampleResult.text1}"></p>
+        <label>NUM1</label>
+        <p th:text="${sampleResult.num1}"></p>
+    </div>
+</body>
+</html>

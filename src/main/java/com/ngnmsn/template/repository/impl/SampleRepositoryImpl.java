@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ngnmsn.template.repository.SampleRepository;
+import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.jooq.DSLContext;
 import org.jooq.Result;
@@ -39,5 +40,17 @@ public class SampleRepositoryImpl implements SampleRepository {
         return sampleResults;
     }
 
+    @Override
+    public SampleResult findById(ULong id) {
+        Record result = jooq.select()
+                            .from(SAMPLES)
+                            .where(SAMPLES.ID.eq(id))
+                            .fetchSingle();
+        SampleResult sampleResult = new SampleResult();
+        sampleResult.setId(result.getValue(SAMPLES.ID));
+        sampleResult.setText1(result.getValue(SAMPLES.TEXT1));
+        sampleResult.setNum1(result.getValue(SAMPLES.NUM1));
 
+        return sampleResult;
+    }
 }
