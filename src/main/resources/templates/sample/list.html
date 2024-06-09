@@ -6,14 +6,8 @@
     </head>
     <body>
         <form method="post" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
-            <label>id<br>
-                <input type="number" name="id" th:field="*{id}">
-            </label><br>
             <label>text1<br>
                 <input type="text" name="text1" th:field="*{text1}">
-            </label><br>
-            <label>num1<br>
-                <input type="number" name="num1" th:field="*{num1}">
             </label><br>
             <input type="submit" value="検索">
         </form>

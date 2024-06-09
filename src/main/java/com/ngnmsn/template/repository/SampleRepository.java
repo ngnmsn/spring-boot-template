@@ -7,5 +7,5 @@ import org.jooq.types.ULong;
 import com.ngnmsn.template.domain.sample.SampleResult;
 
 public interface SampleRepository extends Serializable {
-    public List<SampleResult> search(ULong id, String text1, int num1);
+    public List<SampleResult> search(String text1);
 }

@@ -17,9 +17,7 @@ public class SampleService {
 
     public List<SampleResult> search(SampleSearchForm form) {
 
-        ULong id = form.getId();
         String text1 = form.getText1();
-        int num1 = form.getNum1();
-        return sampleRepository.search(id,text1, num1);
+        return sampleRepository.search(text1);
     }
 }

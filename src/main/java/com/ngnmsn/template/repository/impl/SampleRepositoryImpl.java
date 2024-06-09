@@ -9,7 +9,6 @@ import org.jooq.DSLContext;
 import org.jooq.Result;
 import org.jooq.Record;
 import org.springframework.stereotype.Repository;
-import org.jooq.types.ULong;
 
 import com.ngnmsn.template.domain.sample.SampleResult;
 import static com.ngnmsn.template.Tables.SAMPLES;
@@ -24,8 +23,11 @@ public class SampleRepositoryImpl implements SampleRepository {
     }
 
     @Override
-    public List<SampleResult> search(ULong id, String text1, int num1) {
-        Result<Record> results = jooq.select().from(SAMPLES).fetch();
+    public List<SampleResult> search(String text1) {
+        Result<Record> results = jooq.select()
+                                    .from(SAMPLES)
+                                    .where(SAMPLES.TEXT1.like("%" + text1 + "%"))
+                                    .fetch();
         List<SampleResult> sampleResults = new ArrayList<SampleResult>();
         for(Record r:results){
             SampleResult sampleResult = new SampleResult();
