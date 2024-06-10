@@ -11,6 +11,7 @@
     </label><br>
     <input type="submit" value="検索">
 </form>
+<a th:text="作成" th:href="@{/sample/create}"></a>
 <table>
     <tr><th>id</th><th>text1</th><th>num1</th></tr>
     <tr th:each="sampleResult : ${sampleResults}">
