@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
-import org.jooq.types.ULong;
 
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.service.SampleService;
 
 
@@ -40,5 +40,10 @@ public class SampleController {
         SampleResult sampleResult = sampleService.detail(id);
         model.addAttribute("sampleResult", sampleResult);
         return "sample/detail";
+    }
+
+    @GetMapping("/create")
+    String create(@ModelAttribute("sampleCreateForm") SampleCreateForm form, Model model){
+        return "sample/create";
     }
 }
