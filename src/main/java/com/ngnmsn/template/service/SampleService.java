@@ -1,6 +1,8 @@
 package com.ngnmsn.template.service;
 
 import java.util.List;
+
+import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.repository.SampleRepository;
@@ -28,5 +30,9 @@ public class SampleService {
     public SampleResult detail(String id) {
         ULong idStr = ULong.valueOf(id);
         return sampleRepository.findById(idStr);
+    }
+
+    public void create(SampleCreateForm form) {
+        sampleRepositoryImpl.insert(form.getText1(), form.getNum1());
     }
 }
