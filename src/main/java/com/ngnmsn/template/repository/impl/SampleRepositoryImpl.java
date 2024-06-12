@@ -53,4 +53,11 @@ public class SampleRepositoryImpl implements SampleRepository {
 
         return sampleResult;
     }
+
+    @Override
+    public void insert(String text1, int num1) {
+        jooq.insertInto(SAMPLES, SAMPLES.TEXT1, SAMPLES.NUM1)
+            .values(text1, num1)
+            .execute();
+    }
 }

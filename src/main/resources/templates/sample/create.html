@@ -5,7 +5,7 @@
     <title>template</title>
 </head>
 <body>
-<form th:object="${sampleCreateForm}">
+<form method="post" th:action="@{/sample/create/confirm}" th:object="${sampleCreateForm}">
     <label>TEXT1<br>
         <input type="text" name="text1" th:field="*{text1}">
     </label><br>
