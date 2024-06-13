@@ -60,4 +60,13 @@ public class SampleRepositoryImpl implements SampleRepository {
             .values(text1, num1)
             .execute();
     }
+
+    @Override
+    public void update(ULong id, String text1, int num1) {
+        jooq.update(SAMPLES)
+            .set(SAMPLES.TEXT1, text1)
+            .set(SAMPLES.NUM1, num1)
+            .where(SAMPLES.ID.eq(id))
+            .execute();
+    }
 }

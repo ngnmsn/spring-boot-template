@@ -5,6 +5,7 @@ import java.util.List;
 import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
+import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.repository.SampleRepository;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,14 @@ public class SampleService {
 
     public SampleResult detail(String id) {
         ULong idStr = ULong.valueOf(id);
-        return sampleRepository.findById(idStr);
+        return sampleRepositoryImpl.findById(idStr);
     }
 
     public void create(SampleCreateForm form) {
         sampleRepositoryImpl.insert(form.getText1(), form.getNum1());
+    }
+
+    public void update(ULong id, SampleUpdateForm form) {
+        sampleRepositoryImpl.update(id, form.getText1(), form.getNum1());
     }
 }
