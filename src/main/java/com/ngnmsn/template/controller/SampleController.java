@@ -31,7 +31,9 @@ public class SampleController {
     private SampleService sampleService;
 
     @GetMapping()
-    String list(@ModelAttribute("sampleSearchForm") SampleSearchForm form, Model model){
+    String list(Model model){
+        SampleSearchForm sampleSearchForm = new SampleSearchForm();
+        model.addAttribute("sampleSearchForm", sampleSearchForm);
         return "sample/list";
     }
 
@@ -50,18 +52,21 @@ public class SampleController {
     }
 
     @GetMapping("/create")
-    String create(@ModelAttribute("sampleCreateForm") SampleCreateForm form, Model model){
+    String create(Model model){
+        SampleCreateForm sampleCreateForm = new SampleCreateForm();
+        model.addAttribute("sampleCreateForm", sampleCreateForm);
         return "sample/create";
     }
 
     @PostMapping("/create/confirm")
     String createConfirm(@ModelAttribute("sampleCreateForm") SampleCreateForm form, Model model){
         session.setAttribute("sampleCreateForm", form);
+        model.addAttribute("sampleCreateForm", form);
         return "sample/create_confirm";
     }
 
     @PostMapping("/create/process")
-    String createProcess(@ModelAttribute("sampleCreateForm") SampleCreateForm form, Model model){
+    String createProcess(){
         SampleCreateForm createForm = (SampleCreateForm)session.getAttribute("sampleCreateForm");
         sampleService.create(createForm);
         return "redirect:/sample/create/complete";
