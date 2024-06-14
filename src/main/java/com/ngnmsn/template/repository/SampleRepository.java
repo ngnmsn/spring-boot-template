@@ -13,4 +13,5 @@ public interface SampleRepository extends Serializable {
     public SampleResult findById(ULong id);
     public void insert(String text1, int num1);
     public void update(ULong id, String text1, int num1);
+    public void delete(ULong id);
 }

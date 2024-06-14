@@ -69,4 +69,11 @@ public class SampleRepositoryImpl implements SampleRepository {
             .where(SAMPLES.ID.eq(id))
             .execute();
     }
+
+    @Override
+    public void delete(ULong id) {
+        jooq.delete(SAMPLES)
+            .where(SAMPLES.ID.eq(id))
+            .execute();
+    }
 }

@@ -6,6 +6,7 @@
 </head>
 <body>
     <a th:text="更新" th:href="@{/sample/{id}/update(id=${sampleResult.id})}"></a>
+    <a th:text="削除" th:href="@{/sample/{id}/delete/confirm(id=${sampleResult.id})}"></a>
     <div th:object="${sampleResult}">
         <label>ID</label>
         <p th:text="${sampleResult.id}"></p>

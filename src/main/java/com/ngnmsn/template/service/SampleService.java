@@ -40,4 +40,8 @@ public class SampleService {
     public void update(ULong id, SampleUpdateForm form) {
         sampleRepositoryImpl.update(id, form.getText1(), form.getNum1());
     }
+
+    public void delete(ULong id) {
+        sampleRepositoryImpl.delete(id);
+    }
 }
