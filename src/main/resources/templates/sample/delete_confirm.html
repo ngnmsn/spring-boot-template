@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <title>template</title>
+</head>
+<body>
+<form method="post" th:action="@{/sample/{id}/delete/process(id=${sampleDeleteId})}">
+    <label>ID</label>
+    <p th:text="${sampleDeleteId}"></p>
+    <label>TEXT1</label>
+    <p th:text="${sampleDeleteForm.text1}"></p>
+    <label>NUM1</label>
+    <p th:text="${sampleDeleteForm.num1}"></p>
+    <input type="submit" value="削除">
+</form>
+</body>
+</html>

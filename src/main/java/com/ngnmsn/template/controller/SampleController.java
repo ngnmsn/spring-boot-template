@@ -2,6 +2,7 @@ package com.ngnmsn.template.controller;
 
 import java.util.List;
 
+import com.ngnmsn.template.domain.sample.*;
 import jakarta.servlet.http.HttpSession;
 import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.ui.Model;
 
-import com.ngnmsn.template.domain.sample.SampleSearchForm;
-import com.ngnmsn.template.domain.sample.SampleResult;
-import com.ngnmsn.template.domain.sample.SampleCreateForm;
-import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.service.SampleService;
 
 
@@ -109,5 +106,29 @@ public class SampleController {
     @GetMapping("/{id}/update/complete")
     String updateComplete(){
         return "sample/update_complete";
+    }
+
+    @GetMapping("/{id}/delete/confirm")
+    String deleteConfirm(@PathVariable String id, Model model){
+        SampleResult sampleResult = sampleService.detail(id);
+        SampleDeleteForm form = new SampleDeleteForm();
+        form.setText1(sampleResult.getText1());
+        form.setNum1(sampleResult.getNum1());
+        session.setAttribute("sampleDeleteId", sampleResult.getId());
+        model.addAttribute("sampleDeleteId", sampleResult.getId());
+        model.addAttribute("sampleDeleteForm", form);
+        return "sample/delete_confirm";
+    }
+
+    @PostMapping("/{id}/delete/process")
+    String deleteProcess(){
+        ULong sampleDeleteId = (ULong)session.getAttribute("sampleDeleteId");
+        sampleService.delete(sampleDeleteId);
+        return "redirect:/sample/{id}/delete/complete";
+    }
+
+    @GetMapping("/{id}/delete/complete")
+    String deleteComplete(){
+        return "sample/delete_complete";
     }
 }
