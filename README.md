@@ -34,3 +34,5 @@ Gradle > Tasks > application > bootRun
 で起動
 ### アクセス
 [http://localhost/8080/sample](http://localhost/8080/sample)でアクセス可能
+## ドキュメント
+- [ER図](./docs/er/ER.md)
