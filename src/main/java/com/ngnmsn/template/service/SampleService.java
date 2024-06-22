@@ -6,7 +6,6 @@ import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
-import com.ngnmsn.template.repository.SampleRepository;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,6 @@ import org.jooq.types.ULong;
 
 @Service
 public class SampleService {
-
-    @Autowired
-    private SampleRepository sampleRepository;
 
     @Autowired
     private SampleRepositoryImpl sampleRepositoryImpl;
