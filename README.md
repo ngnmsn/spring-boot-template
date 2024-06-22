@@ -3,6 +3,7 @@
 Spring Bootのテンプレートプロジェクト。<br>
 Spring Bootにおける基本的な処理の実装を行う。
 ## 構成要素
+- 認証
 - 基本的なCRUD
   - 一覧
   - 詳細
@@ -24,15 +25,21 @@ Spring Bootにおける基本的な処理の実装を行う。
 ### リポジトリクローン
 ```
 git clone https://github.com/ngnmsn/spring-boot-template.git
+cd spring-boot-template
 ```
-### IntelliJ
-クローンしたリポジトリのフォルダを指定しIntelliJを開く
 ### ビルド
 ```
-Gradle > Tasks > application > bootRun
+./gradlew bootRun
 ```
-で起動
 ### アクセス
-[http://localhost/8080/sample](http://localhost/8080/sample)でアクセス可能
+以下の画面よりログインする。
+
+[http://localhost:8080/login](http://localhost:8080/login)
+
+| 項目 | 入力値              |
+| ---- |------------------|
+| ログインID | test@example.com |
+| パスワード | password         |
+
 ## ドキュメント
 - [ER図](./docs/er/ER.md)
