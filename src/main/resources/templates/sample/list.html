@@ -6,6 +6,9 @@
 </head>
 <body>
 <form method="post" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
+    <label>ID<br>
+        <input type="text" name="text1" th:field="*{displayId}">
+    </label><br>
     <label>text1<br>
         <input type="text" name="text1" th:field="*{text1}">
     </label><br>
@@ -13,9 +16,9 @@
 </form>
 <a th:text="作成" th:href="@{/sample/create}"></a>
 <table>
-    <tr><th>id</th><th>text1</th><th>num1</th></tr>
+    <tr><th>ID</th><th>TEXT1</th><th>NUM1</th></tr>
     <tr th:each="sampleResult : ${sampleResults}">
-        <td><a th:text="${sampleResult.id}" th:href="@{/sample/{id}(id=${sampleResult.id})}"></a></td>
+        <td><a th:text="${sampleResult.displayId}" th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a></td>
         <td th:text="${sampleResult.text1}"></td>
         <td th:text="${sampleResult.num1}"></td>
     </tr>

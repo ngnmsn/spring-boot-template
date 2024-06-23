@@ -5,9 +5,9 @@
     <title>template</title>
 </head>
 <body>
-<form method="post" th:action="@{/sample/{id}/update/confirm(id=${sampleUpdateId})}" th:object="${sampleUpdateForm}">
+<form method="post" th:action="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateDisplayId})}" th:object="${sampleUpdateForm}">
     <label>ID</label>
-    <p th:text="${sampleUpdateId}"></p>
+    <p th:text="${sampleUpdateDisplayId}"></p>
     <label>TEXT1<br>
         <input type="text" name="text1" th:field="*{text1}">
     </label><br>
@@ -16,5 +16,6 @@
     </label><br>
     <input type="submit" value="確認">
 </form>
+<a th:text="キャンセル" th:href="@{/sample/{displayId}(displayId=${sampleUpdateDisplayId})}"></a>
 </body>
 </html>

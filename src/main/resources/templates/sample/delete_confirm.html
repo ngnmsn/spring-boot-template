@@ -5,14 +5,15 @@
     <title>template</title>
 </head>
 <body>
-<form method="post" th:action="@{/sample/{id}/delete/process(id=${sampleDeleteId})}">
+<form method="post" th:action="@{/sample/{displayId}/delete/process(displayId=${sampleDeleteDisplayId})}">
     <label>ID</label>
-    <p th:text="${sampleDeleteId}"></p>
+    <p th:text="${sampleDeleteDisplayId}"></p>
     <label>TEXT1</label>
     <p th:text="${sampleDeleteForm.text1}"></p>
     <label>NUM1</label>
     <p th:text="${sampleDeleteForm.num1}"></p>
     <input type="submit" value="削除">
 </form>
+<a th:text="キャンセル" th:href="@{/sample/{displayId}(displayId=${sampleDeleteDisplayId})}"></a>
 </body>
 </html>

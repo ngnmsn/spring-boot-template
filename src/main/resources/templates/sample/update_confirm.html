@@ -5,14 +5,15 @@
     <title>template</title>
 </head>
 <body>
-<form method="post" th:action="@{/sample/{id}/update/process(id=${sampleUpdateId})}">
+<form method="post" th:action="@{/sample/{displayId}/update/process(displayId=${sampleUpdateDisplayId})}">
     <label>ID</label>
-    <p th:text="${sampleUpdateId}"></p>
+    <p th:text="${sampleUpdateDisplayId}"></p>
     <label>TEXT1</label>
     <p th:text="${sampleUpdateForm.text1}"></p>
     <label>NUM1</label>
     <p th:text="${sampleUpdateForm.num1}"></p>
     <input type="submit" value="更新">
 </form>
+<a th:text="修正" th:href="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateDisplayId})}"></a>
 </body>
 </html>
