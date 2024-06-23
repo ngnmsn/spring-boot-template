@@ -5,15 +5,16 @@
     <title>template</title>
 </head>
 <body>
-    <a th:text="更新" th:href="@{/sample/{id}/update(id=${sampleResult.id})}"></a>
-    <a th:text="削除" th:href="@{/sample/{id}/delete/confirm(id=${sampleResult.id})}"></a>
+    <a th:text="更新" th:href="@{/sample/{displayId}/update(displayId=${sampleResult.displayId})}"></a>
+    <a th:text="削除" th:href="@{/sample/{displayId}/delete/confirm(displayId=${sampleResult.displayId})}"></a>
     <div th:object="${sampleResult}">
         <label>ID</label>
-        <p th:text="${sampleResult.id}"></p>
+        <p th:text="${sampleResult.displayId}"></p>
         <label>TEXT1</label>
         <p th:text="${sampleResult.text1}"></p>
         <label>NUM1</label>
         <p th:text="${sampleResult.num1}"></p>
     </div>
+    <a th:text="一覧" th:href="@{/sample}"></a>
 </body>
 </html>

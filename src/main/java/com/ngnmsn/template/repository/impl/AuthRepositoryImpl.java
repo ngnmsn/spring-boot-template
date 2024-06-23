@@ -23,6 +23,7 @@ public class AuthRepositoryImpl {
                 .where(USERS.LOGIN_ID.eq(loginId))
                 .fetchSingle();
         AuthResult authResult = new AuthResult();
+        authResult.setDisplayId(result.getValue(USERS.DISPLAY_ID));
         authResult.setLoginId(result.getValue(USERS.LOGIN_ID));
         authResult.setPassword(result.getValue(USERS.PASSWORD));
 

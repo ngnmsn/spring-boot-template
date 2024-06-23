@@ -24,15 +24,17 @@ public class SampleRepositoryImpl implements SampleRepository {
     }
 
     @Override
-    public List<SampleResult> search(String text1) {
+    public List<SampleResult> search(String displayId, String text1) {
         Result<Record> results = jooq.select()
                                     .from(SAMPLES)
-                                    .where(SAMPLES.TEXT1.like("%" + text1 + "%"))
+                                    .where(SAMPLES.DISPLAY_ID.like("%" + displayId + "%"))
+                                    .and(SAMPLES.TEXT1.like("%" + text1 + "%"))
                                     .fetch();
         List<SampleResult> sampleResults = new ArrayList<SampleResult>();
         for(Record r:results){
             SampleResult sampleResult = new SampleResult();
             sampleResult.setId(r.getValue(SAMPLES.ID));
+            sampleResult.setDisplayId(r.getValue(SAMPLES.DISPLAY_ID));
             sampleResult.setText1(r.getValue(SAMPLES.TEXT1));
             sampleResult.setNum1(r.getValue(SAMPLES.NUM1));
             sampleResults.add(sampleResult);
@@ -41,13 +43,14 @@ public class SampleRepositoryImpl implements SampleRepository {
     }
 
     @Override
-    public SampleResult findById(ULong id) {
+    public SampleResult findByDisplayId(String displayId) {
         Record result = jooq.select()
                             .from(SAMPLES)
-                            .where(SAMPLES.ID.eq(id))
+                            .where(SAMPLES.DISPLAY_ID.eq(displayId))
                             .fetchSingle();
         SampleResult sampleResult = new SampleResult();
         sampleResult.setId(result.getValue(SAMPLES.ID));
+        sampleResult.setDisplayId(result.getValue(SAMPLES.DISPLAY_ID));
         sampleResult.setText1(result.getValue(SAMPLES.TEXT1));
         sampleResult.setNum1(result.getValue(SAMPLES.NUM1));
 
@@ -55,9 +58,9 @@ public class SampleRepositoryImpl implements SampleRepository {
     }
 
     @Override
-    public void insert(String text1, int num1) {
-        jooq.insertInto(SAMPLES, SAMPLES.TEXT1, SAMPLES.NUM1)
-            .values(text1, num1)
+    public void insert(String displayId, String text1, int num1) {
+        jooq.insertInto(SAMPLES, SAMPLES.DISPLAY_ID, SAMPLES.TEXT1, SAMPLES.NUM1)
+            .values(displayId, text1, num1)
             .execute();
     }
 

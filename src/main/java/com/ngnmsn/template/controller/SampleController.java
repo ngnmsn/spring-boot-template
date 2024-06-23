@@ -41,9 +41,9 @@ public class SampleController {
         return "sample/list";
     }
 
-    @GetMapping("/{id}")
-    String detail(@PathVariable String id, Model model){
-        SampleResult sampleResult = sampleService.detail(id);
+    @GetMapping("/{displayId}")
+    String detail(@PathVariable String displayId, Model model){
+        SampleResult sampleResult = sampleService.detail(displayId);
         model.addAttribute("sampleResult", sampleResult);
         return "sample/detail";
     }
@@ -62,10 +62,18 @@ public class SampleController {
         return "sample/create_confirm";
     }
 
+    @GetMapping("/create/confirm")
+    String returnCreate(Model model) {
+        SampleCreateForm form = (SampleCreateForm)session.getAttribute("sampleCreateForm");
+        model.addAttribute("sampleCreateForm", form);
+        return "sample/create";
+    }
+
     @PostMapping("/create/process")
     String createProcess(){
         SampleCreateForm createForm = (SampleCreateForm)session.getAttribute("sampleCreateForm");
         sampleService.create(createForm);
+        session.removeAttribute("sampleCreateForm");
         return "redirect:/sample/create/complete";
     }
 
@@ -74,60 +82,74 @@ public class SampleController {
         return "sample/create_complete";
     }
 
-    @GetMapping("/{id}/update")
-    String update(@PathVariable String id, Model model){
-        SampleResult sampleResult = sampleService.detail(id);
+    @GetMapping("/{displayId}/update")
+    String update(@PathVariable String displayId, Model model){
+        SampleResult sampleResult = sampleService.detail(displayId);
         SampleUpdateForm form = new SampleUpdateForm();
         form.setText1(sampleResult.getText1());
         form.setNum1(sampleResult.getNum1());
         session.setAttribute("sampleUpdateId", sampleResult.getId());
-        model.addAttribute("sampleUpdateId", sampleResult.getId());
+        session.setAttribute("sampleUpdateDisplayId", sampleResult.getDisplayId());
+        model.addAttribute("sampleUpdateDisplayId", sampleResult.getDisplayId());
         model.addAttribute("sampleUpdateForm", form);
         return "sample/update";
     }
 
-    @PostMapping("/{id}/update/confirm")
+    @PostMapping("/{displayId}/update/confirm")
     String updateConfirm(@ModelAttribute("sampleUpdateForm") SampleUpdateForm form, Model model){
-        ULong sampleUpdateId = (ULong)session.getAttribute("sampleUpdateId");
+        String displayId = (String)session.getAttribute("sampleUpdateDisplayId");
         session.setAttribute("sampleUpdateForm", form);
-        model.addAttribute("sampleUpdateId", sampleUpdateId);
+        model.addAttribute("sampleUpdateDisplayId", displayId);
         model.addAttribute("sampleUpdateForm", form);
         return "sample/update_confirm";
     }
 
-    @PostMapping("/{id}/update/process")
+    @GetMapping("/{displayId}/update/confirm")
+    String returnUpdate(Model model) {
+        SampleUpdateForm form = (SampleUpdateForm)session.getAttribute("sampleUpdateForm");
+        model.addAttribute("sampleUpdateForm", form);
+        return "sample/update";
+    }
+
+    @PostMapping("/{displayId}/update/process")
     String updateProcess(){
         ULong sampleUpdateId = (ULong)session.getAttribute("sampleUpdateId");
         SampleUpdateForm updateForm = (SampleUpdateForm)session.getAttribute("sampleUpdateForm");
         sampleService.update(sampleUpdateId, updateForm);
-        return "redirect:/sample/{id}/update/complete";
+        session.removeAttribute("sampleUpdateId");
+        session.removeAttribute("sampleUpdateDisplayId");
+        session.removeAttribute("sampleUpdateForm");
+        return "redirect:/sample/{displayId}/update/complete";
     }
 
-    @GetMapping("/{id}/update/complete")
+    @GetMapping("/{displayId}/update/complete")
     String updateComplete(){
         return "sample/update_complete";
     }
 
-    @GetMapping("/{id}/delete/confirm")
-    String deleteConfirm(@PathVariable String id, Model model){
-        SampleResult sampleResult = sampleService.detail(id);
+    @GetMapping("/{displayId}/delete/confirm")
+    String deleteConfirm(@PathVariable String displayId, Model model){
+        SampleResult sampleResult = sampleService.detail(displayId);
         SampleDeleteForm form = new SampleDeleteForm();
         form.setText1(sampleResult.getText1());
         form.setNum1(sampleResult.getNum1());
         session.setAttribute("sampleDeleteId", sampleResult.getId());
-        model.addAttribute("sampleDeleteId", sampleResult.getId());
+        session.setAttribute("sampleDeleteDisplayId", sampleResult.getDisplayId());
+        model.addAttribute("sampleDeleteDisplayId", sampleResult.getDisplayId());
         model.addAttribute("sampleDeleteForm", form);
         return "sample/delete_confirm";
     }
 
-    @PostMapping("/{id}/delete/process")
+    @PostMapping("/{displayId}/delete/process")
     String deleteProcess(){
         ULong sampleDeleteId = (ULong)session.getAttribute("sampleDeleteId");
         sampleService.delete(sampleDeleteId);
-        return "redirect:/sample/{id}/delete/complete";
+        session.removeAttribute("sampleDeleteId");
+        session.removeAttribute("sampleDeleteDisplayId");
+        return "redirect:/sample/{displayId}/delete/complete";
     }
 
-    @GetMapping("/{id}/delete/complete")
+    @GetMapping("/{displayId}/delete/complete")
     String deleteComplete(){
         return "sample/delete_complete";
     }

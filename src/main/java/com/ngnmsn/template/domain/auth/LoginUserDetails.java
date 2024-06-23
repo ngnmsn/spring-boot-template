@@ -3,7 +3,6 @@ package com.ngnmsn.template.domain.auth;
 import java.util.Arrays;
 import java.util.Collection;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,12 +10,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @EqualsAndHashCode
 public class LoginUserDetails implements UserDetails {
+    private final String displayId;
     private final String loginId;
     private final String password;
     private final String userName;
     private final Collection <? extends GrantedAuthority> authorities;
 
     public LoginUserDetails(AuthResult authResult) {
+        this.displayId = authResult.getDisplayId();
         this.loginId = authResult.getLoginId();
         this.password = authResult.getPassword();
         this.userName = authResult.getUserName();
@@ -38,6 +39,10 @@ public class LoginUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return this.loginId;
+    }
+
+    public String getDisplayId() {
+        return this.displayId;
     }
 
     public String getName() {
