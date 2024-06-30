@@ -10,6 +10,9 @@ Spring Bootにおける基本的な処理の実装を行う。
   - 作成
   - 更新
   - 削除
+- テスト
+  - ControllerクラスのUT
+  - ServiceクラスのUT
 ## 開発環境
 | 項目                                                                                          | 説明          | バージョン             |
 |---------------------------------------------------------------------------------------------|-------------|-------------------|
@@ -27,9 +30,13 @@ Spring Bootにおける基本的な処理の実装を行う。
 git clone https://github.com/ngnmsn/spring-boot-template.git
 cd spring-boot-template
 ```
-### ビルド
+### 実行
 ```
 ./gradlew bootRun
+```
+### テスト
+```
+./gradlew test
 ```
 ### アクセス
 以下の画面よりログインする。
