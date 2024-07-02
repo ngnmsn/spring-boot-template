@@ -4,12 +4,8 @@ import com.ngnmsn.template.domain.sample.SampleResult;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import org.jooq.DSLContext;
 import org.jooq.types.ULong;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -30,11 +26,6 @@ public class SampleRepositoryTest {
 
     @Autowired
     private DSLContext jooq;
-
-    @BeforeEach
-    public void initMocks() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @DisplayName("search()の正常系テスト")
     @Test
