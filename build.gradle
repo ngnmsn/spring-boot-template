@@ -1,11 +1,20 @@
 import org.jooq.meta.jaxb.Logging
 import nu.studer.gradle.jooq.JooqEdition
 
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'org.flywaydb:flyway-mysql:9.22.3'
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.5'
 	id 'io.spring.dependency-management' version '1.1.4'
-	id 'org.flywaydb.flyway' version '10.12.0'
+	id 'org.flywaydb.flyway' version '9.22.3'
 	id 'nu.studer.jooq' version '9.0'
 }
 
@@ -48,6 +57,7 @@ flyway {
 	user = 'root'
 	password = 'root'
 	driver = 'com.mysql.cj.jdbc.Driver'
+	cleanDisabled = false
 }
 
 jooq {

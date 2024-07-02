@@ -10,8 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,9 +25,8 @@ import org.springframework.util.MultiValueMap;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
@@ -37,7 +36,7 @@ public class SampleControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @Spy
     private HttpSession session;
 
     @InjectMocks
@@ -123,7 +122,6 @@ public class SampleControllerTest {
             add("num1", "1");
         }};
 
-        doNothing().when(session).setAttribute(any(),any());
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sample/create/confirm")
                         .params(formMap))
@@ -157,6 +155,7 @@ public class SampleControllerTest {
         }};
 
         when(session.getAttribute(any())).thenReturn(form);
+        doNothing().when(sampleService).create(any());
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sample/create/process"))
                 .andExpect(status().is3xxRedirection())
@@ -184,7 +183,6 @@ public class SampleControllerTest {
             setNum1(1);
         }};
         when(sampleService.detail(any())).thenReturn(result);
-        doNothing().when(session).setAttribute(any(),any());
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update"))
                 .andExpect(status().isOk())
@@ -195,7 +193,6 @@ public class SampleControllerTest {
     @Test
     public void testUpdateConfirmSuccess() throws Exception{
         when(session.getAttribute(any())).thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-        doNothing().when(session).setAttribute(any(),any());
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm"))
                 .andExpect(status().isOk())
@@ -230,7 +227,6 @@ public class SampleControllerTest {
         when(session.getAttribute("sampleUpdateId")).thenReturn(ULong.valueOf(1));
         when(session.getAttribute("sampleUpdateForm")).thenReturn(form);
         doNothing().when(sampleService).update(any(),any());
-        doNothing().when(session).removeAttribute(any());
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/process"))
                 .andExpect(status().is3xxRedirection())
@@ -259,7 +255,6 @@ public class SampleControllerTest {
         }};
 
         when(sampleService.detail(any())).thenReturn(result);
-        doNothing().when(session).setAttribute(any(),any());
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/confirm"))
                 .andExpect(status().isOk())
@@ -279,7 +274,6 @@ public class SampleControllerTest {
 
         when(session.getAttribute(any())).thenReturn(ULong.valueOf(1));
         doNothing().when(sampleService).delete(any());
-        doNothing().when(session).removeAttribute(any());
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/process"))
                 .andExpect(status().is3xxRedirection())
