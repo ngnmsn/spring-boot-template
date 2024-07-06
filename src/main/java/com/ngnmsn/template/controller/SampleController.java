@@ -37,11 +37,21 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_LIST;
   }
 
-  @PostMapping(WebConst.URL_SEARCH)
+  @GetMapping(WebConst.URL_SEARCH)
   String search(@ModelAttribute("sampleSearchForm") SampleSearchForm form, Model model) {
     List<SampleResult> sampleResults = sampleService.search(form);
+    session.setAttribute("sampleSearchForm", form);
     model.addAttribute("sampleResults", sampleResults);
     return SampleConst.TEMPLATE_SAMPLE_LIST;
+  }
+
+  @GetMapping(WebConst.URL_SEARCH_RETURN)
+  String returnSearch(Model mode) {
+    SampleSearchForm sampleSearchForm = (SampleSearchForm) session.getAttribute("sampleSearchForm");
+    if (sampleSearchForm == null) {
+      sampleSearchForm = new SampleSearchForm();
+    }
+    return SampleConst.REDIRECT_SAMPLE_SEARCH + sampleSearchForm.generateQueryParameter();
   }
 
   @GetMapping(WebConst.URL_DETAIL)

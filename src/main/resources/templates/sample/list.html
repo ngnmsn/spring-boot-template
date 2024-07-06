@@ -5,7 +5,7 @@
   <title>template</title>
 </head>
 <body>
-<form method="post" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
+<form method="get" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
   <label>ID<br>
     <input type="text" name="text1" th:field="*{displayId}">
   </label><br>
