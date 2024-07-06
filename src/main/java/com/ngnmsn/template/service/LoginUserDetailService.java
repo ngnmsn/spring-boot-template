@@ -9,17 +9,16 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class LoginUserDetailService implements UserDetailsService {
-    @Autowired
-    private AuthRepositoryImpl authRepositoryImpl;
 
-    @Override
-    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
-        AuthResult result = authRepositoryImpl.findByLoginId(loginId);
-        LoginUserDetails loginUserDetails = new LoginUserDetails(result);
-        return loginUserDetails;
-    }
+  @Autowired
+  private AuthRepositoryImpl authRepositoryImpl;
+
+  @Override
+  public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
+    AuthResult result = authRepositoryImpl.findByLoginId(loginId);
+    LoginUserDetails loginUserDetails = new LoginUserDetails(result);
+    return loginUserDetails;
+  }
 }

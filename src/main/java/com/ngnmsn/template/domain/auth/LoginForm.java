@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class LoginForm {
-    String loginId;
-    String password;
+
+  String loginId;
+  String password;
 }

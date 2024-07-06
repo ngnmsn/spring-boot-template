@@ -4,8 +4,9 @@ import lombok.Data;
 
 @Data
 public class AuthResult {
-    String displayId;
-    String loginId;
-    String password;
-    String userName;
+
+  String displayId;
+  String loginId;
+  String password;
+  String userName;
 }

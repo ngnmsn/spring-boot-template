@@ -5,8 +5,9 @@ import org.jooq.types.ULong;
 
 @Data
 public class SampleResult {
-    private ULong id;
-    private String displayId;
-    private String text1;
-    private int num1;
+
+  private ULong id;
+  private String displayId;
+  private String text1;
+  private int num1;
 }
