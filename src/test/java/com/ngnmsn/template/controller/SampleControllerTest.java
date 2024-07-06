@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.service.SampleService;
 import jakarta.servlet.http.HttpSession;
@@ -79,18 +80,40 @@ public class SampleControllerTest {
       }
     };
 
-    final MultiValueMap<String, String> formMap = new LinkedMultiValueMap<>() {
+    when(sampleService.search(any())).thenReturn(expectList);
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/search?displayId=001&text1=test"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("sample/list"));
+  }
+
+  @DisplayName("returnSearch()の正常系テスト(sessionあり)")
+  @Test
+  public void testReturnSearchSuccess001() throws Exception {
+
+    SampleSearchForm sampleSearchForm = new SampleSearchForm() {
       {
-        add("displayId", "001");
-        add("text1", "test");
+        setDisplayId("001");
+        setText1("test");
       }
     };
 
-    when(sampleService.search(any())).thenReturn(expectList);
+    when(session.getAttribute("sampleSearchForm")).thenReturn(sampleSearchForm);
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/sample/search").params(formMap))
-        .andExpect(status().isOk())
-        .andExpect(view().name("sample/list"));
+            .get("/sample/search/return"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/sample/search?displayId=001&text1=test"));
+  }
+
+  @DisplayName("returnSearch()の正常系テスト(sessionがnull)")
+  @Test
+  public void testReturnSearchSuccess002() throws Exception {
+
+    when(session.getAttribute("sampleSearchForm")).thenReturn(null);
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/search/return"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/sample/search?displayId=&text1="));
   }
 
   @DisplayName("detail()の正常系テスト")

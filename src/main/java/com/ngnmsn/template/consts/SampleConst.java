@@ -3,6 +3,9 @@ package com.ngnmsn.template.consts;
 public class SampleConst {
   public static final String URL_SAMPLE = "/sample";
 
+  public static final String REDIRECT_SAMPLE_SEARCH = "redirect:"
+                                                      + URL_SAMPLE
+                                                      + WebConst.URL_SEARCH;
   public static final String REDIRECT_SAMPLE_CREATE_COMPLETE = "redirect:"
                                                                 + URL_SAMPLE
                                                                 + WebConst.URL_CREATE_COMPLETE;

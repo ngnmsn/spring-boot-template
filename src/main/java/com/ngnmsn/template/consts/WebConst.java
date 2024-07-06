@@ -2,6 +2,7 @@ package com.ngnmsn.template.consts;
 
 public class WebConst {
   public static final String URL_SEARCH = "/search";
+  public static final String URL_SEARCH_RETURN = "/search/return";
   public static final String URL_DETAIL = "/{displayId}";
   public static final String URL_CREATE = "/create";
   public static final String URL_CREATE_CONFIRM = "/create/confirm";
