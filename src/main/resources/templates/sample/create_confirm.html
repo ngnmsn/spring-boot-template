@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ja">
 <head>
-    <meta charset="UTF-8" />
-    <title>template</title>
+  <meta charset="UTF-8"/>
+  <title>template</title>
 </head>
 <body>
-    <form method="post" th:action="@{/sample/create/process}" th:object="${sampleCreateForm}">
-        <label>TEXT1</label>
-            <p th:text="*{text1}"></p>
-        <label>NUM1</label>
-            <p th:text="*{num1}"></p>
-        <input type="submit" value="作成">
-    </form>
-    <a th:text="修正" th:href="@{/sample/create/confirm}"></a>
+<form method="post" th:action="@{/sample/create/process}" th:object="${sampleCreateForm}">
+  <label>TEXT1</label>
+  <p th:text="*{text1}"></p>
+  <label>NUM1</label>
+  <p th:text="*{num1}"></p>
+  <input type="submit" value="作成">
+</form>
+<a th:text="修正" th:href="@{/sample/create/confirm}"></a>
 </body>
 </html>

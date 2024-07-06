@@ -15,6 +15,8 @@ Spring Bootにおける基本的な処理の実装を行う。
   - ServiceクラスのUT
   - RepositoryクラスのUT
   - UtilクラスのUT
+- コード規約チェック<br>
+CheckStyleを使用し、Googleのコード規約でチェック 
 ## 開発環境
 | 項目                                                                                          | 説明          | バージョン             |
 |---------------------------------------------------------------------------------------------|-------------|-------------------|
@@ -25,6 +27,7 @@ Spring Bootにおける基本的な処理の実装を行う。
 | [Flyway](https://flywaydb.org/)                                                             | マイグレーションツール | 9.22.3            |
 | [jOOQ](https://www.jooq.org/)                                                               | ORマッパー      | 3.18.14           |
 | [MySQL](https://www.mysql.com/jp/)                                                          | DB          | 8.3.0             |
+| [CheckStyle](https://checkstyle.sourceforge.io/)                                            | コード規約チェック   | 10.17.0           |
 
 ## 環境構築方法
 ### リポジトリクローン
@@ -40,15 +43,20 @@ cd spring-boot-template
 ```
 ./gradlew test
 ```
+### コード規約チェック
+```
+./gradlew checkStyleMain
+./gradlew checkStyleTest
+```
 ### アクセス
 以下の画面よりログインする。
 
 [http://localhost:8080/login](http://localhost:8080/login)
 
-| 項目 | 入力値              |
-| ---- |------------------|
-| ログインID | test@example.com |
-| パスワード | password         |
+| 項目          | 入力値              |
+|-------------|------------------|
+| ログインID      | test@example.com |
+| パスワード       | password         |
 
 ## ドキュメント
 - [ER図](./docs/er/ER.md)

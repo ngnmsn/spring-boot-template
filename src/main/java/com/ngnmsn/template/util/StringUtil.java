@@ -1,13 +1,13 @@
 package com.ngnmsn.template.util;
 
-import org.springframework.stereotype.Component;
-
 import java.util.UUID;
+import org.springframework.stereotype.Component;
 
 @Component
 public class StringUtil {
-    public String generateUUID() {
-        UUID uuid = UUID.randomUUID();
-        return uuid.toString().replace("-", "").toUpperCase();
-    }
+
+  public String generateUuid() {
+    UUID uuid = UUID.randomUUID();
+    return uuid.toString().replace("-", "").toUpperCase();
+  }
 }
