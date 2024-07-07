@@ -3,21 +3,24 @@
 <head>
   <meta charset="UTF-8"/>
   <title>template</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
 <form method="post"
       th:action="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateDisplayId})}"
       th:object="${sampleUpdateForm}">
-  <label>ID</label>
-  <p th:text="${sampleUpdateDisplayId}"></p>
-  <label>TEXT1<br>
-    <input type="text" name="text1" th:field="*{text1}">
+  <label for="sampleUpdateDisplayId" class="form-label">ID</label>
+  <p id="sampleUpdateDisplayId" th:text="${sampleUpdateDisplayId}"></p>
+  <label for="text1" class="form-label">TEXT1<br>
+    <input type="text" class="form-control" id="text1" name="text1" th:field="*{text1}">
   </label><br>
-  <label>NUM1<br>
-    <input type="number" name="num1" th:field="*{num1}">
+  <label for="num1" class="form-label">NUM1<br>
+    <input type="number" class="form-control" id="num1" name="num1" th:field="*{num1}">
   </label><br>
-  <input type="submit" value="確認">
+  <input type="submit" class="btn btn-primary" value="確認">
 </form>
-<a th:text="キャンセル" th:href="@{/sample/{displayId}(displayId=${sampleUpdateDisplayId})}"></a>
+<a th:text="キャンセル" class="btn btn-secondary" role="button" th:href="@{/sample/{displayId}(displayId=${sampleUpdateDisplayId})}"></a>
 </body>
 </html>

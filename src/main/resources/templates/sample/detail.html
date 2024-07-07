@@ -3,19 +3,22 @@
 <head>
   <meta charset="UTF-8"/>
   <title>template</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
-<a th:text="更新" th:href="@{/sample/{displayId}/update(displayId=${sampleResult.displayId})}"></a>
-<a th:text="削除"
+<a th:text="更新" class="btn btn-secondary" role="button" th:href="@{/sample/{displayId}/update(displayId=${sampleResult.displayId})}"></a>
+<a th:text="削除" class="btn btn-secondary" role="button"
    th:href="@{/sample/{displayId}/delete/confirm(displayId=${sampleResult.displayId})}"></a>
 <div th:object="${sampleResult}">
-  <label>ID</label>
-  <p th:text="${sampleResult.displayId}"></p>
-  <label>TEXT1</label>
-  <p th:text="${sampleResult.text1}"></p>
-  <label>NUM1</label>
-  <p th:text="${sampleResult.num1}"></p>
+  <label for="displayId" class="form-label">ID</label>
+  <p id="displayId" th:text="${sampleResult.displayId}"></p>
+  <label for="text1" class="form-label">TEXT1</label>
+  <p id="text1" th:text="${sampleResult.text1}"></p>
+  <label for="num1" class="form-label">NUM1</label>
+  <p id="num1" th:text="${sampleResult.num1}"></p>
 </div>
-<a th:text="一覧" th:href="@{/sample/search/return}"></a>
+<a th:text="一覧" class="btn btn-secondary" role="button" th:href="@{/sample/search/return}"></a>
 </body>
 </html>
