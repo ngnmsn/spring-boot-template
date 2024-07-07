@@ -3,31 +3,37 @@
 Spring Bootのテンプレートプロジェクト。<br>
 Spring Bootにおける基本的な処理の実装を行う。
 ## 構成要素
-- 認証
-- 基本的なCRUD
-  - 一覧
-  - 詳細
-  - 作成
-  - 更新
-  - 削除
-- テスト
-  - ControllerクラスのUT
-  - ServiceクラスのUT
-  - RepositoryクラスのUT
-  - UtilクラスのUT
-- コード規約チェック<br>
-CheckStyleを使用し、Googleのコード規約でチェック 
+- サーバサイド
+  - 認証
+  - 基本的なCRUD
+    - 一覧
+    - 詳細
+    - 作成
+    - 更新
+    - 削除
+  - テスト
+    - ControllerクラスのUT
+    - ServiceクラスのUT
+    - RepositoryクラスのUT
+    - UtilクラスのUT
+  - コード規約チェック<br>
+  CheckStyleを使用し、Googleのコード規約でチェック
+- クライアントサイド
+  - Bootstrapによるデザイン実装
+  - JQueryによるJavaScript実装
 ## 開発環境
-| 項目                                                                                          | 説明          | バージョン             |
-|---------------------------------------------------------------------------------------------|-------------|-------------------|
-| [Java](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/what-is-corretto-21.html) | 言語          | Amazon Correto 21 |
-| [Gradle](https://gradle.org/)                                                               | ビルドツール      | 8.7               |
-| [Spring Boot](https://spring.io/projects/spring-boot)                                       | Javaフレームワーク | 3.2.5             |
-| [Thymeleaf](https://www.thymeleaf.org/)                                                     | テンプレートエンジン  | 3.1.2             |
-| [Flyway](https://flywaydb.org/)                                                             | マイグレーションツール | 9.22.3            |
-| [jOOQ](https://www.jooq.org/)                                                               | ORマッパー      | 3.18.14           |
-| [MySQL](https://www.mysql.com/jp/)                                                          | DB          | 8.3.0             |
-| [CheckStyle](https://checkstyle.sourceforge.io/)                                            | コード規約チェック   | 10.17.0           |
+| 項目                                                                                          | 説明                | バージョン             |
+|---------------------------------------------------------------------------------------------|-------------------|-------------------|
+| [Java](https://docs.aws.amazon.com/corretto/latest/corretto-21-ug/what-is-corretto-21.html) | 言語                | Amazon Correto 21 |
+| [Gradle](https://gradle.org/)                                                               | ビルドツール            | 8.7               |
+| [Spring Boot](https://spring.io/projects/spring-boot)                                       | Javaフレームワーク       | 3.2.5             |
+| [Thymeleaf](https://www.thymeleaf.org/)                                                     | テンプレートエンジン        | 3.1.2             |
+| [Flyway](https://flywaydb.org/)                                                             | マイグレーションツール       | 9.22.3            |
+| [jOOQ](https://www.jooq.org/)                                                               | ORマッパー            | 3.18.14           |
+| [MySQL](https://www.mysql.com/jp/)                                                          | DB                | 8.3.0             |
+| [CheckStyle](https://checkstyle.sourceforge.io/)                                            | コード規約チェック         | 10.17.0           |
+| [Bootstrap](https://getbootstrap.jp/)                                                       | CSSフレームワーク        | 5.3.3　            |
+| [JQuery](https://jquery.com/)                                                               | JavaScriptフレームワーク | 3.7.1             |
 
 ## 環境構築方法
 ### リポジトリクローン
