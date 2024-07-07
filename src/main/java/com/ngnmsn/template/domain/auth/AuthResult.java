@@ -2,6 +2,9 @@ package com.ngnmsn.template.domain.auth;
 
 import lombok.Data;
 
+/**
+ * AuthResultクラス
+ */
 @Data
 public class AuthResult {
 

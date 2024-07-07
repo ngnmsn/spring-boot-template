@@ -13,6 +13,9 @@ import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * SampleRepositoryImplクラス
+ */
 @Repository
 public class SampleRepositoryImpl implements SampleRepository {
 

@@ -3,6 +3,9 @@ package com.ngnmsn.template.domain.sample;
 import lombok.Data;
 import org.jooq.types.ULong;
 
+/**
+ * SampleResultクラス
+ */
 @Data
 public class SampleResult {
 

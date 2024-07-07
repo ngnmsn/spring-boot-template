@@ -8,6 +8,9 @@ import org.jooq.Record;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+/**
+ * AuthRepositoryImplクラス
+ */
 @Repository
 public class AuthRepositoryImpl {
 
@@ -18,6 +21,12 @@ public class AuthRepositoryImpl {
     super();
   }
 
+  /**
+   * findByLoginIdメソッド
+   *
+   * @param loginId ログインID
+   * @return AuthResult ログインIDで検索したユーザ情報
+   */
   public AuthResult findByLoginId(String loginId) {
     Record result = jooq.select()
         .from(USERS)

@@ -32,6 +32,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+/**
+ * SampleControllerTestクラス
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class SampleControllerTest {

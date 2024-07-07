@@ -7,6 +7,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * LoginUserDetailsクラス
+ */
 @EqualsAndHashCode
 public class LoginUserDetails implements UserDetails {
 
@@ -16,6 +19,11 @@ public class LoginUserDetails implements UserDetails {
   private final String userName;
   private final Collection<? extends GrantedAuthority> authorities;
 
+  /**
+   * LoginUserDetailsコンストラクタ
+   *
+   * @param authResult ユーザ情報
+   */
   public LoginUserDetails(AuthResult authResult) {
     this.displayId = authResult.getDisplayId();
     this.loginId = authResult.getLoginId();
