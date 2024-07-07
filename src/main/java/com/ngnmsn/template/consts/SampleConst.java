@@ -1,5 +1,8 @@
 package com.ngnmsn.template.consts;
 
+/**
+ * SampleConstクラス
+ */
 public class SampleConst {
   public static final String URL_SAMPLE = "/sample";
 

@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+/**
+ * LoginUserDetailServiceクラス
+ */
 @Service
 public class LoginUserDetailService implements UserDetailsService {
 
@@ -18,7 +21,6 @@ public class LoginUserDetailService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
     AuthResult result = authRepositoryImpl.findByLoginId(loginId);
-    LoginUserDetails loginUserDetails = new LoginUserDetails(result);
-    return loginUserDetails;
+    return new LoginUserDetails(result);
   }
 }

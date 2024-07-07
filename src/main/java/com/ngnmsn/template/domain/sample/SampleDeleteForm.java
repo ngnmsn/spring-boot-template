@@ -2,6 +2,9 @@ package com.ngnmsn.template.domain.sample;
 
 import lombok.Data;
 
+/**
+ * SampleDeleteFormクラス
+ */
 @Data
 public class SampleDeleteForm {
 

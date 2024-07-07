@@ -11,6 +11,9 @@ import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * SampleServiceクラス
+ */
 @Service
 public class SampleService {
 
@@ -20,6 +23,12 @@ public class SampleService {
   @Autowired
   private StringUtil stringUtil;
 
+  /**
+   * searchメソッド
+   *
+   * @param form 検索フォーム
+   * @return List<code><</code>SampleResult<code>></code> 検索結果リスト
+   */
   public List<SampleResult> search(SampleSearchForm form) {
 
     String displayId = form.getDisplayId();
@@ -27,19 +36,41 @@ public class SampleService {
     return sampleRepositoryImpl.search(displayId, text1);
   }
 
+  /**
+   * detailメソッド
+   *
+   * @param displayId 表示ID
+   * @return SampleResult クエリ結果
+   */
   public SampleResult detail(String displayId) {
     return sampleRepositoryImpl.findByDisplayId(displayId);
   }
 
+  /**
+   * createメソッド
+   *
+   * @param form Sample作成用フォーム
+   */
   public void create(SampleCreateForm form) {
     String displayId = stringUtil.generateUuid();
     sampleRepositoryImpl.insert(displayId, form.getText1(), form.getNum1());
   }
 
+  /**
+   * updateメソッド
+   *
+   * @param id ID
+   * @param form Sample更新用フォーム
+   */
   public void update(ULong id, SampleUpdateForm form) {
     sampleRepositoryImpl.update(id, form.getText1(), form.getNum1());
   }
 
+  /**
+   * deleteメソッド
+   *
+   * @param id ID
+   */
   public void delete(ULong id) {
     sampleRepositoryImpl.delete(id);
   }

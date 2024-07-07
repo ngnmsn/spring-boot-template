@@ -2,6 +2,9 @@ package com.ngnmsn.template.domain.sample;
 
 import lombok.Data;
 
+/**
+ * SampleSearchFormクラス
+ */
 @Data
 public class SampleSearchForm {
 

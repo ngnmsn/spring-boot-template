@@ -5,6 +5,9 @@ import java.io.Serializable;
 import java.util.List;
 import org.jooq.types.ULong;
 
+/**
+ * SampleRepositoryクラス
+ */
 public interface SampleRepository extends Serializable {
 
   public List<SampleResult> search(String displayId, String text1);
