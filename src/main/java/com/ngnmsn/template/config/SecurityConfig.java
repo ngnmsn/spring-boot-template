@@ -40,6 +40,7 @@ public class SecurityConfig {
             .permitAll()
         )
         .authorizeHttpRequests((requests) -> requests
+            .requestMatchers("/css/**").permitAll()
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
             .permitAll()
             .anyRequest().authenticated()

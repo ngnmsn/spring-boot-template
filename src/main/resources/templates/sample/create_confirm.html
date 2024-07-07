@@ -3,15 +3,18 @@
 <head>
   <meta charset="UTF-8"/>
   <title>template</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
 <form method="post" th:action="@{/sample/create/process}" th:object="${sampleCreateForm}">
-  <label>TEXT1</label>
-  <p th:text="*{text1}"></p>
-  <label>NUM1</label>
-  <p th:text="*{num1}"></p>
-  <input type="submit" value="作成">
+  <label for="text1" class="form-label">TEXT1</label>
+  <p id="text1" th:text="*{text1}"></p>
+  <label for="num1" class="form-label">NUM1</label>
+  <p id="num1" th:text="*{num1}"></p>
+  <input type="submit" class="btn btn-primary" value="作成">
 </form>
-<a th:text="修正" th:href="@{/sample/create/confirm}"></a>
+<a th:text="修正" class="btn btn-secondary" role="button" th:href="@{/sample/create/confirm}"></a>
 </body>
 </html>

@@ -3,9 +3,12 @@
 <head>
   <meta charset="UTF-8"/>
   <title>template</title>
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
 <p th:text="更新が完了しました。"></p>
-<a th:text="一覧" th:href="@{/sample/search/return}"></a>
+<a th:text="一覧" class="btn btn-primary" role="button" th:href="@{/sample/search/return}"></a>
 </body>
 </html>
