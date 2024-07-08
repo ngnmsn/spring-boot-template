@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <title>template</title>
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}">
   <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
   <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
@@ -25,8 +26,11 @@
     <th scope="col">NUM1</th>
   </tr>
   <tr th:each="sampleResult : ${sampleResults}">
-    <td><a th:text="${sampleResult.displayId}"
-           th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a></td>
+    <td>
+        <a th:text="${sampleResult.displayId}"
+           th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a>
+        <i class="bi bi-copy"></i>
+    </td>
     <td th:text="${sampleResult.text1}"></td>
     <td th:text="${sampleResult.num1}"></td>
   </tr>
