@@ -5,8 +5,8 @@
   <title>template</title>
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}">
-  <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
-  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
 </head>
 <body>
 <form method="get" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
@@ -27,13 +27,14 @@
   </tr>
   <tr th:each="sampleResult : ${sampleResults}">
     <td>
-        <a th:text="${sampleResult.displayId}"
+        <a th:text="${#strings.substring(sampleResult.displayId,0,8)}"
            th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a>
-        <i class="bi bi-copy"></i>
+        <i class="bi bi-copy" id="copy" th:data-id="${sampleResult.displayId}"></i>
     </td>
     <td th:text="${sampleResult.text1}"></td>
     <td th:text="${sampleResult.num1}"></td>
   </tr>
 </table>
+<script type="text/javascript" th:src="@{/js/main.js}" defer></script>
 </body>
 </html>
