@@ -4,15 +4,20 @@
   <meta charset="UTF-8"/>
   <title>template</title>
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}">
   <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
-  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
+  <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}" defer></script>
+  <script type="text/javascript" th:src="@{/js/main.js}" defer></script>
 </head>
 <body>
 <form method="post"
       th:action="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateDisplayId})}"
       th:object="${sampleUpdateForm}">
   <label for="sampleUpdateDisplayId" class="form-label">ID</label>
-  <p id="sampleUpdateDisplayId" th:text="${sampleUpdateDisplayId}"></p>
+  <div style="display:flex;">
+    <p id="sampleUpdateDisplayId" th:text="${#strings.substring(sampleUpdateDisplayId,0,8)}"></p>
+    <i class="bi bi-copy" id="copy" th:data-id="${sampleUpdateDisplayId}" data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
+  </div>
   <label for="text1" class="form-label">TEXT1<br>
     <input type="text" class="form-control" id="text1" name="text1" th:field="*{text1}">
   </label><br>
