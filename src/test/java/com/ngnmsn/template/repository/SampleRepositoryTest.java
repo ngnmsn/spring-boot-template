@@ -44,7 +44,7 @@ public class SampleRepositoryTest {
         });
       }
     };
-    List<SampleResult> resultList = sampleRepositoryImpl.search("001", "test");
+    List<SampleResult> resultList = sampleRepositoryImpl.search("001", "test", 1, 30);
 
     int i = 0;
     for (SampleResult result : resultList) {
@@ -80,17 +80,17 @@ public class SampleRepositoryTest {
   public void testInsertSuccess() {
     SampleResult expect = new SampleResult() {
       {
-        setId(ULong.valueOf(6));
-        setDisplayId("006ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-        setText1("test6");
-        setNum1(6);
+        setId(ULong.valueOf(41));
+        setDisplayId("041ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+        setText1("test41");
+        setNum1(41);
       }
     };
-    sampleRepositoryImpl.insert("006ABCDEFGHIJKLMNOPQRSTUVWXYZABC", "test6", 6);
+    sampleRepositoryImpl.insert("041ABCDEFGHIJKLMNOPQRSTUVWXYZABC", "test41", 41);
 
     Record record = jooq.select()
         .from(SAMPLES)
-        .where(SAMPLES.ID.eq(ULong.valueOf(6)))
+        .where(SAMPLES.ID.eq(ULong.valueOf(41)))
         .fetchSingle();
 
     SampleResult result = new SampleResult() {
@@ -108,7 +108,7 @@ public class SampleRepositoryTest {
     assertThat(result.getNum1(), is(expect.getNum1()));
 
     jooq.delete(SAMPLES)
-        .where(SAMPLES.ID.eq(ULong.valueOf(6)))
+        .where(SAMPLES.ID.eq(ULong.valueOf(41)))
         .execute();
   }
 

@@ -4,6 +4,7 @@ package com.ngnmsn.template.consts;
  * WebConstクラス
  */
 public class WebConst {
+
   public static final String URL_SEARCH = "/search";
   public static final String URL_SEARCH_RETURN = "/search/return";
   public static final String URL_DETAIL = "/{displayId}";

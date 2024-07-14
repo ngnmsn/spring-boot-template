@@ -105,7 +105,7 @@ public class SampleControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/search/return"))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/sample/search?displayId=001&text1=test"));
+        .andExpect(redirectedUrl("/sample/search?displayId=001&text1=test&page=1&maxNumPerPage=30"));
   }
 
   @DisplayName("returnSearch()の正常系テスト(sessionがnull)")
@@ -116,7 +116,7 @@ public class SampleControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/search/return"))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/sample/search?displayId=&text1="));
+        .andExpect(redirectedUrl("/sample/search?displayId=&text1=&page=1&maxNumPerPage=30"));
   }
 
   @DisplayName("detail()の正常系テスト")

@@ -10,3 +10,9 @@ spring:
     baseline-version: 0
     enabled: true
     baseline-on-migrate: true
+setting:
+  max-num-per-page:
+    - 30
+    - 50
+    - 100
+  max-num-per-query: 3000
