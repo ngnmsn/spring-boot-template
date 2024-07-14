@@ -3,6 +3,7 @@ package com.ngnmsn.template.service;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -49,7 +50,7 @@ public class SampleServiceTest {
   @Test
   public void testSearchSuccess() {
     List<SampleResult> expect = setExpectList();
-    when(sampleRepositoryImpl.search(any(), any())).thenReturn(expect);
+    when(sampleRepositoryImpl.search(any(), any(), anyInt(), anyInt())).thenReturn(expect);
 
     SampleSearchForm form = new SampleSearchForm();
     form.setDisplayId("");

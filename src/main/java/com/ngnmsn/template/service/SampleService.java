@@ -33,7 +33,9 @@ public class SampleService {
 
     String displayId = form.getDisplayId();
     String text1 = form.getText1();
-    return sampleRepositoryImpl.search(displayId, text1);
+    int page = form.getPage();
+    int maxNumPerPage = form.getMaxNumPerPage();
+    return sampleRepositoryImpl.search(displayId, text1, page, maxNumPerPage);
   }
 
   /**
@@ -59,7 +61,7 @@ public class SampleService {
   /**
    * updateメソッド
    *
-   * @param id ID
+   * @param id   ID
    * @param form Sample更新用フォーム
    */
   public void update(ULong id, SampleUpdateForm form) {

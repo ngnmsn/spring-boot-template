@@ -27,11 +27,13 @@ public class SampleRepositoryImpl implements SampleRepository {
   }
 
   @Override
-  public List<SampleResult> search(String displayId, String text1) {
+  public List<SampleResult> search(String displayId, String text1, int page, int maxNumPerPage) {
     Result<Record> results = jooq.select()
         .from(SAMPLES)
         .where(SAMPLES.DISPLAY_ID.like("%" + displayId + "%"))
         .and(SAMPLES.TEXT1.like("%" + text1 + "%"))
+        .limit(maxNumPerPage)
+        .offset((page - 1) * maxNumPerPage)
         .fetch();
     List<SampleResult> sampleResults = new ArrayList<SampleResult>();
     for (Record r : results) {
