@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleResults;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.service.SampleService;
@@ -70,6 +71,8 @@ public class SampleControllerTest {
   @Test
   public void testSearchSuccess() throws Exception {
 
+    SampleResults expects = new SampleResults();
+    expects.setResultCount(1);
     List<SampleResult> expectList = new ArrayList<>() {
       {
         add(new SampleResult() {
@@ -82,8 +85,9 @@ public class SampleControllerTest {
         });
       }
     };
+    expects.setSampleResultList(expectList);
 
-    when(sampleService.search(any())).thenReturn(expectList);
+    when(sampleService.search(any())).thenReturn(expects);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/search?displayId=001&text1=test"))
         .andExpect(status().isOk())

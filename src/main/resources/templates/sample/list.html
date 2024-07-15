@@ -20,21 +20,33 @@
   <input type="submit" class="btn btn-primary" value="検索">
 </form>
 <a th:text="作成" class="btn btn-secondary" role="button" th:href="@{/sample/create}"></a>
+<div th:if="!${#lists.isEmpty(sampleResults)}" style="display:flex;">
+  <p th:text="|全${sampleResults.resultCount}件|"></p>
+  <nav>
+    <ul class="pagination">
+      <th:block th:each="i : ${#numbers.sequence(1, (sampleResults.resultCount / sampleSearchForm.maxNumPerPage) + 1)}">
+        <li class="page-item"><a class="page-link" th:classappend="${i == sampleSearchForm.page} ? active" th:href="|/sample/search?displayId=${sampleSearchForm.displayId}&text1=${sampleSearchForm.text1}&page=${i}&maxNumPerPage=${sampleSearchForm.maxNumPerPage}|" th:text="${i}"></a></li>
+      </th:block>
+    </ul>
+  </nav>
+</div>
 <table class="table table-bordered">
   <tr>
     <th scope="col">ID</th>
     <th scope="col">TEXT1</th>
     <th scope="col">NUM1</th>
   </tr>
-  <tr th:each="sampleResult : ${sampleResults}">
-    <td>
-      <a th:text="${#strings.substring(sampleResult.displayId,0,8)}"
-         th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a>
-      <i class="bi bi-copy" id="copy" th:data-id="${sampleResult.displayId}" data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
-    </td>
-    <td th:text="${sampleResult.text1}"></td>
-    <td th:text="${sampleResult.num1}"></td>
-  </tr>
+  <th:block th:if="!${#lists.isEmpty(sampleResults)}">
+    <tr th:each="sampleResult : ${sampleResults.sampleResultList}">
+      <td>
+        <a th:text="${#strings.substring(sampleResult.displayId,0,8)}"
+           th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a>
+        <i class="bi bi-copy" id="copy" th:data-id="${sampleResult.displayId}" data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
+      </td>
+      <td th:text="${sampleResult.text1}"></td>
+      <td th:text="${sampleResult.num1}"></td>
+    </tr>
+  </th:block>
 </table>
 </body>
 </html>

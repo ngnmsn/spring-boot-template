@@ -1,8 +1,10 @@
 package com.ngnmsn.template.repository.impl;
 
 import static com.ngnmsn.template.Tables.SAMPLES;
+import static org.jooq.impl.DSL.count;
 
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleResults;
 import com.ngnmsn.template.repository.SampleRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,18 @@ public class SampleRepositoryImpl implements SampleRepository {
   }
 
   @Override
-  public List<SampleResult> search(String displayId, String text1, int page, int maxNumPerPage) {
+  public SampleResults search(String displayId, String text1, int page, int maxNumPerPage) {
+    SampleResults sampleResults = new SampleResults();
+
+    Record count = jooq.select(count())
+        .from(SAMPLES)
+        .where(SAMPLES.DISPLAY_ID.like("%" + displayId + "%"))
+        .and(SAMPLES.TEXT1.like("%" + text1 + "%"))
+        .fetchSingle();
+    int resultCount = count.getValue(count());
+
+    sampleResults.setResultCount(resultCount);
+
     Result<Record> results = jooq.select()
         .from(SAMPLES)
         .where(SAMPLES.DISPLAY_ID.like("%" + displayId + "%"))
@@ -35,15 +48,16 @@ public class SampleRepositoryImpl implements SampleRepository {
         .limit(maxNumPerPage)
         .offset((page - 1) * maxNumPerPage)
         .fetch();
-    List<SampleResult> sampleResults = new ArrayList<SampleResult>();
+    List<SampleResult> sampleResultList = new ArrayList<SampleResult>();
     for (Record r : results) {
       SampleResult sampleResult = new SampleResult();
       sampleResult.setId(r.getValue(SAMPLES.ID));
       sampleResult.setDisplayId(r.getValue(SAMPLES.DISPLAY_ID));
       sampleResult.setText1(r.getValue(SAMPLES.TEXT1));
       sampleResult.setNum1(r.getValue(SAMPLES.NUM1));
-      sampleResults.add(sampleResult);
+      sampleResultList.add(sampleResult);
     }
+    sampleResults.setSampleResultList(sampleResultList);
     return sampleResults;
   }
 

@@ -5,6 +5,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleResults;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,8 @@ public class SampleRepositoryTest {
   @DisplayName("search()の正常系テスト")
   @Test
   public void testSearchSuccess() {
+    SampleResults expects = new SampleResults();
+    expects.setResultCount(1);
     List<SampleResult> expectList = new ArrayList<>() {
       {
         add(new SampleResult() {
@@ -44,14 +47,18 @@ public class SampleRepositoryTest {
         });
       }
     };
-    List<SampleResult> resultList = sampleRepositoryImpl.search("001", "test", 1, 30);
+    expects.setSampleResultList(expectList);
+
+    SampleResults results = sampleRepositoryImpl.search("001", "test", 1, 30);
+
+    assertThat(results.getResultCount(), is(expects.getResultCount()));
 
     int i = 0;
-    for (SampleResult result : resultList) {
-      assertThat(result.getId(), is(expectList.get(i).getId()));
-      assertThat(result.getDisplayId(), is(expectList.get(i).getDisplayId()));
-      assertThat(result.getText1(), is(expectList.get(i).getText1()));
-      assertThat(result.getNum1(), is(expectList.get(i).getNum1()));
+    for (SampleResult result : results.getSampleResultList()) {
+      assertThat(result.getId(), is(expects.getSampleResultList().get(i).getId()));
+      assertThat(result.getDisplayId(), is(expects.getSampleResultList().get(i).getDisplayId()));
+      assertThat(result.getText1(), is(expects.getSampleResultList().get(i).getText1()));
+      assertThat(result.getNum1(), is(expects.getSampleResultList().get(i).getNum1()));
       i++;
     }
   }
