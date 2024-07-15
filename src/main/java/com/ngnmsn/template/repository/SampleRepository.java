@@ -1,8 +1,8 @@
 package com.ngnmsn.template.repository;
 
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleResults;
 import java.io.Serializable;
-import java.util.List;
 import org.jooq.types.ULong;
 
 /**
@@ -10,7 +10,7 @@ import org.jooq.types.ULong;
  */
 public interface SampleRepository extends Serializable {
 
-  public List<SampleResult> search(String displayId, String text1, int page, int maxNumPerPage);
+  public SampleResults search(String displayId, String text1, int page, int maxNumPerPage);
 
   public SampleResult findByDisplayId(String displayId);
 

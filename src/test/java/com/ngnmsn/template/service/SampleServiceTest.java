@@ -11,6 +11,7 @@ import static org.mockito.Mockito.when;
 
 import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleResults;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
@@ -49,19 +50,23 @@ public class SampleServiceTest {
   @DisplayName("search()の正常系テスト")
   @Test
   public void testSearchSuccess() {
-    List<SampleResult> expect = setExpectList();
-    when(sampleRepositoryImpl.search(any(), any(), anyInt(), anyInt())).thenReturn(expect);
+    SampleResults expects = setExpects();
+    when(sampleRepositoryImpl.search(any(), any(), anyInt(), anyInt())).thenReturn(expects);
 
     SampleSearchForm form = new SampleSearchForm();
     form.setDisplayId("");
     form.setText1("");
 
-    List<SampleResult> results = sampleService.search(form);
+    SampleResults results = sampleService.search(form);
 
-    assertThat(results.getFirst().getId(), is(expect.getFirst().getId()));
-    assertThat(results.getFirst().getDisplayId(), is(expect.getFirst().getDisplayId()));
-    assertThat(results.getFirst().getText1(), is(expect.getFirst().getText1()));
-    assertThat(results.getFirst().getNum1(), is(expect.getFirst().getNum1()));
+    assertThat(results.getSampleResultList().getFirst().getId(),
+        is(expects.getSampleResultList().getFirst().getId()));
+    assertThat(results.getSampleResultList().getFirst().getDisplayId(),
+        is(expects.getSampleResultList().getFirst().getDisplayId()));
+    assertThat(results.getSampleResultList().getFirst().getText1(),
+        is(expects.getSampleResultList().getFirst().getText1()));
+    assertThat(results.getSampleResultList().getFirst().getNum1(),
+        is(expects.getSampleResultList().getFirst().getNum1()));
   }
 
   @DisplayName("detail()の正常系テスト")
@@ -129,10 +134,13 @@ public class SampleServiceTest {
     return expect;
   }
 
-  private List<SampleResult> setExpectList() {
+  private SampleResults setExpects() {
+    SampleResults expects = new SampleResults();
+    expects.setResultCount(1);
     List<SampleResult> expectList = new ArrayList<>();
     SampleResult expect = setExpect();
     expectList.add(expect);
-    return expectList;
+    expects.setSampleResultList(expectList);
+    return expects;
   }
 }

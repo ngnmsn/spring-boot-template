@@ -5,6 +5,7 @@ import com.ngnmsn.template.consts.WebConst;
 import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleDeleteForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleResults;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.service.SampleService;
@@ -35,6 +36,7 @@ public class SampleController {
 
   @GetMapping()
   String list(Model model) {
+
     SampleSearchForm sampleSearchForm = new SampleSearchForm();
     model.addAttribute("sampleSearchForm", sampleSearchForm);
     return SampleConst.TEMPLATE_SAMPLE_LIST;
@@ -42,7 +44,7 @@ public class SampleController {
 
   @GetMapping(WebConst.URL_SEARCH)
   String search(@ModelAttribute("sampleSearchForm") SampleSearchForm form, Model model) {
-    List<SampleResult> sampleResults = sampleService.search(form);
+    SampleResults sampleResults = sampleService.search(form);
     session.setAttribute("sampleSearchForm", form);
     model.addAttribute("sampleResults", sampleResults);
     return SampleConst.TEMPLATE_SAMPLE_LIST;

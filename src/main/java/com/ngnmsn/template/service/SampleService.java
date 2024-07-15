@@ -2,6 +2,7 @@ package com.ngnmsn.template.service;
 
 import com.ngnmsn.template.domain.sample.SampleCreateForm;
 import com.ngnmsn.template.domain.sample.SampleResult;
+import com.ngnmsn.template.domain.sample.SampleResults;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
@@ -29,7 +30,7 @@ public class SampleService {
    * @param form 検索フォーム
    * @return List<code><</code>SampleResult<code>></code> 検索結果リスト
    */
-  public List<SampleResult> search(SampleSearchForm form) {
+  public SampleResults search(SampleSearchForm form) {
 
     String displayId = form.getDisplayId();
     String text1 = form.getText1();
