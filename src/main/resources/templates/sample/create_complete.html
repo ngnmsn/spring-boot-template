@@ -1,14 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ja">
-<head>
-  <meta charset="UTF-8"/>
-  <title>template</title>
-  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
-  <script th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
-  <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" defer></script>
-</head>
-<body>
-<p th:text="作成が完了しました。"></p>
-<a th:text="一覧" class="btn btn-primary" role="button" th:href="@{/sample/search/return}"></a>
-</body>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+  <p th:text="作成が完了しました。"></p>
+  <a th:text="一覧" class="btn btn-primary" role="button" th:href="@{/sample/search/return}"></a>
+</th:block>
 </html>

@@ -48,6 +48,7 @@ dependencies {
 	implementation 'org.webjars.npm:bootstrap-icons:1.11.3'
 	implementation 'org.webjars:jquery:3.7.1'
 	implementation 'org.webjars:webjars-locator:0.52'
+	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
