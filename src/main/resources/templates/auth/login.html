@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-  <form method="post" th:action="@{/login}" th:object="${loginForm}">
-    <label for="loginId" class="form-label">ログインID<br>
-      <input type="text" class="form-control" id="loginId" name="loginId" th:field="*{loginId}">
-    </label><br>
-    <label for="password" class="form-label">パスワード<br>
-      <input type="password" class="form-control" id="password" name="password" th:field="*{password}">
-    </label><br>
-    <input type="submit" class="btn btn-primary" value="ログイン">
-  </form>
+  <div class="container" id="content">
+    <h2>Login</h2>
+    <div id="form">
+      <form method="post" th:action="@{/login}" th:object="${loginForm}">
+        <div id="form-input">
+          <label for="loginId" class="form-label">ログインID<br>
+            <input type="text" class="form-control" id="loginId" name="loginId" th:field="*{loginId}">
+          </label><br>
+          <label for="password" class="form-label">パスワード<br>
+            <input type="password" class="form-control" id="password" name="password" th:field="*{password}">
+          </label><br>
+        </div>
+        <input type="submit" class="btn btn-primary" value="ログイン">
+      </form>
+    </div>
+  </div>
 </th:block>
 </html>
