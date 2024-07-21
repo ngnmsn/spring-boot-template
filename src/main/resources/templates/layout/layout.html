@@ -4,13 +4,16 @@
   <title>SpringBoot Template</title>
   <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
   <link rel="stylesheet" th:href="@{/webjars/bootstrap-icons/font/bootstrap-icons.css}">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
   <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}" defer></script>
   <script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}" defer></script>
   <script type="text/javascript" th:src="@{/js/main.js}" defer></script>
 </head>
 <body>
-<div>
-  <th:block layout:fragment="content"></th:block>
-</div>
+  <th:block layout:replace="~{fragment/header::header}"></th:block>
+  <div id="main">
+    <th:block layout:replace="~{fragment/sidebar::sidebar}"></th:block>
+    <th:block layout:fragment="content"></th:block>
+  </div>
 </body>
 </html>

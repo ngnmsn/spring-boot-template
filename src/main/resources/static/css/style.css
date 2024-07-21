@@ -1,0 +1,81 @@
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+}
+
+label {
+    font-weight: bold;
+    margin-right: 16px;
+}
+p {
+    margin-right: 8px;
+}
+
+#navbar {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+#main {
+    height: 100%;
+    display: flex;
+    padding: 8px;
+}
+#sidebar {
+    height: 100%;
+    min-width: 200px;
+}
+#content {
+    height: 100%;
+}
+#search {
+    display: flex;
+    justify-content: center;
+}
+#search-form {
+    width: 80%;
+    min-width: 400px;
+    padding: 16px;
+    border-radius: 8PX;
+}
+#search-input {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+#search-button {
+    display: flex;
+    justify-content: flex-end;
+}
+#under-search {
+    display: flex;
+    justify-content: center;
+}
+#under-search-child {
+    width: 80%;
+    min-width: 400px;
+    padding: 16px;
+    display: flex;
+    justify-content: end;
+}
+
+/* paginationパーツ */
+#pagination {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+#pagination-number {
+    margin-right: 16px;
+}
+#form {
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+#form-input {
+    padding-bottom: 16px;
+}
+#displayId-component {
+    display: flex;
+}
