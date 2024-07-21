@@ -100,5 +100,5 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-test.dependsOn flywayClean
-test.dependsOn flywayMigrate
+generateJooq.dependsOn flywayClean
+generateJooq.dependsOn flywayMigrate
