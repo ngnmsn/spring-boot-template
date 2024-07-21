@@ -13,6 +13,9 @@ public class SampleConst {
   public static final String REDIRECT_SAMPLE_CREATE_COMPLETE = "redirect:"
       + URL_SAMPLE
       + WebConst.URL_CREATE_COMPLETE;
+  public static final String REDIRECT_SAMPLE_UPDATE = "redirect:"
+      + URL_SAMPLE
+      + WebConst.URL_UPDATE;
   public static final String REDIRECT_SAMPLE_UPDATE_COMPLETE = "redirect:"
       + URL_SAMPLE
       + WebConst.URL_UPDATE_COMPLETE;

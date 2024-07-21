@@ -107,6 +107,7 @@ public class SampleController {
     form.setNum1(sampleResult.getNum1());
     session.setAttribute("sampleUpdateId", sampleResult.getId());
     session.setAttribute("sampleUpdateDisplayId", sampleResult.getDisplayId());
+    session.setAttribute("sampleUpdateForm", form);
     model.addAttribute("sampleUpdateDisplayId", sampleResult.getDisplayId());
     model.addAttribute("sampleUpdateForm", form);
     return SampleConst.TEMPLATE_SAMPLE_UPDATE;
@@ -115,8 +116,13 @@ public class SampleController {
   @PostMapping(WebConst.URL_UPDATE_CONFIRM)
   String updateConfirm(@ModelAttribute("sampleUpdateForm") SampleUpdateForm form, Model model) {
     String displayId = (String) session.getAttribute("sampleUpdateDisplayId");
-    session.setAttribute("sampleUpdateForm", form);
     model.addAttribute("sampleUpdateDisplayId", displayId);
+    SampleUpdateForm beforeForm = (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
+    if (form.equals(beforeForm)) {
+      model.addAttribute("alertMessage", "変更がありません。");
+      return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+    }
+    session.setAttribute("sampleUpdateForm", form);
     model.addAttribute("sampleUpdateForm", form);
     return SampleConst.TEMPLATE_SAMPLE_UPDATE_CONFIRM;
   }
