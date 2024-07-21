@@ -3,6 +3,7 @@ package com.ngnmsn.template.controller;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
@@ -240,11 +241,45 @@ public class SampleControllerTest {
   @DisplayName("updateConfirm()の正常系テスト")
   @Test
   public void testUpdateConfirmSuccess() throws Exception {
-    when(session.getAttribute(any())).thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    SampleUpdateForm beforeSampleUpdateForm = new SampleUpdateForm() {
+      {
+        setText1("test1");
+        setNum1(1);
+      }
+    };
+    SampleUpdateForm afterSampleUpdateForm = new SampleUpdateForm() {
+      {
+        setText1("test11");
+        setNum1(11);
+      }
+    };
+    when(session.getAttribute("sampleUpdateDisplayId"))
+        .thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    when(session.getAttribute("sampleUpdateForm")).thenReturn(beforeSampleUpdateForm);
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm"))
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
+            .flashAttr("sampleUpdateForm", afterSampleUpdateForm))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/update_confirm"));
+  }
+
+  @DisplayName("updateConfirm()の正常系テスト(変更なし)")
+  @Test
+  public void testUpdateConfirmNoUpdateSuccess() throws Exception {
+    SampleUpdateForm sampleUpdateForm = new SampleUpdateForm() {
+      {
+        setText1("test1");
+        setNum1(1);
+      }
+    };
+    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    when(session.getAttribute("sampleUpdateForm")).thenReturn(sampleUpdateForm);
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
+            .flashAttr("sampleUpdateForm", sampleUpdateForm))
+        .andExpect(status().isOk())
+        .andExpect(view().name("sample/update"))
+        .andExpect(model().attribute("alertMessage", "変更がありません。"));
   }
 
   @DisplayName("returnUpdate()の正常系テスト")
@@ -257,8 +292,8 @@ public class SampleControllerTest {
         setNum1(1);
       }
     };
-
-    when(session.getAttribute(any())).thenReturn(form);
+    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    when(session.getAttribute("sampleUpdateForm")).thenReturn(form);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm"))
         .andExpect(status().isOk())

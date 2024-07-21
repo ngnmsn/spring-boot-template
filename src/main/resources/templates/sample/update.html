@@ -4,6 +4,7 @@
   <div class="container" id="content">
     <h2>Sample</h2>
     <div id="form">
+      <div th:if="${alertMessage}" class="alert alert-warning" role="alert" th:text="${alertMessage}"></div>
       <form method="post"
             th:action="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateDisplayId})}"
             th:object="${sampleUpdateForm}">
