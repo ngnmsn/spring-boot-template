@@ -10,7 +10,6 @@ import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.service.SampleService;
 import jakarta.servlet.http.HttpSession;
-import java.util.List;
 import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -124,7 +123,9 @@ public class SampleController {
 
   @GetMapping(WebConst.URL_UPDATE_CONFIRM)
   String returnUpdate(Model model) {
+    String displayId = (String) session.getAttribute("sampleUpdateDisplayId");
     SampleUpdateForm form = (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
+    model.addAttribute("sampleUpdateDisplayId", displayId);
     model.addAttribute("sampleUpdateForm", form);
     return SampleConst.TEMPLATE_SAMPLE_UPDATE;
   }
