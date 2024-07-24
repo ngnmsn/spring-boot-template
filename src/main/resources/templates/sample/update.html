@@ -15,10 +15,12 @@
             <i class="bi bi-copy" id="copy" th:data-id="${sampleUpdateDisplayId}" data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
           </div>
           <label for="text1" class="form-label">TEXT1<br>
-            <input type="text" class="form-control" id="text1" name="text1" th:field="*{text1}">
+            <input type="text" class="form-control" id="text1" name="text1" th:field="*{text1}" th:errorclass = "is-invalid">
+            <div class="invalid-feedback" th:errors="*{text1}"></div>
           </label><br>
           <label for="num1" class="form-label">NUM1<br>
-            <input type="number" class="form-control" id="num1" name="num1" th:field="*{num1}">
+            <input type="number" class="form-control" id="num1" name="num1" th:field="*{num1}" th:errorclass = "is-invalid">
+            <div class="invalid-feedback" th:errors="*{num1}"></div>
           </label><br>
         </div>
         <a th:text="キャンセル" class="btn btn-secondary" role="button" th:href="@{/sample/{displayId}(displayId=${sampleUpdateDisplayId})}"></a>
