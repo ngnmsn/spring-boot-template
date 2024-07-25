@@ -14,6 +14,8 @@ import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -73,7 +75,11 @@ public class SampleController {
   }
 
   @PostMapping(WebConst.URL_CREATE_CONFIRM)
-  String createConfirm(@ModelAttribute("sampleCreateForm") SampleCreateForm form, Model model) {
+  String createConfirm(@ModelAttribute("sampleCreateForm") @Validated SampleCreateForm form,
+      BindingResult bindingResult, Model model) {
+    if (bindingResult.hasErrors()) {
+      return SampleConst.TEMPLATE_SAMPLE_CREATE;
+    }
     session.setAttribute("sampleCreateForm", form);
     model.addAttribute("sampleCreateForm", form);
     return SampleConst.TEMPLATE_SAMPLE_CREATE_CONFIRM;
@@ -114,10 +120,14 @@ public class SampleController {
   }
 
   @PostMapping(WebConst.URL_UPDATE_CONFIRM)
-  String updateConfirm(@ModelAttribute("sampleUpdateForm") SampleUpdateForm form, Model model) {
+  String updateConfirm(@ModelAttribute("sampleUpdateForm") @Validated SampleUpdateForm form,
+      BindingResult bindingResult, Model model) {
     String displayId = (String) session.getAttribute("sampleUpdateDisplayId");
     model.addAttribute("sampleUpdateDisplayId", displayId);
     SampleUpdateForm beforeForm = (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
+    if (bindingResult.hasErrors()) {
+      return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+    }
     if (form.equals(beforeForm)) {
       model.addAttribute("alertMessage", "変更がありません。");
       return SampleConst.TEMPLATE_SAMPLE_UPDATE;

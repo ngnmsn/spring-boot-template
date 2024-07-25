@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<html lang="ja" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
   <div class="container" id="content">
     <h2>Sample</h2>
     <div id="search">
-      <form class="bg-info" id="search-form" method="get" th:action="@{/sample/search}" th:object="${sampleSearchForm}">
+      <form class="bg-info" id="search-form" method="get" th:action="@{/sample/search}"
+            th:object="${sampleSearchForm}">
         <h4>Search</h4>
         <div id="search-input">
           <label for="displayId" class="form-label">ID<br>
-            <input type="text" class="form-control" id="displayId" name="displayId" th:field="*{displayId}">
+            <input type="text" class="form-control" id="displayId" name="displayId"
+                   th:field="*{displayId}">
           </label><br>
           <label for="text1" class="form-label">text1<br>
             <input type="text" class="form-control" id="text1" name="text1" th:field="*{text1}">
@@ -30,8 +33,12 @@
       </div>
       <nav>
         <ul class="pagination">
-          <th:block th:each="i : ${#numbers.sequence(1, (sampleResults.resultCount / sampleSearchForm.maxNumPerPage) + 1)}">
-            <li class="page-item"><a class="page-link" th:classappend="${i == sampleSearchForm.page} ? active" th:href="|/sample/search?displayId=${sampleSearchForm.displayId}&text1=${sampleSearchForm.text1}&page=${i}&maxNumPerPage=${sampleSearchForm.maxNumPerPage}|" th:text="${i}"></a></li>
+          <th:block
+              th:each="i : ${#numbers.sequence(1, (sampleResults.resultCount / sampleSearchForm.maxNumPerPage) + 1)}">
+            <li class="page-item"><a class="page-link"
+                                     th:classappend="${i == sampleSearchForm.page} ? active"
+                                     th:href="|/sample/search?displayId=${sampleSearchForm.displayId}&text1=${sampleSearchForm.text1}&page=${i}&maxNumPerPage=${sampleSearchForm.maxNumPerPage}|"
+                                     th:text="${i}"></a></li>
           </th:block>
         </ul>
       </nav>
@@ -47,7 +54,8 @@
           <td>
             <a th:text="${#strings.substring(sampleResult.displayId,0,8)}"
                th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a>
-            <i class="bi bi-copy" id="copy" th:data-id="${sampleResult.displayId}" data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
+            <i class="bi bi-copy" id="copy" th:data-id="${sampleResult.displayId}"
+               data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
           </td>
           <td th:text="${sampleResult.text1}"></td>
           <td th:text="${sampleResult.num1}"></td>

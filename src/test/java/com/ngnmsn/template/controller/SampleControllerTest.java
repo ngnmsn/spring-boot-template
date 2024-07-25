@@ -110,7 +110,8 @@ public class SampleControllerTest {
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/search/return"))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/sample/search?displayId=001&text1=test&page=1&maxNumPerPage=30"));
+        .andExpect(
+            redirectedUrl("/sample/search?displayId=001&text1=test&page=1&maxNumPerPage=30"));
   }
 
   @DisplayName("returnSearch()の正常系テスト(sessionがnull)")
@@ -170,6 +171,24 @@ public class SampleControllerTest {
             .params(formMap))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/create_confirm"));
+  }
+
+  @DisplayName("createConfirm()の正常系テスト(バリデーションエラー)")
+  @Test
+  public void testCreateConfirmSuccessInvalid() throws Exception {
+
+    final MultiValueMap<String, String> formMap = new LinkedMultiValueMap<>() {
+      {
+        add("text1", "");
+        add("num1", null);
+      }
+    };
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/create/confirm")
+            .params(formMap))
+        .andExpect(status().isOk())
+        .andExpect(view().name("sample/create"));
   }
 
   @DisplayName("returnCreate()の正常系テスト")
@@ -263,6 +282,31 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/update_confirm"));
   }
 
+  @DisplayName("updateConfirm()の正常系テスト(バリデーションエラー)")
+  @Test
+  public void testUpdateConfirmSuccessInvalid() throws Exception {
+    SampleUpdateForm beforeSampleUpdateForm = new SampleUpdateForm() {
+      {
+        setText1("test1");
+        setNum1(1);
+      }
+    };
+    SampleUpdateForm afterSampleUpdateForm = new SampleUpdateForm() {
+      {
+        setText1("");
+        setNum1(null);
+      }
+    };
+    when(session.getAttribute("sampleUpdateDisplayId"))
+        .thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    when(session.getAttribute("sampleUpdateForm")).thenReturn(beforeSampleUpdateForm);
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
+            .flashAttr("sampleUpdateForm", afterSampleUpdateForm))
+        .andExpect(status().isOk())
+        .andExpect(view().name("sample/update"));
+  }
+
   @DisplayName("updateConfirm()の正常系テスト(変更なし)")
   @Test
   public void testUpdateConfirmNoUpdateSuccess() throws Exception {
@@ -272,7 +316,8 @@ public class SampleControllerTest {
         setNum1(1);
       }
     };
-    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn(
+        "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
     when(session.getAttribute("sampleUpdateForm")).thenReturn(sampleUpdateForm);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
@@ -292,7 +337,8 @@ public class SampleControllerTest {
         setNum1(1);
       }
     };
-    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn(
+        "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
     when(session.getAttribute("sampleUpdateForm")).thenReturn(form);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm"))
