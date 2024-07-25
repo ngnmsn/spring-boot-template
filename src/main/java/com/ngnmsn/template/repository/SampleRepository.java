@@ -14,9 +14,9 @@ public interface SampleRepository extends Serializable {
 
   public SampleResult findByDisplayId(String displayId);
 
-  public void insert(String displayId, String text1, int num1);
+  public void insert(String displayId, String text1, Integer num1);
 
-  public void update(ULong id, String text1, int num1);
+  public void update(ULong id, String text1, Integer num1);
 
   public void delete(ULong id);
 }

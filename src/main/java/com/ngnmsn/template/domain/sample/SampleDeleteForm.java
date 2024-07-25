@@ -9,5 +9,5 @@ import lombok.Data;
 public class SampleDeleteForm {
 
   private String text1;
-  private int num1;
+  private Integer num1;
 }

@@ -15,6 +15,6 @@ public class SampleUpdateForm {
   @Size(min = 1, max = 50, message = "1文字以上50文字以内で入力してください。")
   private String text1;
 
-  @NotNull
-  private int num1;
+  @NotNull(message = "値を入力してください。")
+  private Integer num1;
 }

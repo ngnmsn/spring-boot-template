@@ -7,7 +7,6 @@ import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import com.ngnmsn.template.util.StringUtil;
-import java.util.List;
 import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

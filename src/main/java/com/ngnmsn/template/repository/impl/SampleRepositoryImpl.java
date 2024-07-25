@@ -77,14 +77,14 @@ public class SampleRepositoryImpl implements SampleRepository {
   }
 
   @Override
-  public void insert(String displayId, String text1, int num1) {
+  public void insert(String displayId, String text1, Integer num1) {
     jooq.insertInto(SAMPLES, SAMPLES.DISPLAY_ID, SAMPLES.TEXT1, SAMPLES.NUM1)
         .values(displayId, text1, num1)
         .execute();
   }
 
   @Override
-  public void update(ULong id, String text1, int num1) {
+  public void update(ULong id, String text1, Integer num1) {
     jooq.update(SAMPLES)
         .set(SAMPLES.TEXT1, text1)
         .set(SAMPLES.NUM1, num1)

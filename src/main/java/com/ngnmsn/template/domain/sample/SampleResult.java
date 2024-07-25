@@ -12,5 +12,5 @@ public class SampleResult {
   private ULong id;
   private String displayId;
   private String text1;
-  private int num1;
+  private Integer num1;
 }
