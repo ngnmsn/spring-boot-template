@@ -30,4 +30,5 @@ public class WebConst {
   public static final String TEMPLATE_UPDATE_COMPLETE = "update_complete";
   public static final String TEMPLATE_DELETE_CONFIRM = "delete_confirm";
   public static final String TEMPLATE_DELETE_COMPLETE = "delete_complete";
+  public static final String TEMPLATE_ERROR = "error";
 }
