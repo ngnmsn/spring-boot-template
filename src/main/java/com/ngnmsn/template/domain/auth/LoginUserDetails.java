@@ -29,8 +29,9 @@ public class LoginUserDetails implements UserDetails {
     this.loginId = authResult.getLoginId();
     this.password = authResult.getPassword();
     this.userName = authResult.getUserName();
-    this.authorities = Arrays.stream("admin".split(","))
-        .map(role -> new SimpleGrantedAuthority(role))
+    this.authorities = authResult.getPermissionNames()
+        .stream()
+        .map(permissionName -> new SimpleGrantedAuthority(permissionName))
         .toList();
   }
 
