@@ -284,14 +284,14 @@ public class SampleControllerTest {
   @WithMockUser(username = "test", authorities = {"sample-write"})
   public void testReturnCreateSuccess001() throws Exception {
 
-    SampleCreateForm form = new SampleCreateForm() {
+    SampleCreateForm sampleCreateForm = new SampleCreateForm() {
       {
         setText1("test1");
         setNum1(1);
       }
     };
 
-    mockHttpSession.setAttribute("sampleCreateForm", form);
+    mockHttpSession.setAttribute("sampleCreateForm", sampleCreateForm);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/create/confirm")
             .session(mockHttpSession))
@@ -315,14 +315,14 @@ public class SampleControllerTest {
   @WithMockUser(username = "test", authorities = {"sample-write"})
   public void testCreateProcessSuccess001() throws Exception {
 
-    SampleCreateForm form = new SampleCreateForm() {
+    SampleCreateForm sampleCreateForm = new SampleCreateForm() {
       {
         setText1("test1");
         setNum1(1);
       }
     };
 
-    mockHttpSession.setAttribute("sampleCreateForm", form);
+    mockHttpSession.setAttribute("sampleCreateForm", sampleCreateForm);
     doNothing().when(sampleService).create(any());
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/create/process")
@@ -496,14 +496,14 @@ public class SampleControllerTest {
   @WithMockUser(username = "test", authorities = {"sample-write"})
   public void testReturnUpdateSuccess001() throws Exception {
 
-    SampleUpdateForm form = new SampleUpdateForm() {
+    SampleUpdateForm sampleUpdateForm = new SampleUpdateForm() {
       {
         setText1("test1");
         setNum1(1);
       }
     };
     mockHttpSession.setAttribute("sampleUpdateDisplayId", "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-    mockHttpSession.setAttribute("sampleUpdateForm", form);
+    mockHttpSession.setAttribute("sampleUpdateForm", sampleUpdateForm);
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
             .session(mockHttpSession))
@@ -527,7 +527,7 @@ public class SampleControllerTest {
   @WithMockUser(username = "test", authorities = {"sample-write"})
   public void testUpdateProcessSuccess001() throws Exception {
 
-    SampleUpdateForm form = new SampleUpdateForm() {
+    SampleUpdateForm sampleUpdateForm = new SampleUpdateForm() {
       {
         setText1("test1");
         setNum1(1);
@@ -535,7 +535,7 @@ public class SampleControllerTest {
     };
 
     mockHttpSession.setAttribute("sampleUpdateId", ULong.valueOf(1));
-    mockHttpSession.setAttribute("sampleUpdateForm", form);
+    mockHttpSession.setAttribute("sampleUpdateForm", sampleUpdateForm);
     doNothing().when(sampleService).update(any(), any());
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/process")

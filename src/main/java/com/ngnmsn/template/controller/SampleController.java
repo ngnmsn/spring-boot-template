@@ -47,16 +47,16 @@ public class SampleController {
 
   @PreAuthorize("hasAuthority('sample-read')")
   @GetMapping(WebConst.URL_SEARCH)
-  String search(@ModelAttribute("sampleSearchForm") SampleSearchForm form, Model model) {
-    SampleResults sampleResults = sampleService.search(form);
-    session.setAttribute("sampleSearchForm", form);
+  String search(@ModelAttribute("sampleSearchForm") SampleSearchForm sampleSearchForm, Model model) {
+    SampleResults sampleResults = sampleService.search(sampleSearchForm);
+    session.setAttribute("sampleSearchForm", sampleSearchForm);
     model.addAttribute("sampleResults", sampleResults);
     return SampleConst.TEMPLATE_SAMPLE_LIST;
   }
 
   @PreAuthorize("hasAuthority('sample-read')")
   @GetMapping(WebConst.URL_SEARCH_RETURN)
-  String returnSearch(Model mode) {
+  String returnSearch() {
     SampleSearchForm sampleSearchForm = (SampleSearchForm) session.getAttribute("sampleSearchForm");
     if (sampleSearchForm == null) {
       sampleSearchForm = new SampleSearchForm();
@@ -82,13 +82,14 @@ public class SampleController {
 
   @PreAuthorize("hasAuthority('sample-write')")
   @PostMapping(WebConst.URL_CREATE_CONFIRM)
-  String createConfirm(@ModelAttribute("sampleCreateForm") @Validated SampleCreateForm form,
+  String createConfirm(@ModelAttribute("sampleCreateForm") @Validated
+      SampleCreateForm sampleCreateForm,
       BindingResult bindingResult, Model model) {
     if (bindingResult.hasErrors()) {
       return SampleConst.TEMPLATE_SAMPLE_CREATE;
     }
-    session.setAttribute("sampleCreateForm", form);
-    model.addAttribute("sampleCreateForm", form);
+    session.setAttribute("sampleCreateForm", sampleCreateForm);
+    model.addAttribute("sampleCreateForm", sampleCreateForm);
     return SampleConst.TEMPLATE_SAMPLE_CREATE_CONFIRM;
   }
 
@@ -132,7 +133,8 @@ public class SampleController {
 
   @PreAuthorize("hasAuthority('sample-write')")
   @PostMapping(WebConst.URL_UPDATE_CONFIRM)
-  String updateConfirm(@ModelAttribute("sampleUpdateForm") @Validated SampleUpdateForm form,
+  String updateConfirm(@ModelAttribute("sampleUpdateForm") @Validated
+      SampleUpdateForm sampleUpdateForm,
       BindingResult bindingResult, Model model) {
     String displayId = (String) session.getAttribute("sampleUpdateDisplayId");
     model.addAttribute("sampleUpdateDisplayId", displayId);
@@ -140,12 +142,12 @@ public class SampleController {
     if (bindingResult.hasErrors()) {
       return SampleConst.TEMPLATE_SAMPLE_UPDATE;
     }
-    if (form.equals(beforeForm)) {
+    if (sampleUpdateForm.equals(beforeForm)) {
       model.addAttribute("alertMessage", "変更がありません。");
       return SampleConst.TEMPLATE_SAMPLE_UPDATE;
     }
-    session.setAttribute("sampleUpdateForm", form);
-    model.addAttribute("sampleUpdateForm", form);
+    session.setAttribute("sampleUpdateForm", sampleUpdateForm);
+    model.addAttribute("sampleUpdateForm", sampleUpdateForm);
     return SampleConst.TEMPLATE_SAMPLE_UPDATE_CONFIRM;
   }
 
