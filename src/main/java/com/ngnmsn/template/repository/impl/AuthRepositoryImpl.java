@@ -37,10 +37,6 @@ public class AuthRepositoryImpl {
   public AuthResult findByLoginId(String loginId) {
     Record result = jooq.select()
         .from(USERS)
-//          .join(USER_GROUPS).on(USER_GROUPS.ID.eq(USERS.USER_GROUP_ID))
-//          .join(ROLES).on(ROLES.ID.eq(USER_GROUPS.ROLE_ID)))
-//          .join(ROLES_PERMISSIONS).on(ROLES_PERMISSIONS.ROLE_ID.eq(ROLES.ID))
-//          .join(PERMISSIONS).on(PERMISSIONS.ID.eq(ROLES_PERMISSIONS.PERMISSION_ID)
         .where(USERS.LOGIN_ID.eq(loginId))
         .fetchSingle();
     AuthResult authResult = new AuthResult();
