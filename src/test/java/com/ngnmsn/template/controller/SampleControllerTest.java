@@ -3,6 +3,8 @@ package com.ngnmsn.template.controller;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,25 +16,22 @@ import com.ngnmsn.template.domain.sample.SampleResults;
 import com.ngnmsn.template.domain.sample.SampleSearchForm;
 import com.ngnmsn.template.domain.sample.SampleUpdateForm;
 import com.ngnmsn.template.service.SampleService;
-import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import org.jooq.types.ULong;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  * SampleControllerTestクラス
@@ -40,37 +39,50 @@ import org.springframework.util.MultiValueMap;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class SampleControllerTest {
-
-  @Autowired
+  
   private MockMvc mockMvc;
 
-  @Spy
-  private HttpSession session;
+  MockHttpSession mockHttpSession;
 
-  @InjectMocks
-  private SampleController sampleController;
+  @Autowired
+  private WebApplicationContext webApplicationContext;
 
   @MockBean
   private SampleService sampleService;
 
   @BeforeEach
   public void initMocks() {
-    MockitoAnnotations.openMocks(this);
-    mockMvc = MockMvcBuilders.standaloneSetup(sampleController).build();
+    mockMvc = MockMvcBuilders
+        .webAppContextSetup(webApplicationContext)
+        .apply(springSecurity())
+        .build();
+    this.mockHttpSession = new MockHttpSession();
   }
 
   @DisplayName("list()の正常系テスト")
   @Test
-  public void testListSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testListSuccess001() throws Exception {
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample"))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/list"));
   }
 
+  @DisplayName("list()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {})
+  public void testListSuccess002() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("search()の正常系テスト")
   @Test
-  public void testSearchSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testSearchSuccess001() throws Exception {
 
     SampleResults expects = new SampleResults();
     expects.setResultCount(1);
@@ -95,8 +107,20 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/list"));
   }
 
+  @DisplayName("search()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {})
+  public void testSearchSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/search?displayId=001&text1=test"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("returnSearch()の正常系テスト(sessionあり)")
   @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
   public void testReturnSearchSuccess001() throws Exception {
 
     SampleSearchForm sampleSearchForm = new SampleSearchForm() {
@@ -106,9 +130,12 @@ public class SampleControllerTest {
       }
     };
 
-    when(session.getAttribute("sampleSearchForm")).thenReturn(sampleSearchForm);
+    mockHttpSession.setAttribute("sampleSearchForm", sampleSearchForm);
+
     mockMvc.perform(MockMvcRequestBuilders
-            .get("/sample/search/return"))
+            .get("/sample/search/return")
+            .with(csrf())
+            .session(mockHttpSession))
         .andExpect(status().is3xxRedirection())
         .andExpect(
             redirectedUrl("/sample/search?displayId=001&text1=test&page=1&maxNumPerPage=30"));
@@ -116,18 +143,32 @@ public class SampleControllerTest {
 
   @DisplayName("returnSearch()の正常系テスト(sessionがnull)")
   @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
   public void testReturnSearchSuccess002() throws Exception {
 
-    when(session.getAttribute("sampleSearchForm")).thenReturn(null);
+    mockHttpSession.setAttribute("sampleSearchForm", null);
     mockMvc.perform(MockMvcRequestBuilders
-            .get("/sample/search/return"))
+            .get("/sample/search/return")
+            .session(mockHttpSession))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/sample/search?displayId=&text1=&page=1&maxNumPerPage=30"));
   }
 
+  @DisplayName("returnSearch()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {})
+  public void testReturnSearchSuccess003() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/search/return"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("detail()の正常系テスト")
   @Test
-  public void testDetailSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testDetailSuccess001() throws Exception {
 
     SampleResult expect = new SampleResult() {
       {
@@ -145,9 +186,21 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/detail"));
   }
 
+  @DisplayName("detail()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {})
+  public void testDetailSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("create()の正常系テスト")
   @Test
-  public void testCreateSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testCreateSuccess001() throws Exception {
 
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/create"))
@@ -155,45 +208,81 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/create"));
   }
 
+  @DisplayName("create()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testCreateSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/create"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("createConfirm()の正常系テスト")
   @Test
-  public void testCreateConfirmSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testCreateConfirmSuccess001() throws Exception {
 
-    final MultiValueMap<String, String> formMap = new LinkedMultiValueMap<>() {
+    SampleCreateForm sampleCreateForm = new SampleCreateForm() {
       {
-        add("text1", "test1");
-        add("num1", "1");
+        setText1("test1");
+        setNum1(1);
       }
     };
 
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/create/confirm")
-            .params(formMap))
+            .flashAttr("sampleCreateForm", sampleCreateForm)
+            .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/create_confirm"));
   }
 
-  @DisplayName("createConfirm()の正常系テスト(バリデーションエラー)")
+  @DisplayName("createConfirm()の正常系テスト(権限エラー)")
   @Test
-  public void testCreateConfirmSuccessInvalid() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testCreateConfirmSuccess002() throws Exception {
 
-    final MultiValueMap<String, String> formMap = new LinkedMultiValueMap<>() {
+    SampleCreateForm sampleCreateForm = new SampleCreateForm() {
       {
-        add("text1", "");
-        add("num1", null);
+        setText1("test1");
+        setNum1(1);
       }
     };
 
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/create/confirm")
-            .params(formMap))
+            .flashAttr("sampleCreateForm", sampleCreateForm)
+            .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
+  @DisplayName("createConfirm()の正常系テスト(バリデーションエラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testCreateConfirmSuccess003() throws Exception {
+
+    SampleCreateForm sampleCreateForm = new SampleCreateForm() {
+      {
+        setText1("");
+        setNum1(null);
+      }
+    };
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/create/confirm")
+            .flashAttr("sampleCreateForm", sampleCreateForm)
+            .with(csrf()))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/create"));
   }
 
   @DisplayName("returnCreate()の正常系テスト")
   @Test
-  public void testReturnCreateSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testReturnCreateSuccess001() throws Exception {
 
     SampleCreateForm form = new SampleCreateForm() {
       {
@@ -202,16 +291,29 @@ public class SampleControllerTest {
       }
     };
 
-    when(session.getAttribute(any())).thenReturn(form);
+    mockHttpSession.setAttribute("sampleCreateForm", form);
     mockMvc.perform(MockMvcRequestBuilders
-            .get("/sample/create/confirm"))
+            .get("/sample/create/confirm")
+            .session(mockHttpSession))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/create"));
   }
 
+  @DisplayName("returnCreate()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testReturnCreateSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/create/confirm"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("createProcess()の正常系テスト")
   @Test
-  public void testCreateProcessSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testCreateProcessSuccess001() throws Exception {
 
     SampleCreateForm form = new SampleCreateForm() {
       {
@@ -220,17 +322,32 @@ public class SampleControllerTest {
       }
     };
 
-    when(session.getAttribute(any())).thenReturn(form);
+    mockHttpSession.setAttribute("sampleCreateForm", form);
     doNothing().when(sampleService).create(any());
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/sample/create/process"))
+            .post("/sample/create/process")
+            .with(csrf())
+            .session(mockHttpSession))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/sample/create/complete"));
   }
 
+  @DisplayName("createProcess()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testCreateProcessSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/create/process")
+            .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("createComplete()の正常系テスト")
   @Test
-  public void testCreateCompleteSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testCreateCompleteSuccess001() throws Exception {
 
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/create/complete"))
@@ -238,9 +355,21 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/create_complete"));
   }
 
+  @DisplayName("createComplete()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testCreateCompleteSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/create/complete"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("update()の正常系テスト")
   @Test
-  public void testUpdateSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testUpdateSuccess001() throws Exception {
 
     SampleResult result = new SampleResult() {
       {
@@ -257,9 +386,21 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/update"));
   }
 
+  @DisplayName("update()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testUpdateSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("updateConfirm()の正常系テスト")
   @Test
-  public void testUpdateConfirmSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testUpdateConfirmSuccess001() throws Exception {
     SampleUpdateForm beforeSampleUpdateForm = new SampleUpdateForm() {
       {
         setText1("test1");
@@ -272,19 +413,21 @@ public class SampleControllerTest {
         setNum1(11);
       }
     };
-    when(session.getAttribute("sampleUpdateDisplayId"))
-        .thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-    when(session.getAttribute("sampleUpdateForm")).thenReturn(beforeSampleUpdateForm);
+    mockHttpSession.setAttribute("sampleUpdateDisplayId", "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    mockHttpSession.setAttribute("sampleUpdateForm", beforeSampleUpdateForm);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
-            .flashAttr("sampleUpdateForm", afterSampleUpdateForm))
+            .flashAttr("sampleUpdateForm", afterSampleUpdateForm)
+            .with(csrf())
+            .session(mockHttpSession))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/update_confirm"));
   }
 
   @DisplayName("updateConfirm()の正常系テスト(バリデーションエラー)")
   @Test
-  public void testUpdateConfirmSuccessInvalid() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testUpdateConfirmSuccess002() throws Exception {
     SampleUpdateForm beforeSampleUpdateForm = new SampleUpdateForm() {
       {
         setText1("test1");
@@ -297,31 +440,52 @@ public class SampleControllerTest {
         setNum1(null);
       }
     };
-    when(session.getAttribute("sampleUpdateDisplayId"))
-        .thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-    when(session.getAttribute("sampleUpdateForm")).thenReturn(beforeSampleUpdateForm);
+    mockHttpSession.setAttribute("sampleUpdateDisplayId", "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    mockHttpSession.setAttribute("sampleUpdateForm", beforeSampleUpdateForm);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
-            .flashAttr("sampleUpdateForm", afterSampleUpdateForm))
+            .flashAttr("sampleUpdateForm", afterSampleUpdateForm)
+            .with(csrf())
+            .session(mockHttpSession))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/update"));
   }
 
+  @DisplayName("updateConfirm()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testUpdateConfirmSuccess003() throws Exception {
+    SampleUpdateForm afterSampleUpdateForm = new SampleUpdateForm() {
+      {
+        setText1("test11");
+        setNum1(11);
+      }
+    };
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
+            .flashAttr("sampleUpdateForm", afterSampleUpdateForm)
+            .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("updateConfirm()の正常系テスト(変更なし)")
   @Test
-  public void testUpdateConfirmNoUpdateSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testUpdateConfirmSuccess004() throws Exception {
     SampleUpdateForm sampleUpdateForm = new SampleUpdateForm() {
       {
         setText1("test1");
         setNum1(1);
       }
     };
-    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn(
-        "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-    when(session.getAttribute("sampleUpdateForm")).thenReturn(sampleUpdateForm);
+    mockHttpSession.setAttribute("sampleUpdateDisplayId", "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    mockHttpSession.setAttribute("sampleUpdateForm", sampleUpdateForm);
     mockMvc.perform(MockMvcRequestBuilders
             .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
-            .flashAttr("sampleUpdateForm", sampleUpdateForm))
+            .flashAttr("sampleUpdateForm", sampleUpdateForm)
+            .with(csrf())
+            .session(mockHttpSession))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/update"))
         .andExpect(model().attribute("alertMessage", "変更がありません。"));
@@ -329,7 +493,8 @@ public class SampleControllerTest {
 
   @DisplayName("returnUpdate()の正常系テスト")
   @Test
-  public void testReturnUpdateSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testReturnUpdateSuccess001() throws Exception {
 
     SampleUpdateForm form = new SampleUpdateForm() {
       {
@@ -337,18 +502,30 @@ public class SampleControllerTest {
         setNum1(1);
       }
     };
-    when(session.getAttribute("sampleUpdateDisplayId")).thenReturn(
-        "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-    when(session.getAttribute("sampleUpdateForm")).thenReturn(form);
+    mockHttpSession.setAttribute("sampleUpdateDisplayId", "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    mockHttpSession.setAttribute("sampleUpdateForm", form);
     mockMvc.perform(MockMvcRequestBuilders
-            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm"))
+            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm")
+            .session(mockHttpSession))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/update"));
   }
 
+  @DisplayName("returnUpdate()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testReturnUpdateSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/confirm"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("updateProcess()の正常系テスト")
   @Test
-  public void testUpdateProcessSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testUpdateProcessSuccess001() throws Exception {
 
     SampleUpdateForm form = new SampleUpdateForm() {
       {
@@ -357,18 +534,33 @@ public class SampleControllerTest {
       }
     };
 
-    when(session.getAttribute("sampleUpdateId")).thenReturn(ULong.valueOf(1));
-    when(session.getAttribute("sampleUpdateForm")).thenReturn(form);
+    mockHttpSession.setAttribute("sampleUpdateId", ULong.valueOf(1));
+    mockHttpSession.setAttribute("sampleUpdateForm", form);
     doNothing().when(sampleService).update(any(), any());
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/process"))
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/process")
+            .with(csrf())
+            .session(mockHttpSession))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/complete"));
   }
 
+  @DisplayName("updateProcess()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testUpdateProcessSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/process")
+            .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("updateComplete()の正常系テスト")
   @Test
-  public void testUpdateCompleteSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testUpdateCompleteSuccess001() throws Exception {
 
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/complete"))
@@ -376,9 +568,21 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/update_complete"));
   }
 
+  @DisplayName("updateComplete()の正常系テスト")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testUpdateCompleteSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/update/complete"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("deleteConfirm()の正常系テスト")
   @Test
-  public void testDeleteConfirmSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testDeleteConfirmSuccess001() throws Exception {
 
     SampleResult result = new SampleResult() {
       {
@@ -396,34 +600,63 @@ public class SampleControllerTest {
         .andExpect(view().name("sample/delete_confirm"));
   }
 
+  @DisplayName("deleteConfirm()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testDeleteConfirmSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/confirm"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("deleteProcess()の正常系テスト")
   @Test
-  public void testDeleteProcessSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testDeleteProcessSuccess001() throws Exception {
 
-    SampleResult result = new SampleResult() {
-      {
-        setId(ULong.valueOf(1));
-        setDisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-        setText1("test1");
-        setNum1(1);
-      }
-    };
-
-    when(session.getAttribute(any())).thenReturn(ULong.valueOf(1));
+    mockHttpSession.setAttribute("sampleDeleteId", ULong.valueOf(1));
     doNothing().when(sampleService).delete(any());
     mockMvc.perform(MockMvcRequestBuilders
-            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/process"))
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/process")
+            .with(csrf())
+            .session(mockHttpSession))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/complete"));
   }
 
+  @DisplayName("deleteProcess()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testDeleteProcessSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .post("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/process")
+            .with(csrf()))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
+  }
+
   @DisplayName("deleteComplete()の正常系テスト")
   @Test
-  public void testDeleteCompleteSuccess() throws Exception {
+  @WithMockUser(username = "test", authorities = {"sample-write"})
+  public void testDeleteCompleteSuccess001() throws Exception {
 
     mockMvc.perform(MockMvcRequestBuilders
             .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/complete"))
         .andExpect(status().isOk())
         .andExpect(view().name("sample/delete_complete"));
+  }
+
+  @DisplayName("deleteComplete()の正常系テスト(権限エラー)")
+  @Test
+  @WithMockUser(username = "test", authorities = {"sample-read"})
+  public void testDeleteCompleteSuccess002() throws Exception {
+
+    mockMvc.perform(MockMvcRequestBuilders
+            .get("/sample/001ABCDEFGHIJKLMNOPQRSTUVWXYZABC/delete/complete"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("error"));
   }
 }

@@ -12,6 +12,7 @@ import com.ngnmsn.template.service.SampleService;
 import jakarta.servlet.http.HttpSession;
 import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +36,7 @@ public class SampleController {
   @Autowired
   private SampleService sampleService;
 
+  @PreAuthorize("hasAuthority('sample-read')")
   @GetMapping()
   String list(Model model) {
 
@@ -43,6 +45,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_LIST;
   }
 
+  @PreAuthorize("hasAuthority('sample-read')")
   @GetMapping(WebConst.URL_SEARCH)
   String search(@ModelAttribute("sampleSearchForm") SampleSearchForm form, Model model) {
     SampleResults sampleResults = sampleService.search(form);
@@ -51,6 +54,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_LIST;
   }
 
+  @PreAuthorize("hasAuthority('sample-read')")
   @GetMapping(WebConst.URL_SEARCH_RETURN)
   String returnSearch(Model mode) {
     SampleSearchForm sampleSearchForm = (SampleSearchForm) session.getAttribute("sampleSearchForm");
@@ -60,6 +64,7 @@ public class SampleController {
     return SampleConst.REDIRECT_SAMPLE_SEARCH + sampleSearchForm.generateQueryParameter();
   }
 
+  @PreAuthorize("hasAuthority('sample-read')")
   @GetMapping(WebConst.URL_DETAIL)
   String detail(@PathVariable String displayId, Model model) {
     SampleResult sampleResult = sampleService.detail(displayId);
@@ -67,6 +72,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_DETAIL;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_CREATE)
   String create(Model model) {
     SampleCreateForm sampleCreateForm = new SampleCreateForm();
@@ -74,6 +80,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_CREATE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @PostMapping(WebConst.URL_CREATE_CONFIRM)
   String createConfirm(@ModelAttribute("sampleCreateForm") @Validated SampleCreateForm form,
       BindingResult bindingResult, Model model) {
@@ -85,6 +92,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_CREATE_CONFIRM;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_CREATE_CONFIRM)
   String returnCreate(Model model) {
     SampleCreateForm form = (SampleCreateForm) session.getAttribute("sampleCreateForm");
@@ -92,6 +100,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_CREATE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @PostMapping(WebConst.URL_CREATE_PROCESS)
   String createProcess() {
     SampleCreateForm createForm = (SampleCreateForm) session.getAttribute("sampleCreateForm");
@@ -100,11 +109,13 @@ public class SampleController {
     return SampleConst.REDIRECT_SAMPLE_CREATE_COMPLETE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_CREATE_COMPLETE)
   String createComplete() {
     return SampleConst.TEMPLATE_SAMPLE_CREATE_COMPLETE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_UPDATE)
   String update(@PathVariable String displayId, Model model) {
     SampleResult sampleResult = sampleService.detail(displayId);
@@ -119,6 +130,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_UPDATE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @PostMapping(WebConst.URL_UPDATE_CONFIRM)
   String updateConfirm(@ModelAttribute("sampleUpdateForm") @Validated SampleUpdateForm form,
       BindingResult bindingResult, Model model) {
@@ -137,6 +149,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_UPDATE_CONFIRM;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_UPDATE_CONFIRM)
   String returnUpdate(Model model) {
     String displayId = (String) session.getAttribute("sampleUpdateDisplayId");
@@ -146,6 +159,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_UPDATE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @PostMapping(WebConst.URL_UPDATE_PROCESS)
   String updateProcess() {
     ULong sampleUpdateId = (ULong) session.getAttribute("sampleUpdateId");
@@ -157,11 +171,13 @@ public class SampleController {
     return SampleConst.REDIRECT_SAMPLE_UPDATE_COMPLETE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_UPDATE_COMPLETE)
   String updateComplete() {
     return SampleConst.TEMPLATE_SAMPLE_UPDATE_COMPLETE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_DELETE_CONFIRM)
   String deleteConfirm(@PathVariable String displayId, Model model) {
     SampleResult sampleResult = sampleService.detail(displayId);
@@ -175,6 +191,7 @@ public class SampleController {
     return SampleConst.TEMPLATE_SAMPLE_DELETE_CONFIRM;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @PostMapping(WebConst.URL_DELETE_PROCESS)
   String deleteProcess() {
     ULong sampleDeleteId = (ULong) session.getAttribute("sampleDeleteId");
@@ -184,6 +201,7 @@ public class SampleController {
     return SampleConst.REDIRECT_SAMPLE_DELETE_COMPLETE;
   }
 
+  @PreAuthorize("hasAuthority('sample-write')")
   @GetMapping(WebConst.URL_DELETE_COMPLETE)
   String deleteComplete() {
     return SampleConst.TEMPLATE_SAMPLE_DELETE_COMPLETE;

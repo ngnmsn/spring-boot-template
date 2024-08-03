@@ -1,3 +1,30 @@
+DELETE FROM permissions;
+INSERT INTO permissions (permission_name) VALUES ('sample-write');
+INSERT INTO permissions (permission_name) VALUES ('sample-read');
+
+DELETE FROM roles;
+INSERT INTO roles (role_name) VALUES ('admin');
+INSERT INTO roles (role_name) VALUES ('write');
+INSERT INTO roles (role_name) VALUES ('read');
+
+DELETE FROM roles_permissions;
+INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 1);
+INSERT INTO roles_permissions (role_id, permission_id) VALUES (1, 2);
+INSERT INTO roles_permissions (role_id, permission_id) VALUES (2, 1);
+INSERT INTO roles_permissions (role_id, permission_id) VALUES (2, 2);
+INSERT INTO roles_permissions (role_id, permission_id) VALUES (3, 2);
+
+DELETE FROM user_groups;
+INSERT INTO user_groups (display_id, role_id, user_group_name) VALUES ('001ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 1, '管理者グループ');
+INSERT INTO user_groups (display_id, role_id, user_group_name) VALUES ('002ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 2, '更新グループ');
+INSERT INTO user_groups (display_id, role_id, user_group_name) VALUES ('003ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 3, '参照グループ');
+
+-- password:password
+DELETE FROM users;
+INSERT INTO users (display_id, user_group_id, login_id, password, user_name, mail_address) VALUES ('001ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 1,'test1@example.com', '$2a$10$g1eLVd1alJ3gW9OiqudP7eG/3k6fKWPLPvDLnRR3Z3h6/WU4SHjbm', 'テストユーザ(管理)', 'test1@example.com');
+INSERT INTO users (display_id, user_group_id, login_id, password, user_name, mail_address) VALUES ('002ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 2,'test2@example.com', '$2a$10$g1eLVd1alJ3gW9OiqudP7eG/3k6fKWPLPvDLnRR3Z3h6/WU4SHjbm', 'テストユーザ(更新)', 'test2@example.com');
+INSERT INTO users (display_id, user_group_id, login_id, password, user_name, mail_address) VALUES ('003ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 3,'test3@example.com', '$2a$10$g1eLVd1alJ3gW9OiqudP7eG/3k6fKWPLPvDLnRR3Z3h6/WU4SHjbm', 'テストユーザ(参照)', 'test3@example.com');
+
 DELETE FROM samples;
 INSERT INTO samples (display_id, text1, num1) VALUES ('001ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 'test1', 1);
 INSERT INTO samples (display_id, text1, num1) VALUES ('002ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 'test2', 2);
@@ -39,7 +66,3 @@ INSERT INTO samples (display_id, text1, num1) VALUES ('037ABCDEFGHIJKLMNOPQRSTUV
 INSERT INTO samples (display_id, text1, num1) VALUES ('038ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 'test38', 38);
 INSERT INTO samples (display_id, text1, num1) VALUES ('039ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 'test39', 39);
 INSERT INTO samples (display_id, text1, num1) VALUES ('040ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 'test40', 40);
-
--- password:password
-DELETE FROM users;
-INSERT INTO users (display_id, login_id, password, user_name, mail_address) VALUES ('001ABCDEFGHIJKLMNOPQRSTUVWXYZABC', 'test@example.com', '$2a$10$g1eLVd1alJ3gW9OiqudP7eG/3k6fKWPLPvDLnRR3Z3h6/WU4SHjbm', 'テストユーザ', 'test@example.com');
