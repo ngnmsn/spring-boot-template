@@ -2,26 +2,27 @@ package com.ngnmsn.template.controller;
 
 import com.ngnmsn.template.consts.SampleConst;
 import com.ngnmsn.template.consts.WebConst;
-import com.ngnmsn.template.domain.sample.SampleCreateForm;
-import com.ngnmsn.template.domain.sample.SampleDeleteForm;
-import com.ngnmsn.template.domain.sample.SampleResult;
-import com.ngnmsn.template.domain.sample.SampleResults;
-import com.ngnmsn.template.domain.sample.SampleSearchForm;
-import com.ngnmsn.template.domain.sample.SampleUpdateForm;
-import com.ngnmsn.template.service.SampleService;
+import com.ngnmsn.template.domain.model.sample.SampleResult;
+import com.ngnmsn.template.domain.model.sample.SampleResults;
+import com.ngnmsn.template.domain.service.SampleService;
+import com.ngnmsn.template.form.sample.SampleCreateForm;
+import com.ngnmsn.template.form.sample.SampleDeleteForm;
+import com.ngnmsn.template.form.sample.SampleSearchForm;
+import com.ngnmsn.template.form.sample.SampleUpdateForm;
+import com.ngnmsn.template.response.sample.SampleDeleteResponse;
+import com.ngnmsn.template.response.sample.SampleDetailResponse;
+import com.ngnmsn.template.response.sample.SampleSearchResponse;
+import com.ngnmsn.template.response.sample.SampleUpdateResponse;
 import jakarta.servlet.http.HttpSession;
 import org.jooq.types.ULong;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * SampleControllerクラス
@@ -30,182 +31,189 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = SampleConst.URL_SAMPLE)
 public class SampleController {
 
-  @Autowired
-  private HttpSession session;
+    @Autowired
+    private HttpSession session;
 
-  @Autowired
-  private SampleService sampleService;
+    @Autowired
+    private SampleService sampleService;
 
-  @PreAuthorize("hasAuthority('sample-read')")
-  @GetMapping()
-  String list(Model model) {
+    @PreAuthorize("hasAuthority('sample-read')")
+    @GetMapping()
+    String list(@ModelAttribute SampleSearchForm sampleSearchForm, Model model) {
 
-    SampleSearchForm sampleSearchForm = new SampleSearchForm();
-    model.addAttribute("sampleSearchForm", sampleSearchForm);
-    return SampleConst.TEMPLATE_SAMPLE_LIST;
-  }
-
-  @PreAuthorize("hasAuthority('sample-read')")
-  @GetMapping(WebConst.URL_SEARCH)
-  String search(@ModelAttribute("sampleSearchForm") SampleSearchForm sampleSearchForm, Model model) {
-    SampleResults sampleResults = sampleService.search(sampleSearchForm);
-    session.setAttribute("sampleSearchForm", sampleSearchForm);
-    model.addAttribute("sampleResults", sampleResults);
-    return SampleConst.TEMPLATE_SAMPLE_LIST;
-  }
-
-  @PreAuthorize("hasAuthority('sample-read')")
-  @GetMapping(WebConst.URL_SEARCH_RETURN)
-  String returnSearch() {
-    SampleSearchForm sampleSearchForm = (SampleSearchForm) session.getAttribute("sampleSearchForm");
-    if (sampleSearchForm == null) {
-      sampleSearchForm = new SampleSearchForm();
+        SampleSearchResponse sampleSearchResponse = new SampleSearchResponse();
+        sampleSearchResponse.setSampleResults(new SampleResults());
+        model.addAttribute("sampleSearchResponse", sampleSearchResponse);
+        return SampleConst.TEMPLATE_SAMPLE_LIST;
     }
-    return SampleConst.REDIRECT_SAMPLE_SEARCH + sampleSearchForm.generateQueryParameter();
-  }
 
-  @PreAuthorize("hasAuthority('sample-read')")
-  @GetMapping(WebConst.URL_DETAIL)
-  String detail(@PathVariable String displayId, Model model) {
-    SampleResult sampleResult = sampleService.detail(displayId);
-    model.addAttribute("sampleResult", sampleResult);
-    return SampleConst.TEMPLATE_SAMPLE_DETAIL;
-  }
-
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_CREATE)
-  String create(Model model) {
-    SampleCreateForm sampleCreateForm = new SampleCreateForm();
-    model.addAttribute("sampleCreateForm", sampleCreateForm);
-    return SampleConst.TEMPLATE_SAMPLE_CREATE;
-  }
-
-  @PreAuthorize("hasAuthority('sample-write')")
-  @PostMapping(WebConst.URL_CREATE_CONFIRM)
-  String createConfirm(@ModelAttribute("sampleCreateForm") @Validated
-      SampleCreateForm sampleCreateForm,
-      BindingResult bindingResult, Model model) {
-    if (bindingResult.hasErrors()) {
-      return SampleConst.TEMPLATE_SAMPLE_CREATE;
+    @PreAuthorize("hasAuthority('sample-read')")
+    @GetMapping(WebConst.URL_SEARCH)
+    String search(@ModelAttribute SampleSearchForm sampleSearchForm,
+                  Model model) {
+        SampleResults sampleResults = sampleService.search(sampleSearchForm);
+        SampleSearchResponse sampleSearchResponse = new SampleSearchResponse();
+        sampleSearchResponse.setSampleResults(sampleResults);
+        session.setAttribute("sampleSearchForm", sampleSearchForm);
+        model.addAttribute("sampleSearchResponse", sampleSearchResponse);
+        return SampleConst.TEMPLATE_SAMPLE_LIST;
     }
-    session.setAttribute("sampleCreateForm", sampleCreateForm);
-    model.addAttribute("sampleCreateForm", sampleCreateForm);
-    return SampleConst.TEMPLATE_SAMPLE_CREATE_CONFIRM;
-  }
 
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_CREATE_CONFIRM)
-  String returnCreate(Model model) {
-    SampleCreateForm form = (SampleCreateForm) session.getAttribute("sampleCreateForm");
-    model.addAttribute("sampleCreateForm", form);
-    return SampleConst.TEMPLATE_SAMPLE_CREATE;
-  }
-
-  @PreAuthorize("hasAuthority('sample-write')")
-  @PostMapping(WebConst.URL_CREATE_PROCESS)
-  String createProcess() {
-    SampleCreateForm createForm = (SampleCreateForm) session.getAttribute("sampleCreateForm");
-    sampleService.create(createForm);
-    session.removeAttribute("sampleCreateForm");
-    return SampleConst.REDIRECT_SAMPLE_CREATE_COMPLETE;
-  }
-
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_CREATE_COMPLETE)
-  String createComplete() {
-    return SampleConst.TEMPLATE_SAMPLE_CREATE_COMPLETE;
-  }
-
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_UPDATE)
-  String update(@PathVariable String displayId, Model model) {
-    SampleResult sampleResult = sampleService.detail(displayId);
-    SampleUpdateForm form = new SampleUpdateForm();
-    form.setText1(sampleResult.getText1());
-    form.setNum1(sampleResult.getNum1());
-    session.setAttribute("sampleUpdateId", sampleResult.getId());
-    session.setAttribute("sampleUpdateDisplayId", sampleResult.getDisplayId());
-    session.setAttribute("sampleUpdateForm", form);
-    model.addAttribute("sampleUpdateDisplayId", sampleResult.getDisplayId());
-    model.addAttribute("sampleUpdateForm", form);
-    return SampleConst.TEMPLATE_SAMPLE_UPDATE;
-  }
-
-  @PreAuthorize("hasAuthority('sample-write')")
-  @PostMapping(WebConst.URL_UPDATE_CONFIRM)
-  String updateConfirm(@ModelAttribute("sampleUpdateForm") @Validated
-      SampleUpdateForm sampleUpdateForm,
-      BindingResult bindingResult, Model model) {
-    String displayId = (String) session.getAttribute("sampleUpdateDisplayId");
-    model.addAttribute("sampleUpdateDisplayId", displayId);
-    SampleUpdateForm beforeForm = (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
-    if (bindingResult.hasErrors()) {
-      return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+    @PreAuthorize("hasAuthority('sample-read')")
+    @GetMapping(WebConst.URL_SEARCH_RETURN)
+    String returnSearch() {
+        SampleSearchForm sampleSearchForm = (SampleSearchForm) session.getAttribute("sampleSearchForm");
+        if (sampleSearchForm == null) {
+            sampleSearchForm = new SampleSearchForm();
+        }
+        return SampleConst.REDIRECT_SAMPLE_SEARCH + sampleSearchForm.generateQueryParameter();
     }
-    if (sampleUpdateForm.equals(beforeForm)) {
-      model.addAttribute("alertMessage", "変更がありません。");
-      return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+
+    @PreAuthorize("hasAuthority('sample-read')")
+    @GetMapping(WebConst.URL_DETAIL)
+    String detail(@PathVariable String displayId, Model model) {
+        SampleResult sampleResult = sampleService.detail(displayId);
+        SampleDetailResponse sampleDetailResponse = new SampleDetailResponse();
+        sampleDetailResponse.setSampleResult(sampleResult);
+        model.addAttribute("sampleDetailResponse", sampleDetailResponse);
+        return SampleConst.TEMPLATE_SAMPLE_DETAIL;
     }
-    session.setAttribute("sampleUpdateForm", sampleUpdateForm);
-    model.addAttribute("sampleUpdateForm", sampleUpdateForm);
-    return SampleConst.TEMPLATE_SAMPLE_UPDATE_CONFIRM;
-  }
 
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_UPDATE_CONFIRM)
-  String returnUpdate(Model model) {
-    String displayId = (String) session.getAttribute("sampleUpdateDisplayId");
-    SampleUpdateForm form = (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
-    model.addAttribute("sampleUpdateDisplayId", displayId);
-    model.addAttribute("sampleUpdateForm", form);
-    return SampleConst.TEMPLATE_SAMPLE_UPDATE;
-  }
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_CREATE)
+    String create(@ModelAttribute SampleCreateForm sampleCreateForm, Model model) {
+        return SampleConst.TEMPLATE_SAMPLE_CREATE;
+    }
 
-  @PreAuthorize("hasAuthority('sample-write')")
-  @PostMapping(WebConst.URL_UPDATE_PROCESS)
-  String updateProcess() {
-    ULong sampleUpdateId = (ULong) session.getAttribute("sampleUpdateId");
-    SampleUpdateForm updateForm = (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
-    sampleService.update(sampleUpdateId, updateForm);
-    session.removeAttribute("sampleUpdateId");
-    session.removeAttribute("sampleUpdateDisplayId");
-    session.removeAttribute("sampleUpdateForm");
-    return SampleConst.REDIRECT_SAMPLE_UPDATE_COMPLETE;
-  }
+    @PreAuthorize("hasAuthority('sample-write')")
+    @PostMapping(WebConst.URL_CREATE_CONFIRM)
+    String createConfirm(@ModelAttribute @Validated SampleCreateForm sampleCreateForm,
+                         BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            return SampleConst.TEMPLATE_SAMPLE_CREATE;
+        }
+        session.setAttribute("sampleCreateForm", sampleCreateForm);
+        return SampleConst.TEMPLATE_SAMPLE_CREATE_CONFIRM;
+    }
 
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_UPDATE_COMPLETE)
-  String updateComplete() {
-    return SampleConst.TEMPLATE_SAMPLE_UPDATE_COMPLETE;
-  }
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_CREATE_CONFIRM)
+    String returnCreate(Model model) {
+        SampleCreateForm sampleCreateForm = (SampleCreateForm) session.getAttribute("sampleCreateForm");
+        model.addAttribute("sampleCreateForm", sampleCreateForm);
+        return SampleConst.TEMPLATE_SAMPLE_CREATE;
+    }
 
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_DELETE_CONFIRM)
-  String deleteConfirm(@PathVariable String displayId, Model model) {
-    SampleResult sampleResult = sampleService.detail(displayId);
-    SampleDeleteForm form = new SampleDeleteForm();
-    form.setText1(sampleResult.getText1());
-    form.setNum1(sampleResult.getNum1());
-    session.setAttribute("sampleDeleteId", sampleResult.getId());
-    session.setAttribute("sampleDeleteDisplayId", sampleResult.getDisplayId());
-    model.addAttribute("sampleDeleteDisplayId", sampleResult.getDisplayId());
-    model.addAttribute("sampleDeleteForm", form);
-    return SampleConst.TEMPLATE_SAMPLE_DELETE_CONFIRM;
-  }
+    @PreAuthorize("hasAuthority('sample-write')")
+    @PostMapping(WebConst.URL_CREATE_PROCESS)
+    String createProcess() {
+        SampleCreateForm sampleCreateForm = (SampleCreateForm) session.getAttribute("sampleCreateForm");
+        sampleService.create(sampleCreateForm);
+        session.removeAttribute("sampleCreateForm");
+        return SampleConst.REDIRECT_SAMPLE_CREATE_COMPLETE;
+    }
 
-  @PreAuthorize("hasAuthority('sample-write')")
-  @PostMapping(WebConst.URL_DELETE_PROCESS)
-  String deleteProcess() {
-    ULong sampleDeleteId = (ULong) session.getAttribute("sampleDeleteId");
-    sampleService.delete(sampleDeleteId);
-    session.removeAttribute("sampleDeleteId");
-    session.removeAttribute("sampleDeleteDisplayId");
-    return SampleConst.REDIRECT_SAMPLE_DELETE_COMPLETE;
-  }
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_CREATE_COMPLETE)
+    String createComplete() {
+        return SampleConst.TEMPLATE_SAMPLE_CREATE_COMPLETE;
+    }
 
-  @PreAuthorize("hasAuthority('sample-write')")
-  @GetMapping(WebConst.URL_DELETE_COMPLETE)
-  String deleteComplete() {
-    return SampleConst.TEMPLATE_SAMPLE_DELETE_COMPLETE;
-  }
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_UPDATE)
+    String update(@PathVariable String displayId, @ModelAttribute SampleUpdateForm sampleUpdateForm,
+                  Model model) {
+        SampleResult sampleResult = sampleService.detail(displayId);
+        sampleUpdateForm.setText1(sampleResult.getText1());
+        sampleUpdateForm.setNum1(sampleResult.getNum1());
+        SampleUpdateResponse sampleUpdateResponse = new SampleUpdateResponse();
+        sampleUpdateResponse.setSampleUpdateDisplayId(sampleResult.getDisplayId());
+        session.setAttribute("sampleUpdateId", sampleResult.getId());
+        session.setAttribute("sampleUpdateDisplayId", sampleResult.getDisplayId());
+        session.setAttribute("sampleUpdateForm", sampleUpdateForm);
+        model.addAttribute("sampleUpdateResponse", sampleUpdateResponse);
+        return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+    }
+
+    @PreAuthorize("hasAuthority('sample-write')")
+    @PostMapping(WebConst.URL_UPDATE_CONFIRM)
+    String updateConfirm(@ModelAttribute @Validated SampleUpdateForm sampleUpdateForm,
+                         BindingResult bindingResult, Model model) {
+        String sampleUpdateDisplayId = (String) session.getAttribute("sampleUpdateDisplayId");
+        SampleUpdateResponse sampleUpdateResponse = new SampleUpdateResponse();
+        sampleUpdateResponse.setSampleUpdateDisplayId(sampleUpdateDisplayId);
+        model.addAttribute("sampleUpdateResponse", sampleUpdateResponse);
+        SampleUpdateForm beforeForm = (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
+        if (bindingResult.hasErrors()) {
+            return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+        }
+        if (sampleUpdateForm.equals(beforeForm)) {
+            model.addAttribute("alertMessage", "変更がありません。");
+            return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+        }
+        session.setAttribute("sampleUpdateForm", sampleUpdateForm);
+        return SampleConst.TEMPLATE_SAMPLE_UPDATE_CONFIRM;
+    }
+
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_UPDATE_CONFIRM)
+    String returnUpdate(@ModelAttribute SampleUpdateForm sampleUpdateForm, Model model) {
+        String sampleUpdateDisplayId = (String) session.getAttribute("sampleUpdateDisplayId");
+        BeanUtils.copyProperties(session.getAttribute("sampleUpdateForm"),
+                sampleUpdateForm);
+        SampleUpdateResponse sampleUpdateResponse = new SampleUpdateResponse();
+        sampleUpdateResponse.setSampleUpdateDisplayId(sampleUpdateDisplayId);
+        model.addAttribute("sampleUpdateResponse", sampleUpdateResponse);
+        return SampleConst.TEMPLATE_SAMPLE_UPDATE;
+    }
+
+    @PreAuthorize("hasAuthority('sample-write')")
+    @PostMapping(WebConst.URL_UPDATE_PROCESS)
+    String updateProcess() {
+        ULong sampleUpdateId = (ULong) session.getAttribute("sampleUpdateId");
+        SampleUpdateForm sampleUpdateForm =
+                (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
+        sampleService.update(sampleUpdateId, sampleUpdateForm);
+        session.removeAttribute("sampleUpdateId");
+        session.removeAttribute("sampleUpdateDisplayId");
+        session.removeAttribute("sampleUpdateForm");
+        return SampleConst.REDIRECT_SAMPLE_UPDATE_COMPLETE;
+    }
+
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_UPDATE_COMPLETE)
+    String updateComplete() {
+        return SampleConst.TEMPLATE_SAMPLE_UPDATE_COMPLETE;
+    }
+
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_DELETE_CONFIRM)
+    String deleteConfirm(@PathVariable String displayId,
+                         @ModelAttribute SampleDeleteForm sampleDeleteForm, Model model) {
+        SampleResult sampleResult = sampleService.detail(displayId);
+        sampleDeleteForm.setText1(sampleResult.getText1());
+        sampleDeleteForm.setNum1(sampleResult.getNum1());
+        SampleDeleteResponse sampleDeleteResponse = new SampleDeleteResponse();
+        sampleDeleteResponse.setSampleDeleteDisplayId(sampleResult.getDisplayId());
+        session.setAttribute("sampleDeleteId", sampleResult.getId());
+        session.setAttribute("sampleDeleteDisplayId", sampleResult.getDisplayId());
+        model.addAttribute("sampleDeleteResponse", sampleDeleteResponse);
+        return SampleConst.TEMPLATE_SAMPLE_DELETE_CONFIRM;
+    }
+
+    @PreAuthorize("hasAuthority('sample-write')")
+    @PostMapping(WebConst.URL_DELETE_PROCESS)
+    String deleteProcess() {
+        ULong sampleDeleteId = (ULong) session.getAttribute("sampleDeleteId");
+        sampleService.delete(sampleDeleteId);
+        session.removeAttribute("sampleDeleteId");
+        session.removeAttribute("sampleDeleteDisplayId");
+        return SampleConst.REDIRECT_SAMPLE_DELETE_COMPLETE;
+    }
+
+    @PreAuthorize("hasAuthority('sample-write')")
+    @GetMapping(WebConst.URL_DELETE_COMPLETE)
+    String deleteComplete() {
+        return SampleConst.TEMPLATE_SAMPLE_DELETE_COMPLETE;
+    }
 }

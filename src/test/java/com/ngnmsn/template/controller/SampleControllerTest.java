@@ -10,12 +10,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import com.ngnmsn.template.domain.sample.SampleCreateForm;
-import com.ngnmsn.template.domain.sample.SampleResult;
-import com.ngnmsn.template.domain.sample.SampleResults;
-import com.ngnmsn.template.domain.sample.SampleSearchForm;
-import com.ngnmsn.template.domain.sample.SampleUpdateForm;
-import com.ngnmsn.template.service.SampleService;
+import com.ngnmsn.template.domain.model.sample.SampleResult;
+import com.ngnmsn.template.domain.model.sample.SampleResults;
+import com.ngnmsn.template.domain.service.SampleService;
+import com.ngnmsn.template.form.sample.SampleCreateForm;
+import com.ngnmsn.template.form.sample.SampleSearchForm;
+import com.ngnmsn.template.form.sample.SampleUpdateForm;
 import java.util.ArrayList;
 import java.util.List;
 import org.jooq.types.ULong;
@@ -39,11 +39,9 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class SampleControllerTest {
-  
-  private MockMvc mockMvc;
 
   MockHttpSession mockHttpSession;
-
+  private MockMvc mockMvc;
   @Autowired
   private WebApplicationContext webApplicationContext;
 

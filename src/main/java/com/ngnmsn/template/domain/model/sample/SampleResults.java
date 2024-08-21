@@ -1,4 +1,4 @@
-package com.ngnmsn.template.domain.sample;
+package com.ngnmsn.template.domain.model.sample;
 
 import java.util.List;
 import lombok.Data;

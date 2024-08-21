@@ -6,7 +6,7 @@ import static com.ngnmsn.template.Tables.ROLES_PERMISSIONS;
 import static com.ngnmsn.template.Tables.USERS;
 import static com.ngnmsn.template.Tables.USER_GROUPS;
 
-import com.ngnmsn.template.domain.auth.AuthResult;
+import com.ngnmsn.template.domain.model.auth.AuthResult;
 import java.util.ArrayList;
 import java.util.List;
 import org.jooq.DSLContext;

@@ -1,7 +1,7 @@
-package com.ngnmsn.template.service;
+package com.ngnmsn.template.domain.service;
 
-import com.ngnmsn.template.domain.auth.AuthResult;
-import com.ngnmsn.template.domain.auth.LoginUserDetails;
+import com.ngnmsn.template.domain.model.auth.AuthResult;
+import com.ngnmsn.template.domain.model.auth.LoginUserDetails;
 import com.ngnmsn.template.repository.impl.AuthRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

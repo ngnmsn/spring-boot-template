@@ -3,8 +3,8 @@ package com.ngnmsn.template.repository.impl;
 import static com.ngnmsn.template.Tables.SAMPLES;
 import static org.jooq.impl.DSL.count;
 
-import com.ngnmsn.template.domain.sample.SampleResult;
-import com.ngnmsn.template.domain.sample.SampleResults;
+import com.ngnmsn.template.domain.model.sample.SampleResult;
+import com.ngnmsn.template.domain.model.sample.SampleResults;
 import com.ngnmsn.template.repository.SampleRepository;
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,5 @@
-package com.ngnmsn.template.domain.auth;
+package com.ngnmsn.template.domain.model.auth;
 
-import java.util.Arrays;
 import java.util.Collection;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;

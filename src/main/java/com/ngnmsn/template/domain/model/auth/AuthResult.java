@@ -1,4 +1,4 @@
-package com.ngnmsn.template.domain.auth;
+package com.ngnmsn.template.domain.model.auth;
 
 import java.util.List;
 import lombok.Data;

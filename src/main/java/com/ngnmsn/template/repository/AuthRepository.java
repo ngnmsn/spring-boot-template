@@ -1,6 +1,6 @@
 package com.ngnmsn.template.repository;
 
-import com.ngnmsn.template.domain.auth.AuthResult;
+import com.ngnmsn.template.domain.model.auth.AuthResult;
 import java.io.Serializable;
 
 /**

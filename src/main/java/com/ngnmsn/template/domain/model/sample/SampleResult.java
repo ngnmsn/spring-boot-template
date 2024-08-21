@@ -1,4 +1,4 @@
-package com.ngnmsn.template.domain.sample;
+package com.ngnmsn.template.domain.model.sample;
 
 import lombok.Data;
 import org.jooq.types.ULong;

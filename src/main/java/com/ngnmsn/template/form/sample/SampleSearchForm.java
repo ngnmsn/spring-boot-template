@@ -1,4 +1,4 @@
-package com.ngnmsn.template.domain.sample;
+package com.ngnmsn.template.form.sample;
 
 import lombok.Data;
 
@@ -8,15 +8,11 @@ import lombok.Data;
 @Data
 public class SampleSearchForm {
 
-  private String displayId = "";
-
-  private String text1 = "";
-
-  private int page = 1;
-
-  private int maxNumPerPage = 30;
-
   private static final String QUERY_PARAMETER = "?displayId=%s&text1=%s&page=%d&maxNumPerPage=%d";
+  private String displayId = "";
+  private String text1 = "";
+  private int page = 1;
+  private int maxNumPerPage = 30;
 
   /**
    * generateQueryParameter

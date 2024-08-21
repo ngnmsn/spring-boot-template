@@ -1,10 +1,10 @@
-package com.ngnmsn.template.service;
+package com.ngnmsn.template.domain.service;
 
-import com.ngnmsn.template.domain.sample.SampleCreateForm;
-import com.ngnmsn.template.domain.sample.SampleResult;
-import com.ngnmsn.template.domain.sample.SampleResults;
-import com.ngnmsn.template.domain.sample.SampleSearchForm;
-import com.ngnmsn.template.domain.sample.SampleUpdateForm;
+import com.ngnmsn.template.domain.model.sample.SampleResult;
+import com.ngnmsn.template.domain.model.sample.SampleResults;
+import com.ngnmsn.template.form.sample.SampleCreateForm;
+import com.ngnmsn.template.form.sample.SampleSearchForm;
+import com.ngnmsn.template.form.sample.SampleUpdateForm;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import com.ngnmsn.template.util.StringUtil;
 import org.jooq.types.ULong;

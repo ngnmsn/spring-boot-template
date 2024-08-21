@@ -1,67 +1,67 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<html lang="ja" layout:decorate="~{layout/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="content">
-  <div class="container" id="content">
-    <h2>Sample</h2>
-    <div id="search">
-      <form class="bg-info" id="search-form" method="get" th:action="@{/sample/search}"
-            th:object="${sampleSearchForm}">
-        <h4>Search</h4>
-        <div id="search-input">
-          <label for="displayId" class="form-label">ID<br>
-            <input type="text" class="form-control" id="displayId" name="displayId"
-                   th:field="*{displayId}">
-          </label><br>
-          <label for="text1" class="form-label">text1<br>
-            <input type="text" class="form-control" id="text1" name="text1" th:field="*{text1}">
-          </label><br>
+    <div class="container" id="content">
+        <h2>Sample</h2>
+        <div id="search">
+            <form class="bg-info" id="search-form" method="get" th:action="@{/sample/search}"
+                  th:object="${sampleSearchForm}">
+                <h4>Search</h4>
+                <div id="search-input">
+                    <label class="form-label" for="displayId">ID<br>
+                        <input class="form-control" id="displayId" name="displayId" th:field="*{displayId}"
+                               type="text">
+                    </label><br>
+                    <label class="form-label" for="text1">text1<br>
+                        <input class="form-control" id="text1" name="text1" th:field="*{text1}" type="text">
+                    </label><br>
+                </div>
+                <div id="search-button">
+                    <input class="btn btn-primary" type="submit" value="検索">
+                </div>
+            </form>
         </div>
-        <div id="search-button">
-          <input type="submit" class="btn btn-primary" value="検索">
+        <div id="under-search">
+            <div id="under-search-child">
+                <a class="btn btn-secondary" role="button" th:href="@{/sample/create}" th:text="作成"></a>
+            </div>
         </div>
-      </form>
+        <div id="pagination" th:if="!${#lists.isEmpty(sampleSearchResponse.sampleResults.sampleResultList)}">
+            <div id="pagination-number">
+                <p th:text="|全${sampleSearchResponse.sampleResults.resultCount}件|"></p>
+            </div>
+            <nav>
+                <ul class="pagination">
+                    <th:block
+                            th:each="i : ${#numbers.sequence(1, (sampleSearchResponse.sampleResults.resultCount / sampleSearchForm.maxNumPerPage) + 1)}">
+                        <li class="page-item"><a class="page-link"
+                                                 th:classappend="${i == sampleSearchForm.page} ? active"
+                                                 th:href="|/sample/search?displayId=${sampleSearchForm.displayId}&text1=${sampleSearchForm.text1}&page=${i}&maxNumPerPage=${sampleSearchForm.maxNumPerPage}|"
+                                                 th:text="${i}"></a></li>
+                    </th:block>
+                </ul>
+            </nav>
+        </div>
+        <table class="table table-bordered">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">TEXT1</th>
+                <th scope="col">NUM1</th>
+            </tr>
+            <th:block th:if="!${#lists.isEmpty(sampleSearchResponse.sampleResults.sampleResultList)}">
+                <tr th:each="sampleResult : ${sampleSearchResponse.sampleResults.sampleResultList}">
+                    <td>
+                        <a th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"
+                           th:text="${#strings.substring(sampleResult.displayId,0,8)}"></a>
+                        <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
+                           th:data-bs-title="IDフル桁コピー" th:data-id="${sampleResult.displayId}"></i>
+                    </td>
+                    <td th:text="${sampleResult.text1}"></td>
+                    <td th:text="${sampleResult.num1}"></td>
+                </tr>
+            </th:block>
+        </table>
     </div>
-    <div id="under-search">
-      <div id="under-search-child">
-        <a th:text="作成" class="btn btn-secondary" role="button" th:href="@{/sample/create}"></a>
-      </div>
-    </div>
-    <div id="pagination" th:if="!${#lists.isEmpty(sampleResults)}">
-      <div id="pagination-number">
-        <p th:text="|全${sampleResults.resultCount}件|"></p>
-      </div>
-      <nav>
-        <ul class="pagination">
-          <th:block
-              th:each="i : ${#numbers.sequence(1, (sampleResults.resultCount / sampleSearchForm.maxNumPerPage) + 1)}">
-            <li class="page-item"><a class="page-link"
-                                     th:classappend="${i == sampleSearchForm.page} ? active"
-                                     th:href="|/sample/search?displayId=${sampleSearchForm.displayId}&text1=${sampleSearchForm.text1}&page=${i}&maxNumPerPage=${sampleSearchForm.maxNumPerPage}|"
-                                     th:text="${i}"></a></li>
-          </th:block>
-        </ul>
-      </nav>
-    </div>
-    <table class="table table-bordered">
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">TEXT1</th>
-        <th scope="col">NUM1</th>
-      </tr>
-      <th:block th:if="!${#lists.isEmpty(sampleResults)}">
-        <tr th:each="sampleResult : ${sampleResults.sampleResultList}">
-          <td>
-            <a th:text="${#strings.substring(sampleResult.displayId,0,8)}"
-               th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"></a>
-            <i class="bi bi-copy" id="copy" th:data-id="${sampleResult.displayId}"
-               data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
-          </td>
-          <td th:text="${sampleResult.text1}"></td>
-          <td th:text="${sampleResult.num1}"></td>
-        </tr>
-      </th:block>
-    </table>
-  </div>
 </th:block>
 </html>

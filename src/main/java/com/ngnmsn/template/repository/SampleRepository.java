@@ -1,7 +1,7 @@
 package com.ngnmsn.template.repository;
 
-import com.ngnmsn.template.domain.sample.SampleResult;
-import com.ngnmsn.template.domain.sample.SampleResults;
+import com.ngnmsn.template.domain.model.sample.SampleResult;
+import com.ngnmsn.template.domain.model.sample.SampleResults;
 import java.io.Serializable;
 import org.jooq.types.ULong;
 
