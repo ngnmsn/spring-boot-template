@@ -1,4 +1,4 @@
-package com.ngnmsn.template.domain.sample;
+package com.ngnmsn.template.form.sample;
 
 import lombok.Data;
 

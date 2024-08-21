@@ -4,8 +4,8 @@ import static com.ngnmsn.template.Tables.SAMPLES;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-import com.ngnmsn.template.domain.sample.SampleResult;
-import com.ngnmsn.template.domain.sample.SampleResults;
+import com.ngnmsn.template.domain.model.sample.SampleResult;
+import com.ngnmsn.template.domain.model.sample.SampleResults;
 import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;

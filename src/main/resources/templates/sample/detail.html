@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<html lang="ja" layout:decorate="~{layout/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="content">
-  <div class="container" id="content">
-    <h2>Sample</h2>
-    <div id="form" th:object="${sampleResult}">
-      <div id="form-input">
-        <label for="displayId" class="form-label">ID</label>
-        <div id="displayId-component">
-          <p id="displayId" th:text="${#strings.substring(sampleResult.displayId,0,8)}"></p>
-          <i class="bi bi-copy" id="copy" th:data-id="${sampleResult.displayId}"
-             data-bs-toggle="tooltip" th:data-bs-title="IDフル桁コピー"></i>
+    <div class="container" id="content">
+        <h2>Sample</h2>
+        <div id="form" th:object="${sampleResult}">
+            <div id="form-input">
+                <label class="form-label" for="displayId">ID</label>
+                <div id="displayId-component">
+                    <p id="displayId"
+                       th:text="${#strings.substring(sampleDetailResponse.sampleResult.displayId,0,8)}"></p>
+                    <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
+                       th:data-bs-title="IDフル桁コピー"
+                       th:data-id="${sampleDetailResponse.sampleResult.displayId}"></i>
+                </div>
+                <label class="form-label" for="text1">TEXT1</label>
+                <p id="text1" th:text="${sampleDetailResponse.sampleResult.text1}"></p>
+                <label class="form-label" for="num1">NUM1</label>
+                <p id="num1" th:text="${sampleDetailResponse.sampleResult.num1}"></p>
+            </div>
         </div>
-        <label for="text1" class="form-label">TEXT1</label>
-        <p id="text1" th:text="${sampleResult.text1}"></p>
-        <label for="num1" class="form-label">NUM1</label>
-        <p id="num1" th:text="${sampleResult.num1}"></p>
-      </div>
+        <a class="btn btn-secondary" role="button" th:href="@{/sample/search/return}"
+           th:text="一覧"></a>
+        <a class="btn btn-secondary" role="button"
+           th:href="@{/sample/{displayId}/update(displayId=${sampleDetailResponse.sampleResult.displayId})}"
+           th:text="更新"></a>
+        <a class="btn btn-secondary" role="button"
+           th:href="@{/sample/{displayId}/delete/confirm(displayId=${sampleDetailResponse.sampleResult.displayId})}"
+           th:text="削除"></a>
     </div>
-    <a th:text="一覧" class="btn btn-secondary" role="button"
-       th:href="@{/sample/search/return}"></a>
-    <a th:text="更新" class="btn btn-secondary" role="button"
-       th:href="@{/sample/{displayId}/update(displayId=${sampleResult.displayId})}"></a>
-    <a th:text="削除" class="btn btn-secondary" role="button"
-       th:href="@{/sample/{displayId}/delete/confirm(displayId=${sampleResult.displayId})}"></a>
-  </div>
 </th:block>
 </html>

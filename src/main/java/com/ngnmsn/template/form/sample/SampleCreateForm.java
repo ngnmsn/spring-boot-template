@@ -1,4 +1,4 @@
-package com.ngnmsn.template.domain.sample;
+package com.ngnmsn.template.form.sample;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
