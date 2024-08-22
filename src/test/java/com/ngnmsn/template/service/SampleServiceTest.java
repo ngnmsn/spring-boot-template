@@ -15,7 +15,7 @@ import com.ngnmsn.template.domain.service.SampleService;
 import com.ngnmsn.template.form.sample.SampleCreateForm;
 import com.ngnmsn.template.form.sample.SampleSearchForm;
 import com.ngnmsn.template.form.sample.SampleUpdateForm;
-import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
+import com.ngnmsn.template.repository.SampleRepository;
 import com.ngnmsn.template.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 public class SampleServiceTest {
 
   @MockBean
-  private SampleRepositoryImpl sampleRepositoryImpl;
+  private SampleRepository sampleRepository;
 
   @MockBean
   private StringUtil stringUtil;
@@ -52,7 +52,7 @@ public class SampleServiceTest {
   @Test
   public void testSearchSuccess() {
     SampleResults expects = setExpects();
-    when(sampleRepositoryImpl.search(any(), any(), anyInt(), anyInt())).thenReturn(expects);
+    when(sampleRepository.search(any(), any(), anyInt(), anyInt())).thenReturn(expects);
 
     SampleSearchForm form = new SampleSearchForm();
     form.setDisplayId("");
@@ -74,7 +74,7 @@ public class SampleServiceTest {
   @Test
   public void testDetailSuccess() {
     SampleResult expect = setExpect();
-    when(sampleRepositoryImpl.findByDisplayId(any())).thenReturn(expect);
+    when(sampleRepository.findByDisplayId(any())).thenReturn(expect);
 
     String displayId = "001ABCDEFGHIJKLMNOPQRSTUVWXYZABC";
 
@@ -94,11 +94,11 @@ public class SampleServiceTest {
     form.setText1("test1");
     form.setNum1(1);
 
-    doNothing().when(sampleRepositoryImpl)
+    doNothing().when(sampleRepository)
         .insert("001ABCDEFGHIJKLMNOPQRSTUVWXYZAB", form.getText1(), form.getNum1());
 
     sampleService.create(form);
-    verify(sampleRepositoryImpl, times(1)).insert("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC",
+    verify(sampleRepository, times(1)).insert("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC",
         form.getText1(), form.getNum1());
   }
 
@@ -109,21 +109,21 @@ public class SampleServiceTest {
     form.setText1("test1");
     form.setNum1(1);
 
-    doNothing().when(sampleRepositoryImpl)
+    doNothing().when(sampleRepository)
         .update(ULong.valueOf(1), form.getText1(), form.getNum1());
 
     sampleService.update(ULong.valueOf(1), form);
-    verify(sampleRepositoryImpl, times(1)).update(ULong.valueOf(1), form.getText1(),
+    verify(sampleRepository, times(1)).update(ULong.valueOf(1), form.getText1(),
         form.getNum1());
   }
 
   @DisplayName("delete()の正常系テスト")
   @Test
   public void testDeleteSuccess() {
-    doNothing().when(sampleRepositoryImpl).delete(ULong.valueOf(1));
+    doNothing().when(sampleRepository).delete(ULong.valueOf(1));
 
     sampleService.delete(ULong.valueOf(1));
-    verify(sampleRepositoryImpl, times(1)).delete(ULong.valueOf(1));
+    verify(sampleRepository, times(1)).delete(ULong.valueOf(1));
   }
 
   private SampleResult setExpect() {
