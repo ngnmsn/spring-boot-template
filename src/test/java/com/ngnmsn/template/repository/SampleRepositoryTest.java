@@ -6,7 +6,6 @@ import static org.hamcrest.Matchers.is;
 
 import com.ngnmsn.template.domain.model.sample.SampleResult;
 import com.ngnmsn.template.domain.model.sample.SampleResults;
-import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
 import java.util.ArrayList;
 import java.util.List;
 import org.jooq.DSLContext;
@@ -25,7 +24,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class SampleRepositoryTest {
 
   @Autowired
-  private SampleRepositoryImpl sampleRepositoryImpl;
+  private SampleRepository sampleRepository;
 
   @Autowired
   private DSLContext jooq;
@@ -49,7 +48,7 @@ public class SampleRepositoryTest {
     };
     expects.setSampleResultList(expectList);
 
-    SampleResults results = sampleRepositoryImpl.search("001", "test", 1, 30);
+    SampleResults results = sampleRepository.search("001", "test", 1, 30);
 
     assertThat(results.getResultCount(), is(expects.getResultCount()));
 
@@ -74,7 +73,7 @@ public class SampleRepositoryTest {
         setNum1(1);
       }
     };
-    SampleResult result = sampleRepositoryImpl.findByDisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+    SampleResult result = sampleRepository.findByDisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
 
     assertThat(result.getId(), is(expect.getId()));
     assertThat(result.getDisplayId(), is(expect.getDisplayId()));
@@ -93,7 +92,7 @@ public class SampleRepositoryTest {
         setNum1(41);
       }
     };
-    sampleRepositoryImpl.insert("041ABCDEFGHIJKLMNOPQRSTUVWXYZABC", "test41", 41);
+    sampleRepository.insert("041ABCDEFGHIJKLMNOPQRSTUVWXYZABC", "test41", 41);
 
     Record record = jooq.select()
         .from(SAMPLES)
@@ -130,7 +129,7 @@ public class SampleRepositoryTest {
         setNum1(55);
       }
     };
-    sampleRepositoryImpl.update(ULong.valueOf(5), "test55", 55);
+    sampleRepository.update(ULong.valueOf(5), "test55", 55);
 
     Record record = jooq.select()
         .from(SAMPLES)
@@ -162,7 +161,7 @@ public class SampleRepositoryTest {
   @Test
   public void testDeleteSuccess() {
 
-    sampleRepositoryImpl.delete(ULong.valueOf(5));
+    sampleRepository.delete(ULong.valueOf(5));
 
     Result<Record> records = jooq.select()
         .from(SAMPLES)

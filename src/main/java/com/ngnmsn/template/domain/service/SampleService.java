@@ -5,7 +5,7 @@ import com.ngnmsn.template.domain.model.sample.SampleResults;
 import com.ngnmsn.template.form.sample.SampleCreateForm;
 import com.ngnmsn.template.form.sample.SampleSearchForm;
 import com.ngnmsn.template.form.sample.SampleUpdateForm;
-import com.ngnmsn.template.repository.impl.SampleRepositoryImpl;
+import com.ngnmsn.template.repository.SampleRepository;
 import com.ngnmsn.template.util.StringUtil;
 import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 public class SampleService {
 
   @Autowired
-  private SampleRepositoryImpl sampleRepositoryImpl;
+  private SampleRepository sampleRepository;
 
   @Autowired
   private StringUtil stringUtil;
@@ -35,7 +35,7 @@ public class SampleService {
     String text1 = form.getText1();
     int page = form.getPage();
     int maxNumPerPage = form.getMaxNumPerPage();
-    return sampleRepositoryImpl.search(displayId, text1, page, maxNumPerPage);
+    return sampleRepository.search(displayId, text1, page, maxNumPerPage);
   }
 
   /**
@@ -45,7 +45,7 @@ public class SampleService {
    * @return SampleResult クエリ結果
    */
   public SampleResult detail(String displayId) {
-    return sampleRepositoryImpl.findByDisplayId(displayId);
+    return sampleRepository.findByDisplayId(displayId);
   }
 
   /**
@@ -55,7 +55,7 @@ public class SampleService {
    */
   public void create(SampleCreateForm form) {
     String displayId = stringUtil.generateUuid();
-    sampleRepositoryImpl.insert(displayId, form.getText1(), form.getNum1());
+    sampleRepository.insert(displayId, form.getText1(), form.getNum1());
   }
 
   /**
@@ -65,7 +65,7 @@ public class SampleService {
    * @param form Sample更新用フォーム
    */
   public void update(ULong id, SampleUpdateForm form) {
-    sampleRepositoryImpl.update(id, form.getText1(), form.getNum1());
+    sampleRepository.update(id, form.getText1(), form.getNum1());
   }
 
   /**
@@ -74,6 +74,6 @@ public class SampleService {
    * @param id ID
    */
   public void delete(ULong id) {
-    sampleRepositoryImpl.delete(id);
+    sampleRepository.delete(id);
   }
 }
