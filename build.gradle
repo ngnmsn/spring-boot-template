@@ -1,104 +1,104 @@
-import org.jooq.meta.jaxb.Logging
 import nu.studer.gradle.jooq.JooqEdition
+import org.jooq.meta.jaxb.Logging
 
 buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath 'org.flywaydb:flyway-mysql:9.22.3'
-	}
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.flywaydb:flyway-mysql:9.22.3'
+    }
 }
 
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.5'
-	id 'io.spring.dependency-management' version '1.1.4'
-	id 'org.flywaydb.flyway' version '9.22.3'
-	id 'nu.studer.jooq' version '9.0'
-	id 'checkstyle'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.5'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.flywaydb.flyway' version '9.22.3'
+    id 'nu.studer.jooq' version '9.0'
+    id 'checkstyle'
 }
 
 group = 'com.ngnmsn'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '21'
+    sourceCompatibility = '21'
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-jooq'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.flywaydb:flyway-mysql'
-	implementation 'org.springframework.session:spring-session-core'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-	implementation 'org.webjars:bootstrap:5.3.3'
-	implementation 'org.webjars.npm:bootstrap-icons:1.11.3'
-	implementation 'org.webjars:jquery:3.7.1'
-	implementation 'org.webjars:webjars-locator:0.52'
-	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.projectlombok:lombok'
-	jooqGenerator  'com.mysql:mysql-connector-j'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'org.springframework.security:spring-security-test'
+    implementation 'org.springframework.boot:spring-boot-starter-jooq'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.flywaydb:flyway-mysql'
+    implementation 'org.springframework.session:spring-session-core'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    implementation 'org.webjars:bootstrap:5.3.3'
+    implementation 'org.webjars.npm:bootstrap-icons:1.11.3'
+    implementation 'org.webjars:jquery:3.7.1'
+    implementation 'org.webjars:webjars-locator:0.52'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    jooqGenerator 'com.mysql:mysql-connector-j'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 }
 
 flyway {
-	url = 'jdbc:mysql://localhost:3306/template'
-	user = 'root'
-	password = 'root'
-	driver = 'com.mysql.cj.jdbc.Driver'
-	cleanDisabled = false
+    url = 'jdbc:mysql://localhost:3306/template'
+    user = 'root'
+    password = 'root'
+    driver = 'com.mysql.cj.jdbc.Driver'
+    cleanDisabled = false
 }
 
 jooq {
-	version = dependencyManagement.importedProperties['jooq.version']
-	edition = JooqEdition.OSS
-	configurations {
-		main {
-			generationTool {
-				logging = Logging.WARN
-				jdbc {
-					driver = flyway.driver
-					url = flyway.url
-					user = flyway.user
-					password = flyway.password
-				}
-				generator {
-					name = 'org.jooq.codegen.DefaultGenerator'
-					database {
-						name = 'org.jooq.meta.mysql.MySQLDatabase'
-						inputSchema = 'template'
-						excludes = 'flyway_schema_history'
-					}
-					target {
-						packageName = 'com.ngnmsn.template'
-					}
-					strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
-				}
-			}
-		}
-	}
+    version = dependencyManagement.importedProperties['jooq.version']
+    edition = JooqEdition.OSS
+    configurations {
+        main {
+            generationTool {
+                logging = Logging.WARN
+                jdbc {
+                    driver = flyway.driver
+                    url = flyway.url
+                    user = flyway.user
+                    password = flyway.password
+                }
+                generator {
+                    name = 'org.jooq.codegen.DefaultGenerator'
+                    database {
+                        name = 'org.jooq.meta.mysql.MySQLDatabase'
+                        inputSchema = 'template'
+                        excludes = 'flyway_schema_history'
+                    }
+                    target {
+                        packageName = 'com.ngnmsn.template'
+                    }
+                    strategy.name = 'org.jooq.codegen.DefaultGeneratorStrategy'
+                }
+            }
+        }
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }
 
 generateJooq.dependsOn flywayClean
