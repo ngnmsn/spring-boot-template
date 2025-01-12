@@ -47,12 +47,12 @@ Spring Bootにおける基本的な処理の実装を行う。
 
 ```shell
 # MySQLをインストール
-brew install mysql@8.4
-# 以下をPATHに設定
-# /usr/local/opt/mysql@8.4/bin
+brew install mysql
+# mysqlを起動
 mysql.server start
 # rootユーザのパスワードを設定
-mysql_secure_installation
+mysql -u root
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'root';
 # rootユーザでログイン
 mysql -uroot -p
 # タイムゾーンを設定
