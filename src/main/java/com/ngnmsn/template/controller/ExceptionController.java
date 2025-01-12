@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @Slf4j
 @ControllerAdvice
 public class ExceptionController {
+
   @ExceptionHandler(Exception.class)
   public String exceptionHandler(Exception e, Model model) {
     log.error(e.getMessage());

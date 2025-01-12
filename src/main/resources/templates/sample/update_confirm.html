@@ -2,31 +2,31 @@
 <html lang="ja" layout:decorate="~{layout/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="content">
-    <div class="container" id="content">
-        <h2>Sample</h2>
-        <div id="form">
-            <form method="post"
-                  th:action="@{/sample/{displayId}/update/process(displayId=${sampleUpdateResponse.sampleUpdateDisplayId})}">
-                <div id="form-input">
-                    <label class="form-label" for="sampleUpdateDisplayId">ID</label>
-                    <div id="displayId-component">
-                        <p id="sampleUpdateDisplayId"
-                           th:text="${#strings.substring(sampleUpdateResponse.sampleUpdateDisplayId,0,8)}"></p>
-                        <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
-                           th:data-bs-title="IDフル桁コピー"
-                           th:data-id="${sampleUpdateResponse.sampleUpdateDisplayId}"></i>
-                    </div>
-                    <label class="form-label" for="text1">TEXT1</label>
-                    <p id="text1" th:text="${sampleUpdateForm.text1}"></p>
-                    <label class="form-label" for="num1">NUM1</label>
-                    <p id="num1" th:text="${sampleUpdateForm.num1}"></p>
-                </div>
-                <a class="btn btn-secondary" role="button"
-                   th:href="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateResponse.sampleUpdateDisplayId})}"
-                   th:text="修正"></a>
-                <input class="btn btn-primary" type="submit" value="更新">
-            </form>
+  <div class="container" id="content">
+    <h2>Sample</h2>
+    <div id="form">
+      <form method="post"
+            th:action="@{/sample/{displayId}/update/process(displayId=${sampleUpdateResponse.sampleUpdateDisplayId})}">
+        <div id="form-input">
+          <label class="form-label" for="sampleUpdateDisplayId">ID</label>
+          <div id="displayId-component">
+            <p id="sampleUpdateDisplayId"
+               th:text="${#strings.substring(sampleUpdateResponse.sampleUpdateDisplayId,0,8)}"></p>
+            <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
+               th:data-bs-title="IDフル桁コピー"
+               th:data-id="${sampleUpdateResponse.sampleUpdateDisplayId}"></i>
+          </div>
+          <label class="form-label" for="text1">TEXT1</label>
+          <p id="text1" th:text="${sampleUpdateForm.text1}"></p>
+          <label class="form-label" for="num1">NUM1</label>
+          <p id="num1" th:text="${sampleUpdateForm.num1}"></p>
         </div>
+        <a class="btn btn-secondary" role="button"
+           th:href="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateResponse.sampleUpdateDisplayId})}"
+           th:text="修正"></a>
+        <input class="btn btn-primary" type="submit" value="更新">
+      </form>
     </div>
+  </div>
 </th:block>
 </html>

@@ -22,7 +22,7 @@ public class SampleRepository {
 
   @Autowired
   private DSLContext jooq;
-  
+
   public SampleResults search(String displayId, String text1, int page, int maxNumPerPage) {
     SampleResults sampleResults = new SampleResults();
 

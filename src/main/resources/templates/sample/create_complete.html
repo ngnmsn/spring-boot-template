@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ja" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<html lang="ja" layout:decorate="~{layout/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
 <th:block layout:fragment="content">
   <div class="container" id="content">
     <h2>Sample</h2>
     <p th:text="作成が完了しました。"></p>
-    <a th:text="一覧" class="btn btn-primary" role="button" th:href="@{/sample/search/return}"></a>
+    <a class="btn btn-primary" role="button" th:href="@{/sample/search/return}" th:text="一覧"></a>
   </div>
 </th:block>
 </html>
