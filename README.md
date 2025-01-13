@@ -36,7 +36,7 @@ Spring Bootにおける基本的な処理の実装を行う。
 | [Thymeleaf](https://www.thymeleaf.org/)                                                     | テンプレートエンジン        | 3.1.2             |
 | [Flyway](https://flywaydb.org/)                                                             | マイグレーションツール       | 9.22.3            |
 | [jOOQ](https://www.jooq.org/)                                                               | ORマッパー            | 3.18.14           |
-| [MySQL](https://www.mysql.com/jp/)                                                          | DB                | 8.3.0             |
+| [MySQL](https://www.mysql.com/jp/)                                                          | DB                | 9.1.0             |
 | [CheckStyle](https://checkstyle.sourceforge.io/)                                            | コード規約チェック         | 10.17.0           |
 | [Bootstrap](https://getbootstrap.jp/)                                                       | CSSフレームワーク        | 5.3.3　            |
 | [JQuery](https://jquery.com/)                                                               | JavaScriptフレームワーク | 3.7.1             |
