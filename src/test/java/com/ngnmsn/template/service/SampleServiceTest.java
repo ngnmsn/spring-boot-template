@@ -20,13 +20,11 @@ import com.ngnmsn.template.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 import org.jooq.types.ULong;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 /**
  * SampleServiceTestクラス
@@ -34,19 +32,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 @SpringBootTest
 public class SampleServiceTest {
 
-  @MockBean
+  @MockitoBean
   private SampleRepository sampleRepository;
 
-  @MockBean
+  @MockitoBean
   private StringUtil stringUtil;
 
-  @InjectMocks
+  @Autowired
   private SampleService sampleService;
-
-  @BeforeEach
-  public void initMocks() {
-    MockitoAnnotations.openMocks(this);
-  }
 
   @DisplayName("search()の正常系テスト")
   @Test
