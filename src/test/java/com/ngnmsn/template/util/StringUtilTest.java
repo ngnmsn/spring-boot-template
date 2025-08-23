@@ -5,17 +5,13 @@ import static org.hamcrest.Matchers.is;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
 /**
  * StringUtilTestクラス
  */
-@SpringBootTest
 public class StringUtilTest {
 
-  @Autowired
-  private StringUtil stringUtil;
+  private final StringUtil stringUtil = new StringUtil();
 
   @DisplayName("generateUuid()の正常系テスト")
   @Test
