@@ -16,11 +16,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * SampleRepositoryTestクラス
  */
 @SpringBootTest
+@Transactional
+@Rollback
 public class SampleRepositoryTest {
 
   @Autowired
@@ -112,10 +116,6 @@ public class SampleRepositoryTest {
     assertThat(result.getDisplayId(), is(expect.getDisplayId()));
     assertThat(result.getText1(), is(expect.getText1()));
     assertThat(result.getNum1(), is(expect.getNum1()));
-
-    jooq.delete(SAMPLES)
-        .where(SAMPLES.ID.eq(ULong.valueOf(41)))
-        .execute();
   }
 
   @DisplayName("update()の正常系テスト")
@@ -149,12 +149,6 @@ public class SampleRepositoryTest {
     assertThat(result.getDisplayId(), is(expect.getDisplayId()));
     assertThat(result.getText1(), is(expect.getText1()));
     assertThat(result.getNum1(), is(expect.getNum1()));
-
-    jooq.update(SAMPLES)
-        .set(SAMPLES.TEXT1, "test5")
-        .set(SAMPLES.NUM1, 5)
-        .where(SAMPLES.ID.eq(ULong.valueOf(5)))
-        .execute();
   }
 
   @DisplayName("delete()の正常系テスト")
@@ -169,10 +163,6 @@ public class SampleRepositoryTest {
         .fetch();
 
     assertThat(records.size(), is(0));
-
-    jooq.insertInto(SAMPLES, SAMPLES.ID, SAMPLES.DISPLAY_ID, SAMPLES.TEXT1, SAMPLES.NUM1)
-        .values(ULong.valueOf(5), "005ABCDEFGHIJKLMNOPQRSTUVWXYZABC", "test5", 5)
-        .execute();
   }
 
 }
