@@ -6,16 +6,16 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'org.flywaydb:flyway-mysql:9.22.3'
+        classpath 'org.flywaydb:flyway-mysql:11.11.1'
     }
 }
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.5'
-    id 'io.spring.dependency-management' version '1.1.4'
-    id 'org.flywaydb.flyway' version '9.22.3'
-    id 'nu.studer.jooq' version '9.0'
+    id 'org.springframework.boot' version '3.5.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.flywaydb.flyway' version '11.11.2'
+    id 'nu.studer.jooq' version '10.1.1'
     id 'checkstyle'
 }
 
@@ -45,11 +45,11 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql'
     implementation 'org.springframework.session:spring-session-core'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
-    implementation 'org.webjars:bootstrap:5.3.3'
-    implementation 'org.webjars.npm:bootstrap-icons:1.11.3'
+    implementation 'org.webjars:bootstrap:5.3.7'
+    implementation 'org.webjars.npm:bootstrap-icons:1.13.1'
     implementation 'org.webjars:jquery:3.7.1'
     implementation 'org.webjars:webjars-locator:0.52'
-    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.2.0'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.4.0'
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
