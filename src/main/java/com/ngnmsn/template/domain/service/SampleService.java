@@ -5,7 +5,7 @@ import com.ngnmsn.template.domain.model.sample.SampleResults;
 import com.ngnmsn.template.form.sample.SampleCreateForm;
 import com.ngnmsn.template.form.sample.SampleSearchForm;
 import com.ngnmsn.template.form.sample.SampleUpdateForm;
-import com.ngnmsn.template.repository.SampleRepository;
+import com.ngnmsn.template.application.port.SampleRepositoryPort;
 import com.ngnmsn.template.util.StringUtil;
 import org.jooq.types.ULong;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +17,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class SampleService {
 
-  @Autowired
-  private SampleRepository sampleRepository;
+  private final SampleRepositoryPort sampleRepositoryPort;
+  private final StringUtil stringUtil;
 
-  @Autowired
-  private StringUtil stringUtil;
+  public SampleService(SampleRepositoryPort sampleRepositoryPort, StringUtil stringUtil) {
+    this.sampleRepositoryPort = sampleRepositoryPort;
+    this.stringUtil = stringUtil;
+  }
 
   /**
    * searchメソッド
@@ -35,7 +37,7 @@ public class SampleService {
     String text1 = form.getText1();
     int page = form.getPage();
     int maxNumPerPage = form.getMaxNumPerPage();
-    return sampleRepository.search(displayId, text1, page, maxNumPerPage);
+    return sampleRepositoryPort.search(displayId, text1, page, maxNumPerPage);
   }
 
   /**
@@ -45,7 +47,7 @@ public class SampleService {
    * @return SampleResult クエリ結果
    */
   public SampleResult detail(String displayId) {
-    return sampleRepository.findByDisplayId(displayId);
+    return sampleRepositoryPort.findByDisplayId(displayId);
   }
 
   /**
@@ -55,7 +57,7 @@ public class SampleService {
    */
   public void create(SampleCreateForm form) {
     String displayId = stringUtil.generateUuid();
-    sampleRepository.insert(displayId, form.getText1(), form.getNum1());
+    sampleRepositoryPort.insert(displayId, form.getText1(), form.getNum1());
   }
 
   /**
@@ -65,7 +67,7 @@ public class SampleService {
    * @param form Sample更新用フォーム
    */
   public void update(ULong id, SampleUpdateForm form) {
-    sampleRepository.update(id, form.getText1(), form.getNum1());
+    sampleRepositoryPort.update(id, form.getText1(), form.getNum1());
   }
 
   /**
@@ -74,6 +76,6 @@ public class SampleService {
    * @param id ID
    */
   public void delete(ULong id) {
-    sampleRepository.delete(id);
+    sampleRepositoryPort.delete(id);
   }
 }
