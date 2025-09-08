@@ -4,7 +4,7 @@ import com.ngnmsn.template.domain.model.SampleSearchCriteria;
 import com.ngnmsn.template.domain.model.SampleSearchResults;
 import com.ngnmsn.template.domain.model.sample.DisplayId;
 import com.ngnmsn.template.domain.model.sample.Sample;
-import com.ngnmsn.template.domain.model.sample.SampleId;
+import com.ngnmsn.template.domain.model.SampleId;
 import java.util.Optional;
 
 /**

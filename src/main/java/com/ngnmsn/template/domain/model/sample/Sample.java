@@ -3,6 +3,7 @@ package com.ngnmsn.template.domain.model.sample;
 import com.ngnmsn.template.domain.exception.SampleBusinessException;
 import com.ngnmsn.template.domain.model.SampleText;
 import com.ngnmsn.template.domain.model.SampleNumber;
+import com.ngnmsn.template.domain.model.SampleId;
 import com.ngnmsn.template.domain.model.CreatedAt;
 import com.ngnmsn.template.domain.model.UpdatedAt;
 
