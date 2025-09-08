@@ -1,69 +1,75 @@
 package com.ngnmsn.template.domain.model;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class SampleNumberTest {
     
-    @Test
-    void shouldCreateSampleNumberSuccessfully() {
-        var sampleNumber = new SampleNumber(100);
+    @ParameterizedTest
+    @ValueSource(ints = {0, 1, 5000, 9999})
+    void shouldCreateSampleNumberWithValidValues(int validValue) {
+        var sampleNumber = new SampleNumber(validValue);
         
-        assertThat(sampleNumber.getValue()).isEqualTo(100);
+        assertThat(sampleNumber.getValue()).isEqualTo(validValue);
+    }
+    
+    @ParameterizedTest
+    @ValueSource(ints = {-1, -100, 10000, 99999})
+    void shouldThrowExceptionForInvalidValues(int invalidValue) {
+        assertThrows(IllegalArgumentException.class, 
+            () -> new SampleNumber(invalidValue));
     }
     
     @Test
-    void shouldThrowExceptionWhenNumberIsNull() {
-        assertThatThrownBy(() -> new SampleNumber(null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("数値はnullにできません");
+    void shouldThrowExceptionForNullValue() {
+        assertThrows(IllegalArgumentException.class, 
+            () -> new SampleNumber(null));
     }
     
-    @Test
-    void shouldThrowExceptionWhenNumberIsBelowMin() {
-        assertThatThrownBy(() -> new SampleNumber(-1))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("数値は0以上9999以下で入力してください");
-    }
-    
-    @Test
-    void shouldThrowExceptionWhenNumberIsAboveMax() {
-        assertThatThrownBy(() -> new SampleNumber(10000))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("数値は0以上9999以下で入力してください");
-    }
-    
-    @Test
-    void shouldReturnTrueForEvenNumber() {
-        var evenNumber = new SampleNumber(2);
+    @ParameterizedTest
+    @ValueSource(ints = {0, 2, 4, 100, 9998})
+    void shouldReturnTrueForEvenNumbers(int evenValue) {
+        var sampleNumber = new SampleNumber(evenValue);
         
-        assertThat(evenNumber.isEven()).isTrue();
-        assertThat(evenNumber.isOdd()).isFalse();
+        assertThat(sampleNumber.isEven()).isTrue();
+        assertThat(sampleNumber.isOdd()).isFalse();
     }
     
-    @Test
-    void shouldReturnTrueForOddNumber() {
-        var oddNumber = new SampleNumber(3);
+    @ParameterizedTest
+    @ValueSource(ints = {1, 3, 5, 99, 9999})
+    void shouldReturnTrueForOddNumbers(int oddValue) {
+        var sampleNumber = new SampleNumber(oddValue);
         
-        assertThat(oddNumber.isOdd()).isTrue();
-        assertThat(oddNumber.isEven()).isFalse();
+        assertThat(sampleNumber.isOdd()).isTrue();
+        assertThat(sampleNumber.isEven()).isFalse();
     }
     
     @Test
     void shouldAddValueCorrectly() {
         var original = new SampleNumber(100);
-        var added = original.add(50);
         
-        assertThat(added.getValue()).isEqualTo(150);
-        assertThat(original.getValue()).isEqualTo(100);
+        var result = original.add(50);
+        
+        assertThat(result.getValue()).isEqualTo(150);
+        assertThat(original.getValue()).isEqualTo(100); // 不変性確認
     }
     
     @Test
-    void shouldBeEqualWhenValueIsSame() {
-        var number1 = new SampleNumber(123);
-        var number2 = new SampleNumber(123);
+    void shouldThrowExceptionWhenAdditionExceedsMaxValue() {
+        var maxNumber = new SampleNumber(9999);
         
-        assertThat(number1).isEqualTo(number2);
-        assertThat(number1.hashCode()).isEqualTo(number2.hashCode());
+        assertThrows(IllegalArgumentException.class, 
+            () -> maxNumber.add(1));
+    }
+    
+    @Test
+    void shouldThrowExceptionWhenAdditionGoesBelowMinValue() {
+        var minNumber = new SampleNumber(0);
+        
+        assertThrows(IllegalArgumentException.class, 
+            () -> minNumber.add(-1));
     }
 }

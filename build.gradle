@@ -17,6 +17,7 @@ plugins {
     id 'org.flywaydb.flyway' version '11.11.2'
     id 'nu.studer.jooq' version '10.1.1'
     id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'com.ngnmsn'
@@ -99,6 +100,35 @@ jooq {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+    
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                // 除外パターン（設定クラスなど）
+                '**/config/**',
+                '**/Application.class',
+                '**/com/ngnmsn/template/tables/**',
+                '**/com/ngnmsn/template/Tables.class',
+                '**/com/ngnmsn/template/Keys.class',
+                '**/com/ngnmsn/template/Indexes.class'
+            ])
+        }))
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
 }
 
 generateJooq.dependsOn flywayClean

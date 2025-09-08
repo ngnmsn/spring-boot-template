@@ -263,6 +263,52 @@ class SampleDomainServiceTest {
         assertThat(recommendations).isEmpty();
     }
     
+    @Test
+    void shouldThrowExceptionWhenMaxRetryExceeded() {
+        // Given - 常に重複するケース
+        when(sampleRepository.existsByDisplayId(any(DisplayId.class)))
+            .thenReturn(true);
+        
+        // When & Then
+        assertThatThrownBy(() -> domainService.generateUniqueDisplayId())
+            .isInstanceOf(SampleBusinessException.class);
+        
+        // 10回試行されることを確認
+        verify(sampleRepository, times(10))
+            .existsByDisplayId(any(DisplayId.class));
+    }
+    
+    @Test
+    void shouldCalculateEmptyStatisticsForEmptyResults() {
+        // Given
+        var criteria = new SampleSearchCriteria(null, null, 1, 10);
+        when(sampleRepository.search(criteria))
+            .thenReturn(new SampleSearchResults(Collections.emptyList(), 0, 1, 10));
+        
+        // When
+        var statistics = domainService.calculateStatistics(criteria);
+        
+        // Then
+        assertThat(statistics.getTotalCount()).isZero();
+        assertThat(statistics.getAverageNumber()).isZero();
+        assertThat(statistics.getLongTextCount()).isZero();
+        assertThat(statistics.getEvenNumberCount()).isZero();
+    }
+    
+    @Test
+    void shouldGenerateRecommendationsForVariousSamples() {
+        // 長いテキストのサンプル
+        var longTextSample = new Sample(
+            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new SampleText("a".repeat(80)),
+            new SampleNumber(100)
+        );
+        
+        var recommendations = domainService.generateRecommendations(longTextSample);
+        
+        assertThat(recommendations).isNotEmpty();
+    }
+    
     // Helper methods
     private Sample createValidSample() {
         var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");

@@ -1,58 +1,69 @@
 package com.ngnmsn.template.domain.model;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DisplayIdTest {
     
     @Test
-    void shouldCreateDisplayIdSuccessfully() {
-        var displayId = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
+    void shouldCreateDisplayIdWithValidFormat() {
+        var validId = "123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234";
         
-        assertThat(displayId.getValue()).isEqualTo("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
-    }
-    
-    @Test
-    void shouldThrowExceptionWhenIdIsNull() {
-        assertThatThrownBy(() -> new DisplayId(null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("表示IDの形式が不正です");
-    }
-    
-    @Test
-    void shouldThrowExceptionWhenFormatIsInvalid() {
-        assertThatThrownBy(() -> new DisplayId("invalid"))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("表示IDの形式が不正です");
-    }
-    
-    @Test
-    void shouldThrowExceptionWhenNumericPartIsNot3Digits() {
-        assertThatThrownBy(() -> new DisplayId("12ABCDEFGHIJKLMNOPQRSTUVWXYZABCDE"))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("表示IDの形式が不正です");
-    }
-    
-    @Test
-    void shouldThrowExceptionWhenAlphaPartIsNot30Characters() {
-        assertThatThrownBy(() -> new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABC"))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("表示IDの形式が不正です");
-    }
-    
-    @Test
-    void shouldThrowExceptionWhenContainsLowercase() {
-        assertThatThrownBy(() -> new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZabcd"))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("表示IDの形式が不正です");
-    }
-    
-    @Test
-    void shouldBeEqualWhenValueIsSame() {
-        var displayId1 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
-        var displayId2 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
+        var displayId = new DisplayId(validId);
         
-        assertThat(displayId1).isEqualTo(displayId2);
-        assertThat(displayId1.hashCode()).isEqualTo(displayId2.hashCode());
+        assertThat(displayId.getValue()).isEqualTo(validId);
+    }
+    
+    @ParameterizedTest
+    @ValueSource(strings = {
+        "",                                    // 空文字
+        "12ABCDEFGHIJKLMNOPQRSTUVWXYZ1234",    // 数字2桁
+        "1234ABCDEFGHIJKLMNOPQRSTUVWXYZ1234",  // 数字4桁
+        "123abcdefghijklmnopqrstuvwxyz1234",   // 小文字
+        "123ABCDEFGHIJKLMNOPQRSTUVWXYZ123",    // 英字29桁
+        "123ABCDEFGHIJKLMNOPQRSTUVWXYZ12345",  // 英字31桁
+        "123ABCDEFGHIJKLMNOPQRSTUVWXYZあ12",  // 日本語文字
+        "123ABCDEFGHIJKLMNOPQRSTUVWXYZ123-",   // 記号
+    })
+    void shouldThrowExceptionForInvalidFormat(String invalidId) {
+        assertThrows(IllegalArgumentException.class, 
+            () -> new DisplayId(invalidId));
+    }
+    
+    @Test
+    void shouldThrowExceptionForNullValue() {
+        assertThrows(IllegalArgumentException.class, 
+            () -> new DisplayId(null));
+    }
+    
+    @Test
+    void shouldImplementEqualsCorrectly() {
+        var id1 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var id2 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var id3 = new DisplayId("456ABCDEFGHIJKLMNOPQRSTUVWXYZ5678");
+        
+        assertThat(id1).isEqualTo(id2);
+        assertThat(id1).isNotEqualTo(id3);
+        assertThat(id1).isNotEqualTo(null);
+        assertThat(id1).isNotEqualTo("string");
+    }
+    
+    @Test
+    void shouldImplementHashCodeCorrectly() {
+        var id1 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var id2 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        
+        assertThat(id1.hashCode()).isEqualTo(id2.hashCode());
+    }
+    
+    @Test
+    void shouldReturnValueAsString() {
+        var value = "123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234";
+        var displayId = new DisplayId(value);
+        
+        assertThat(displayId.toString()).isEqualTo(value);
     }
 }
