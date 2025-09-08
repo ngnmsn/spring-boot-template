@@ -12,9 +12,9 @@ import static org.mockito.Mockito.when;
 import com.ngnmsn.template.domain.model.sample.SampleResult;
 import com.ngnmsn.template.domain.model.sample.SampleResults;
 import com.ngnmsn.template.domain.service.SampleService;
-import com.ngnmsn.template.form.sample.SampleCreateForm;
-import com.ngnmsn.template.form.sample.SampleSearchForm;
-import com.ngnmsn.template.form.sample.SampleUpdateForm;
+import com.ngnmsn.template.application.command.SampleCreateCommand;
+import com.ngnmsn.template.application.command.SampleUpdateCommand;
+import com.ngnmsn.template.application.query.SampleSearchQuery;
 import com.ngnmsn.template.repository.SampleRepository;
 import com.ngnmsn.template.util.StringUtil;
 import java.util.ArrayList;
@@ -47,11 +47,9 @@ public class SampleServiceTest {
     SampleResults expects = setExpects();
     when(sampleRepository.search(any(), any(), anyInt(), anyInt())).thenReturn(expects);
 
-    SampleSearchForm form = new SampleSearchForm();
-    form.setDisplayId("");
-    form.setText1("");
+    SampleSearchQuery query = new SampleSearchQuery("", "", 1, 20);
 
-    SampleResults results = sampleService.search(form);
+    SampleResults results = sampleService.search(query);
 
     assertThat(results.getSampleResultList().getFirst().getId(),
         is(expects.getSampleResultList().getFirst().getId()));
@@ -83,31 +81,27 @@ public class SampleServiceTest {
   @Test
   public void testCreateSuccess() {
     when(stringUtil.generateUuid()).thenReturn("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
-    SampleCreateForm form = new SampleCreateForm();
-    form.setText1("test1");
-    form.setNum1(1);
+    SampleCreateCommand command = new SampleCreateCommand("test1", 1);
 
     doNothing().when(sampleRepository)
-        .insert("001ABCDEFGHIJKLMNOPQRSTUVWXYZAB", form.getText1(), form.getNum1());
+        .insert("001ABCDEFGHIJKLMNOPQRSTUVWXYZAB", command.getText1(), command.getNum1());
 
-    sampleService.create(form);
+    sampleService.create(command);
     verify(sampleRepository, times(1)).insert("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC",
-        form.getText1(), form.getNum1());
+        command.getText1(), command.getNum1());
   }
 
   @DisplayName("update()の正常系テスト")
   @Test
   public void testUpdateSuccess() {
-    SampleUpdateForm form = new SampleUpdateForm();
-    form.setText1("test1");
-    form.setNum1(1);
+    SampleUpdateCommand command = new SampleUpdateCommand("test1", 1);
 
     doNothing().when(sampleRepository)
-        .update(ULong.valueOf(1), form.getText1(), form.getNum1());
+        .update(ULong.valueOf(1), command.getText1(), command.getNum1());
 
-    sampleService.update(ULong.valueOf(1), form);
-    verify(sampleRepository, times(1)).update(ULong.valueOf(1), form.getText1(),
-        form.getNum1());
+    sampleService.update(ULong.valueOf(1), command);
+    verify(sampleRepository, times(1)).update(ULong.valueOf(1), command.getText1(),
+        command.getNum1());
   }
 
   @DisplayName("delete()の正常系テスト")

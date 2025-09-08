@@ -2,9 +2,9 @@ package com.ngnmsn.template.domain.service;
 
 import com.ngnmsn.template.domain.model.sample.SampleResult;
 import com.ngnmsn.template.domain.model.sample.SampleResults;
-import com.ngnmsn.template.form.sample.SampleCreateForm;
-import com.ngnmsn.template.form.sample.SampleSearchForm;
-import com.ngnmsn.template.form.sample.SampleUpdateForm;
+import com.ngnmsn.template.application.command.SampleCreateCommand;
+import com.ngnmsn.template.application.command.SampleUpdateCommand;
+import com.ngnmsn.template.application.query.SampleSearchQuery;
 import com.ngnmsn.template.application.port.SampleRepositoryPort;
 import com.ngnmsn.template.util.StringUtil;
 import org.jooq.types.ULong;
@@ -28,15 +28,15 @@ public class SampleService {
   /**
    * searchメソッド
    *
-   * @param form 検索フォーム
+   * @param query 検索クエリ
    * @return List<code><</code>SampleResult<code>></code> 検索結果リスト
    */
-  public SampleResults search(SampleSearchForm form) {
+  public SampleResults search(SampleSearchQuery query) {
 
-    String displayId = form.getDisplayId();
-    String text1 = form.getText1();
-    int page = form.getPage();
-    int maxNumPerPage = form.getMaxNumPerPage();
+    String displayId = query.getDisplayId();
+    String text1 = query.getText1();
+    int page = query.getPage();
+    int maxNumPerPage = query.getMaxNumPerPage();
     return sampleRepositoryPort.search(displayId, text1, page, maxNumPerPage);
   }
 
@@ -53,21 +53,21 @@ public class SampleService {
   /**
    * createメソッド
    *
-   * @param form Sample作成用フォーム
+   * @param command Sample作成用コマンド
    */
-  public void create(SampleCreateForm form) {
+  public void create(SampleCreateCommand command) {
     String displayId = stringUtil.generateUuid();
-    sampleRepositoryPort.insert(displayId, form.getText1(), form.getNum1());
+    sampleRepositoryPort.insert(displayId, command.getText1(), command.getNum1());
   }
 
   /**
    * updateメソッド
    *
    * @param id   ID
-   * @param form Sample更新用フォーム
+   * @param command Sample更新用コマンド
    */
-  public void update(ULong id, SampleUpdateForm form) {
-    sampleRepositoryPort.update(id, form.getText1(), form.getNum1());
+  public void update(ULong id, SampleUpdateCommand command) {
+    sampleRepositoryPort.update(id, command.getText1(), command.getNum1());
   }
 
   /**

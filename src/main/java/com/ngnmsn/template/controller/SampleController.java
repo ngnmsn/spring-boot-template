@@ -5,6 +5,9 @@ import com.ngnmsn.template.consts.WebConst;
 import com.ngnmsn.template.domain.model.sample.SampleResult;
 import com.ngnmsn.template.domain.model.sample.SampleResults;
 import com.ngnmsn.template.domain.service.SampleService;
+import com.ngnmsn.template.application.command.SampleCreateCommand;
+import com.ngnmsn.template.application.command.SampleUpdateCommand;
+import com.ngnmsn.template.application.query.SampleSearchQuery;
 import com.ngnmsn.template.form.sample.SampleCreateForm;
 import com.ngnmsn.template.form.sample.SampleDeleteForm;
 import com.ngnmsn.template.form.sample.SampleSearchForm;
@@ -55,7 +58,13 @@ public class SampleController {
   @GetMapping(WebConst.URL_SEARCH)
   String search(@ModelAttribute SampleSearchForm sampleSearchForm,
       Model model) {
-    SampleResults sampleResults = sampleService.search(sampleSearchForm);
+    // Form → Query conversion
+    var query = new SampleSearchQuery(
+        sampleSearchForm.getDisplayId(),
+        sampleSearchForm.getText1(),
+        sampleSearchForm.getPage(),
+        sampleSearchForm.getMaxNumPerPage());
+    SampleResults sampleResults = sampleService.search(query);
     SampleSearchResponse sampleSearchResponse = new SampleSearchResponse();
     sampleSearchResponse.setSampleResults(sampleResults);
     session.setAttribute("sampleSearchForm", sampleSearchForm);
@@ -112,7 +121,11 @@ public class SampleController {
   @PostMapping(WebConst.URL_CREATE_PROCESS)
   String createProcess() {
     SampleCreateForm sampleCreateForm = (SampleCreateForm) session.getAttribute("sampleCreateForm");
-    sampleService.create(sampleCreateForm);
+    // Form → Command conversion
+    var command = new SampleCreateCommand(
+        sampleCreateForm.getText1(),
+        sampleCreateForm.getNum1());
+    sampleService.create(command);
     session.removeAttribute("sampleCreateForm");
     return SampleConst.REDIRECT_SAMPLE_CREATE_COMPLETE;
   }
@@ -177,7 +190,11 @@ public class SampleController {
     ULong sampleUpdateId = (ULong) session.getAttribute("sampleUpdateId");
     SampleUpdateForm sampleUpdateForm =
         (SampleUpdateForm) session.getAttribute("sampleUpdateForm");
-    sampleService.update(sampleUpdateId, sampleUpdateForm);
+    // Form → Command conversion
+    var command = new SampleUpdateCommand(
+        sampleUpdateForm.getText1(),
+        sampleUpdateForm.getNum1());
+    sampleService.update(sampleUpdateId, command);
     session.removeAttribute("sampleUpdateId");
     session.removeAttribute("sampleUpdateDisplayId");
     session.removeAttribute("sampleUpdateForm");
