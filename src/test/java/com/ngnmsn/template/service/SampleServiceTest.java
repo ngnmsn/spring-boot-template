@@ -15,7 +15,7 @@ import com.ngnmsn.template.domain.service.SampleService;
 import com.ngnmsn.template.application.command.SampleCreateCommand;
 import com.ngnmsn.template.application.command.SampleUpdateCommand;
 import com.ngnmsn.template.application.query.SampleSearchQuery;
-import com.ngnmsn.template.repository.SampleRepository;
+import com.ngnmsn.template.application.port.SampleRepositoryPort;
 import com.ngnmsn.template.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 public class SampleServiceTest {
 
   @MockitoBean
-  private SampleRepository sampleRepository;
+  private SampleRepositoryPort sampleRepository;
 
   @MockitoBean
   private StringUtil stringUtil;
