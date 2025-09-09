@@ -3,7 +3,7 @@ package com.ngnmsn.template.domain.model;
 import com.ngnmsn.template.domain.exception.SampleBusinessException;
 import com.ngnmsn.template.domain.model.sample.DisplayId;
 import com.ngnmsn.template.domain.model.sample.Sample;
-import com.ngnmsn.template.domain.model.sample.SampleId;
+import com.ngnmsn.template.domain.model.SampleId;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;

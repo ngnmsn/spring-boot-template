@@ -6,6 +6,7 @@ import static org.hamcrest.Matchers.is;
 
 import com.ngnmsn.template.domain.model.sample.SampleResult;
 import com.ngnmsn.template.domain.model.sample.SampleResults;
+import com.ngnmsn.template.infrastructure.repository.jooq.sample.SampleRepository;
 import java.util.ArrayList;
 import java.util.List;
 import org.jooq.DSLContext;

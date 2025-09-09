@@ -3,7 +3,7 @@ package com.ngnmsn.template.architecture;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
-import com.tngtech.archunit.lang.ArchConfiguration;
+// import com.tngtech.archunit.lang.ArchConfiguration; // ArchConfiguration is not available in this version
 
 import java.io.File;
 
@@ -15,9 +15,7 @@ public class ArchitectureTestRunner {
         // レポートディレクトリを作成
         new File(REPORT_DIR).mkdirs();
         
-        // ArchUnitの設定
-        ArchConfiguration.get().setProperty("archunit.report.format", "html");
-        ArchConfiguration.get().setProperty("archunit.report.dir", REPORT_DIR);
+        // ArchUnit設定はシステムプロパティまたは設定ファイルで行います
         
         // テストクラスを実行
         JavaClasses classes = new ClassFileImporter()

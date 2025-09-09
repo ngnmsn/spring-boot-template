@@ -16,6 +16,13 @@ public class SampleId {
     this.value = value;
   }
 
+  public SampleId(long value) {
+    if (value < 0) {
+      throw new IllegalArgumentException("SampleId cannot be negative");
+    }
+    this.value = ULong.valueOf(value);
+  }
+
   public ULong getValue() {
     return value;
   }

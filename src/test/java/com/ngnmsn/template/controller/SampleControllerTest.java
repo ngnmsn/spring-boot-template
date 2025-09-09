@@ -12,9 +12,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.ngnmsn.template.domain.model.sample.SampleResult;
 import com.ngnmsn.template.domain.model.sample.SampleResults;
 import com.ngnmsn.template.domain.service.SampleService;
-import com.ngnmsn.template.form.sample.SampleCreateForm;
-import com.ngnmsn.template.form.sample.SampleSearchForm;
-import com.ngnmsn.template.form.sample.SampleUpdateForm;
+import com.ngnmsn.template.presentation.form.sample.SampleCreateForm;
+import com.ngnmsn.template.presentation.form.sample.SampleSearchForm;
+import com.ngnmsn.template.presentation.form.sample.SampleUpdateForm;
 import java.util.ArrayList;
 import java.util.List;
 import org.jooq.types.ULong;
