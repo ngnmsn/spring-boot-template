@@ -58,6 +58,8 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.seleniumhq.selenium:selenium-java'
+    testImplementation 'com.h2database:h2'
 }
 
 flyway {
@@ -98,8 +100,34 @@ jooq {
     }
 }
 
-tasks.named('test') {
+test {
     useJUnitPlatform()
+    // 通常の単体テストのみ実行
+    exclude '**/e2e/**'
+}
+
+task e2eTest(type: Test) {
+    description = 'Runs end-to-end tests'
+    group = 'verification'
+    
+    // E2Eテストのみ実行
+    include '**/e2e/**'
+    
+    // テスト環境のプロファイルを設定
+    systemProperty 'spring.profiles.active', 'test'
+    
+    // Chrome ヘッドレスモードの設定
+    systemProperty 'webdriver.chrome.driver', findProperty('chromedriver.path') ?: '/usr/local/bin/chromedriver'
+    
+    shouldRunAfter test
+    useJUnitPlatform()
+}
+
+// CIで実行するタスク
+task ciTest {
+    dependsOn test, e2eTest
+    description = 'Runs all tests for CI pipeline'
+    group = 'verification'
 }
 
 jacoco {
