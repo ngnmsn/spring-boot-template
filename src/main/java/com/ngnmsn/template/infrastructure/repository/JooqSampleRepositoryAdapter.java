@@ -7,7 +7,11 @@ import com.ngnmsn.template.domain.model.SampleSearchCriteria;
 import com.ngnmsn.template.domain.model.SampleSearchResults;
 import com.ngnmsn.template.domain.model.sample.DisplayId;
 import com.ngnmsn.template.domain.model.sample.Sample;
-import com.ngnmsn.template.domain.model.sample.SampleId;
+import com.ngnmsn.template.domain.model.SampleId;
+import com.ngnmsn.template.domain.model.SampleText;
+import com.ngnmsn.template.domain.model.SampleNumber;
+import com.ngnmsn.template.domain.model.CreatedAt;
+import com.ngnmsn.template.domain.model.UpdatedAt;
 import com.ngnmsn.template.domain.repository.SampleRepositoryPort;
 import com.ngnmsn.template.tables.records.SamplesRecord;
 import java.util.List;
@@ -33,7 +37,7 @@ public class JooqSampleRepositoryAdapter implements SampleRepositoryPort {
     @Override
     public Optional<Sample> findById(SampleId id) {
         SamplesRecord record = dsl.selectFrom(SAMPLES)
-            .where(SAMPLES.ID.eq(id.getValue()))
+            .where(SAMPLES.ID.eq(ULong.valueOf(id.getValue())))
             .fetchOne();
         
         return record != null ? Optional.of(toDomainModel(record)) : Optional.empty();
@@ -84,7 +88,7 @@ public class JooqSampleRepositoryAdapter implements SampleRepositoryPort {
     @Override
     public void deleteById(SampleId id) {
         dsl.deleteFrom(SAMPLES)
-            .where(SAMPLES.ID.eq(id.getValue()))
+            .where(SAMPLES.ID.eq(ULong.valueOf(id.getValue())))
             .execute();
     }
 
@@ -100,24 +104,29 @@ public class JooqSampleRepositoryAdapter implements SampleRepositoryPort {
     private void insertSample(Sample sample) {
         dsl.insertInto(SAMPLES)
             .set(SAMPLES.DISPLAY_ID, sample.getDisplayId().getValue())
-            .set(SAMPLES.TEXT1, sample.getText1())
-            .set(SAMPLES.NUM1, sample.getNum1())
+            .set(SAMPLES.TEXT1, sample.getText1().getValue())
+            .set(SAMPLES.NUM1, sample.getNum1().getValue())
             .execute();
     }
 
     private void updateSample(Sample sample) {
         dsl.update(SAMPLES)
             .set(SAMPLES.DISPLAY_ID, sample.getDisplayId().getValue())
-            .set(SAMPLES.TEXT1, sample.getText1())
-            .set(SAMPLES.NUM1, sample.getNum1())
-            .where(SAMPLES.ID.eq(sample.getId().getValue()))
+            .set(SAMPLES.TEXT1, sample.getText1().getValue())
+            .set(SAMPLES.NUM1, sample.getNum1().getValue())
+            .where(SAMPLES.ID.eq(ULong.valueOf(sample.getId().getValue())))
             .execute();
     }
 
     private Sample toDomainModel(SamplesRecord record) {
-        SampleId id = record.getId() != null ? new SampleId(record.getId()) : null;
+        SampleId id = record.getId() != null ? new SampleId(record.getId().longValue()) : null;
         DisplayId displayId = new DisplayId(record.getDisplayId());
-        return new Sample(id, displayId, record.getText1(), record.getNum1());
+        SampleText text1 = new SampleText(record.getText1());
+        SampleNumber num1 = new SampleNumber(record.getNum1());
+        CreatedAt createdAt = CreatedAt.now();
+        UpdatedAt updatedAt = UpdatedAt.now();
+        
+        return new Sample(id, displayId, text1, num1, createdAt, updatedAt);
     }
 
     private Condition buildSearchCondition(SampleSearchCriteria criteria) {
