@@ -1,4 +1,4 @@
-package com.ngnmsn.template.presentation.controller;
+package com.ngnmsn.template.presentation.web;
 
 import com.ngnmsn.template.application.service.SampleApplicationService;
 import com.ngnmsn.template.application.query.SampleSearchQuery;

@@ -1,4 +1,4 @@
-package com.ngnmsn.template.controller;
+package com.ngnmsn.template.presentation.web;
 
 import com.ngnmsn.template.consts.AuthConst;
 import com.ngnmsn.template.presentation.form.auth.LoginForm;

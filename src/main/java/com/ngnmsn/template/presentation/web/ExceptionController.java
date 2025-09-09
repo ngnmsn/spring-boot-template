@@ -1,4 +1,4 @@
-package com.ngnmsn.template.controller;
+package com.ngnmsn.template.presentation.web;
 
 import com.ngnmsn.template.consts.WebConst;
 import lombok.extern.slf4j.Slf4j;

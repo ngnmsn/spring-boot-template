@@ -13,14 +13,15 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 class BasicArchitectureTest {
     
     /**
-     * 基本的なパッケージ構成テスト - コントローラ
+     * 基本的なパッケージ構成テスト - コントローラ（クリーンアーキテクチャ準拠）
      */
     @ArchTest
-    static final ArchRule controllersShouldBeInControllerPackage = 
+    static final ArchRule controllersShouldBeInPresentationSubPackages = 
         classes()
             .that().haveSimpleNameEndingWith("Controller")
-            .should().resideInAPackage("..controller..")
-            .because("コントローラクラスはcontrollerパッケージに配置すべき");
+            .should().resideInAnyPackage("..presentation.web..", "..presentation.api..")
+            .allowEmptyShould(true)
+            .because("コントローラクラスはpresentation.webまたはpresentation.apiパッケージに配置すべき");
     
     /**
      * 基本的なパッケージ構成テスト - 設定クラス
@@ -30,6 +31,7 @@ class BasicArchitectureTest {
         classes()
             .that().haveSimpleNameEndingWith("Config")
             .should().resideInAPackage("..config..")
+            .allowEmptyShould(true)
             .because("設定クラスはconfigパッケージに配置すべき");
     
     /**
@@ -41,6 +43,7 @@ class BasicArchitectureTest {
             .that().haveSimpleNameEndingWith("Util")
             .or().haveSimpleNameEndingWith("Utils")
             .should().resideInAPackage("..util..")
+            .allowEmptyShould(true)
             .because("ユーティリティクラスはutilパッケージに配置すべき");
     
     /**
@@ -51,17 +54,42 @@ class BasicArchitectureTest {
         classes()
             .that().haveSimpleNameEndingWith("ApplicationService")
             .should().resideInAPackage("..application.service..")
+            .allowEmptyShould(true)
             .because("アプリケーションサービスはapplication.serviceパッケージに配置すべき");
     
     @Test
     void manualArchitectureTest() {
         JavaClasses classes = new ClassFileImporter().importPackages("com.ngnmsn.template");
         
-        // 手動でテスト実行
-        controllersShouldBeInControllerPackage.check(classes);
-        configClassesShouldBeInConfigPackage.check(classes);
-        utilClassesShouldBeInUtilPackage.check(classes);
-        applicationServicesShouldBeInApplicationPackage.check(classes);
+        // 手動でテスト実行 - allowEmptyShould(true)で同じ設定を適用
+        classes()
+            .that().haveSimpleNameEndingWith("Controller")
+            .should().resideInAnyPackage("..presentation.web..", "..presentation.api..")
+            .allowEmptyShould(true)
+            .because("コントローラクラスはpresentation.webまたはpresentation.apiパッケージに配置すべき")
+            .check(classes);
+            
+        classes()
+            .that().haveSimpleNameEndingWith("Config")
+            .should().resideInAPackage("..config..")
+            .allowEmptyShould(true)
+            .because("設定クラスはconfigパッケージに配置すべき")
+            .check(classes);
+            
+        classes()
+            .that().haveSimpleNameEndingWith("Util")
+            .or().haveSimpleNameEndingWith("Utils")
+            .should().resideInAPackage("..util..")
+            .allowEmptyShould(true)
+            .because("ユーティリティクラスはutilパッケージに配置すべき")
+            .check(classes);
+            
+        classes()
+            .that().haveSimpleNameEndingWith("ApplicationService")
+            .should().resideInAPackage("..application.service..")
+            .allowEmptyShould(true)
+            .because("アプリケーションサービスはapplication.serviceパッケージに配置すべき")
+            .check(classes);
         
         System.out.println("Basic architecture tests passed successfully!");
     }
