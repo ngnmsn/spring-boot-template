@@ -60,6 +60,8 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.seleniumhq.selenium:selenium-java'
     testImplementation 'com.h2database:h2'
+    testImplementation 'com.tngtech.archunit:archunit-junit5:1.0.1'
+    testImplementation 'com.tngtech.archunit:archunit:1.0.1'
 }
 
 flyway {
@@ -104,6 +106,15 @@ test {
     useJUnitPlatform()
     // 通常の単体テストのみ実行
     exclude '**/e2e/**'
+    
+    // ArchUnitの詳細ログを有効化（開発時）
+    systemProperty 'archunit.log.level', 'DEBUG'
+    
+    // テスト失敗時の詳細情報を表示
+    testLogging {
+        events "passed", "skipped", "failed", "standard_out", "standard_error"
+        exceptionFormat "full"
+    }
 }
 
 task e2eTest(type: Test) {
@@ -123,10 +134,28 @@ task e2eTest(type: Test) {
     useJUnitPlatform()
 }
 
+task archTest(type: Test) {
+    description = 'Runs architecture tests'
+    group = 'verification'
+    
+    include '**/architecture/BasicArchitectureTest.class'
+    
+    // テスト実行後にレポートを表示
+    doLast {
+        println "Architecture test results:"
+        println "  HTML Report: ${reports.html.entryPoint}"
+        println "  XML Report: ${reports.junitXml.outputLocation}"
+    }
+    
+    useJUnitPlatform()
+}
+
+// アーキテクチャテストは独立して実行
+
 // CIで実行するタスク
 task ciTest {
-    dependsOn test, e2eTest
-    description = 'Runs all tests for CI pipeline'
+    dependsOn test, archTest, e2eTest
+    description = 'Runs all tests including architecture tests'
     group = 'verification'
 }
 

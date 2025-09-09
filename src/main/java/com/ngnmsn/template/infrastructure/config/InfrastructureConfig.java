@@ -1,7 +1,7 @@
 package com.ngnmsn.template.infrastructure.config;
 
 import com.ngnmsn.template.application.port.SampleRepositoryPort;
-import com.ngnmsn.template.infrastructure.repository.LegacySampleRepositoryAdapter;
+import com.ngnmsn.template.infrastructure.repository.jooq.sample.LegacySampleRepositoryAdapter;
 import com.ngnmsn.template.infrastructure.repository.jooq.sample.SampleRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
