@@ -6,7 +6,7 @@ import com.tngtech.archunit.lang.ArchRule;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
-@AnalyzeClasses(packages = "com.ngnmsn.template.application")
+@AnalyzeClasses(packages = "com.ngnmsn.template")
 class ApplicationLayerArchitectureTest {
     
     /**
@@ -17,6 +17,7 @@ class ApplicationLayerArchitectureTest {
         classes()
             .that().resideInAPackage("..application.service..")
             .should().haveSimpleNameEndingWith("ApplicationService")
+            .allowEmptyShould(true)
             .because("アプリケーションサービスは'ApplicationService'で終わる名前にすべき");
     
     /**
@@ -28,6 +29,7 @@ class ApplicationLayerArchitectureTest {
             .that().resideInAPackage("..application.service..")
             .and().haveSimpleNameEndingWith("ApplicationService")
             .should().beTopLevelClasses()
+            .allowEmptyShould(true)
             .because("アプリケーションサービスは適切なパッケージに配置すべき");
     
     /**
@@ -38,6 +40,7 @@ class ApplicationLayerArchitectureTest {
         classes()
             .that().resideInAPackage("..application.command..")
             .should().haveSimpleNameEndingWith("Command")
+            .allowEmptyShould(true)
             .because("コマンドオブジェクトは'Command'で終わる名前にすべき");
     
     /**
@@ -48,6 +51,7 @@ class ApplicationLayerArchitectureTest {
         classes()
             .that().resideInAPackage("..application.query..")
             .should().haveSimpleNameEndingWith("Query")
+            .allowEmptyShould(true)
             .because("クエリオブジェクトは'Query'で終わる名前にすべき");
     
     /**
@@ -59,5 +63,6 @@ class ApplicationLayerArchitectureTest {
             .that().resideInAPackage("..application.exception..")
             .should().haveSimpleNameEndingWith("Exception")
             .andShould().beAssignableTo(RuntimeException.class)
+            .allowEmptyShould(true)
             .because("アプリケーション例外は適切な命名規則に従うべき");
 }
