@@ -1,0 +1,18 @@
+/**
+ * ドメインモデル
+ * 
+ * <p>エンティティとバリューオブジェクトを含むパッケージ：
+ * <ul>
+ *   <li>エンティティ - ビジネスルールとライフサイクルを持つオブジェクト</li>
+ *   <li>バリューオブジェクト - 不変で値の等価性を持つオブジェクト</li>
+ *   <li>共通バリューオブジェクト - 複数のドメインで使用される汎用的なオブジェクト</li>
+ * </ul>
+ * 
+ * @since 1.0
+ */
+@NonNullApi
+@NonNullFields
+package com.ngnmsn.template.domain.model;
+
+import org.springframework.lang.NonNullApi;
+import org.springframework.lang.NonNullFields;

@@ -1,9 +1,9 @@
-package com.ngnmsn.template.infrastructure.repository;
+package com.ngnmsn.template.infrastructure.repository.jooq.sample;
 
 import com.ngnmsn.template.application.port.SampleRepositoryPort;
 import com.ngnmsn.template.domain.model.sample.SampleResult;
 import com.ngnmsn.template.domain.model.sample.SampleResults;
-import com.ngnmsn.template.repository.SampleRepository;
+import com.ngnmsn.template.infrastructure.repository.jooq.sample.SampleRepository;
 import org.jooq.types.ULong;
 import org.springframework.stereotype.Component;
 

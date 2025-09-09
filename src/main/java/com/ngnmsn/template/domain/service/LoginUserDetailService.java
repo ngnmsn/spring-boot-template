@@ -2,7 +2,7 @@ package com.ngnmsn.template.domain.service;
 
 import com.ngnmsn.template.domain.model.auth.AuthResult;
 import com.ngnmsn.template.domain.model.auth.LoginUserDetails;
-import com.ngnmsn.template.repository.AuthRepository;
+import com.ngnmsn.template.infrastructure.repository.jooq.sample.AuthRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

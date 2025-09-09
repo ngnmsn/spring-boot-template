@@ -1,4 +1,4 @@
-package com.ngnmsn.template.form.auth;
+package com.ngnmsn.template.presentation.form.auth;
 
 import lombok.Data;
 

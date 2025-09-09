@@ -1,6 +1,6 @@
-package com.ngnmsn.template.response.sample;
+package com.ngnmsn.template.presentation.response.sample;
 
-import com.ngnmsn.template.form.sample.SampleDeleteForm;
+import com.ngnmsn.template.presentation.form.sample.SampleDeleteForm;
 import lombok.Data;
 
 /**

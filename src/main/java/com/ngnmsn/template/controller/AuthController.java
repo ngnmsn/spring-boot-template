@@ -1,7 +1,7 @@
 package com.ngnmsn.template.controller;
 
 import com.ngnmsn.template.consts.AuthConst;
-import com.ngnmsn.template.form.auth.LoginForm;
+import com.ngnmsn.template.presentation.form.auth.LoginForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

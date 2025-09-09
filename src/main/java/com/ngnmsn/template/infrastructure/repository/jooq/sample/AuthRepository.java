@@ -1,4 +1,4 @@
-package com.ngnmsn.template.repository;
+package com.ngnmsn.template.infrastructure.repository.jooq.sample.jooq.sample;
 
 import static com.ngnmsn.template.Tables.PERMISSIONS;
 import static com.ngnmsn.template.Tables.ROLES;

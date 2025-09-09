@@ -1,4 +1,4 @@
-package com.ngnmsn.template.controller;
+package com.ngnmsn.template.presentation.web.sample;
 
 import com.ngnmsn.template.consts.SampleConst;
 import com.ngnmsn.template.consts.WebConst;
@@ -8,14 +8,14 @@ import com.ngnmsn.template.domain.service.SampleService;
 import com.ngnmsn.template.application.command.SampleCreateCommand;
 import com.ngnmsn.template.application.command.SampleUpdateCommand;
 import com.ngnmsn.template.application.query.SampleSearchQuery;
-import com.ngnmsn.template.form.sample.SampleCreateForm;
-import com.ngnmsn.template.form.sample.SampleDeleteForm;
-import com.ngnmsn.template.form.sample.SampleSearchForm;
-import com.ngnmsn.template.form.sample.SampleUpdateForm;
-import com.ngnmsn.template.response.sample.SampleDeleteResponse;
-import com.ngnmsn.template.response.sample.SampleDetailResponse;
-import com.ngnmsn.template.response.sample.SampleSearchResponse;
-import com.ngnmsn.template.response.sample.SampleUpdateResponse;
+import com.ngnmsn.template.presentation.form.sample.SampleCreateForm;
+import com.ngnmsn.template.presentation.form.sample.SampleDeleteForm;
+import com.ngnmsn.template.presentation.form.sample.SampleSearchForm;
+import com.ngnmsn.template.presentation.form.sample.SampleUpdateForm;
+import com.ngnmsn.template.presentation.response.sample.SampleDeleteResponse;
+import com.ngnmsn.template.presentation.response.sample.SampleDetailResponse;
+import com.ngnmsn.template.presentation.response.sample.SampleSearchResponse;
+import com.ngnmsn.template.presentation.response.sample.SampleUpdateResponse;
 import jakarta.servlet.http.HttpSession;
 import org.jooq.types.ULong;
 import org.springframework.beans.BeanUtils;
