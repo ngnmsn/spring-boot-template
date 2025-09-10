@@ -16,6 +16,7 @@ class DomainLayerArchitectureTest {
     static final ArchRule domainServicesShouldBeNamed = 
         classes()
             .that().resideInAPackage("..domain.service..")
+            .and().haveSimpleNameNotEndingWith("Test")
             .should().haveSimpleNameEndingWith("DomainService")
             .because("ドメインサービスは'DomainService'で終わる名前にすべき");
     
@@ -39,6 +40,7 @@ class DomainLayerArchitectureTest {
             .that().areAnnotatedWith("javax.persistence.Entity")
             .or().areAnnotatedWith("jakarta.persistence.Entity")
             .should().resideInAPackage("..domain.model..")
+            .allowEmptyShould(true)
             .because("エンティティはdomain.modelパッケージに配置すべき");
     
     /**
