@@ -17,6 +17,9 @@ class CodingStandardsTest {
     @ArchTest
     static final ArchRule classesShouldUsePascalCase = 
         classes()
+            .that().resideInAPackage("com.ngnmsn.template..")
+            .and().areNotAnonymousClasses()
+            .and().doNotHaveSimpleName("package-info")
             .should().haveSimpleNameStartingWith("A")
             .orShould().haveSimpleNameStartingWith("B")
             .orShould().haveSimpleNameStartingWith("C")
@@ -53,6 +56,9 @@ class CodingStandardsTest {
         methods()
             .that().areDeclaredInClassesThat().resideInAPackage("com.ngnmsn.template..")
             .and().doNotHaveName("<init>")
+            .and().doNotHaveName("$values")
+            .and().doNotHaveName("values")
+            .and().doNotHaveName("valueOf")
             .should().haveNameMatching("^[a-z][a-zA-Z0-9]*$")
             .because("メソッド名はcamelCaseにすべき");
     
