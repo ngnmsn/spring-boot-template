@@ -1,5 +1,6 @@
-package com.ngnmsn.template.domain.model.auth;
+package com.ngnmsn.template.infrastructure.adapter.security;
 
+import com.ngnmsn.template.domain.model.auth.AuthResult;
 import java.util.Collection;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,10 +8,20 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * LoginUserDetailsクラス
+ * Spring Security用のUserDetails実装
+ * 
+ * <p>ドメインモデルのAuthResultをSpring SecurityのUserDetailsに変換するアダプター。
+ * infrastructure層のアダプターとして、外部フレームワークとドメインモデルを繋ぎます。
+ * 
+ * <p>このクラスは以下の変換を行います：
+ * <ul>
+ *   <li>AuthResult → UserDetails</li>
+ *   <li>PermissionNames → GrantedAuthority</li>
+ *   <li>ドメインの認証情報をSpring Security形式に変換</li>
+ * </ul>
  */
 @EqualsAndHashCode
-public class LoginUserDetails implements UserDetails {
+public class SpringSecurityUserDetails implements UserDetails {
 
   private final String displayId;
   private final String loginId;
@@ -19,11 +30,11 @@ public class LoginUserDetails implements UserDetails {
   private final Collection<? extends GrantedAuthority> authorities;
 
   /**
-   * LoginUserDetailsコンストラクタ
+   * ドメインモデルからSpring Security用オブジェクトを構築
    *
-   * @param authResult ユーザ情報
+   * @param authResult ドメインの認証結果
    */
-  public LoginUserDetails(AuthResult authResult) {
+  public SpringSecurityUserDetails(AuthResult authResult) {
     this.displayId = authResult.getDisplayId();
     this.loginId = authResult.getLoginId();
     this.password = authResult.getPassword();

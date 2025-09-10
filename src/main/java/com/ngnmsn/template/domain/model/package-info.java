@@ -10,9 +10,4 @@
  * 
  * @since 1.0
  */
-@NonNullApi
-@NonNullFields
 package com.ngnmsn.template.domain.model;
-
-import org.springframework.lang.NonNullApi;
-import org.springframework.lang.NonNullFields;
