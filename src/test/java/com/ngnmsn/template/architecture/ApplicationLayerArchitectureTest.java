@@ -16,6 +16,7 @@ class ApplicationLayerArchitectureTest {
     static final ArchRule applicationServicesShouldBeNamed = 
         classes()
             .that().resideInAPackage("..application.service..")
+            .and().haveSimpleNameNotEndingWith("Test")
             .should().haveSimpleNameEndingWith("ApplicationService")
             .allowEmptyShould(true)
             .because("アプリケーションサービスは'ApplicationService'で終わる名前にすべき");
