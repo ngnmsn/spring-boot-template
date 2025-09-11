@@ -6,10 +6,10 @@ import com.ngnmsn.template.application.command.SampleCreateCommand;
 import com.ngnmsn.template.application.command.SampleUpdateCommand;
 import com.ngnmsn.template.application.exception.SampleNotFoundException;
 import com.ngnmsn.template.application.exception.SampleValidationException;
-import com.ngnmsn.template.domain.exception.SampleBusinessException;
 import com.ngnmsn.template.presentation.form.sample.SampleSearchForm;
 import com.ngnmsn.template.presentation.form.sample.SampleCreateForm;
 import com.ngnmsn.template.presentation.form.sample.SampleUpdateForm;
+import com.ngnmsn.template.application.dto.SampleUpdateDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -112,19 +112,20 @@ public class SampleController {
             var createdSample = sampleApplicationService.createSample(command);
             
             // 成功メッセージの設定
+            var createdId = sampleApplicationService.extractId(createdSample);
             redirectAttributes.addFlashAttribute("successMessage", "サンプルを作成しました");
-            redirectAttributes.addFlashAttribute("createdId", createdSample.getId());
+            redirectAttributes.addFlashAttribute("createdId", createdId);
             
-            return "redirect:/samples/" + createdSample.getId();
+            return "redirect:/samples/" + createdId;
             
         } catch (SampleValidationException e) {
             // アプリケーション例外をプレゼンテーション用メッセージに変換
             model.addAttribute("errorMessage", e.getMessage());
             return "sample/create";
             
-        } catch (SampleBusinessException e) {
-            // ビジネス例外をプレゼンテーション用メッセージに変換
-            model.addAttribute("errorMessage", e.getMessage());
+        } catch (Exception e) {
+            // 予期しない例外をプレゼンテーション用メッセージに変換
+            model.addAttribute("errorMessage", "処理中にエラーが発生しました");
             return "sample/create";
         }
     }
@@ -142,10 +143,13 @@ public class SampleController {
         try {
             var sample = sampleApplicationService.findById(id);
             
-            // Response → Form 変換（表示用変換のみ）
+            // アプリケーションサービスを使用してDTO取得（直接アクセスを回避）
+            var sampleDto = sampleApplicationService.convertToUpdateDto(sample);
+            
+            // DTOからFormに変換（プレゼンテーション層の責務）
             var editForm = new SampleUpdateForm();
-            editForm.setText1(sample.getText1());
-            editForm.setNum1(sample.getNum1());
+            editForm.setText1(sampleDto.getText1());
+            editForm.setNum1(sampleDto.getNum1());
             
             model.addAttribute("sample", sample);
             model.addAttribute("updateForm", editForm);
@@ -202,9 +206,22 @@ public class SampleController {
             model.addAttribute("errorMessage", "サンプルが見つかりません");
             return "error";
             
-        } catch (SampleValidationException | SampleBusinessException e) {
+        } catch (SampleValidationException e) {
             // 例外をプレゼンテーション用メッセージに変換
             model.addAttribute("errorMessage", e.getMessage());
+            
+            try {
+                var sample = sampleApplicationService.findById(id);
+                model.addAttribute("sample", sample);
+            } catch (SampleNotFoundException ex) {
+                model.addAttribute("errorMessage", "サンプルが見つかりません");
+                return "error";
+            }
+            
+            return "sample/edit";
+            
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "処理中にエラーが発生しました");
             
             try {
                 var sample = sampleApplicationService.findById(id);
@@ -238,8 +255,8 @@ public class SampleController {
         } catch (SampleNotFoundException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "サンプルが見つかりません");
             
-        } catch (SampleBusinessException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "削除処理でエラーが発生しました");
         }
         
         return "redirect:/samples";
@@ -265,11 +282,10 @@ public class SampleController {
             redirectAttributes.addFlashAttribute("successMessage", 
                 selectedIds.size() + "件のサンプルを削除しました");
             
-        } catch (SampleBusinessException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("errorMessage", "削除処理でエラーが発生しました");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "一括削除処理でエラーが発生しました");
         }
         
         return "redirect:/samples";

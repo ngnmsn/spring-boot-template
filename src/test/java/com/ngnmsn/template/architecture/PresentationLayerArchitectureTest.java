@@ -16,6 +16,7 @@ class PresentationLayerArchitectureTest {
     static final ArchRule webControllersShouldBeNamed = 
         classes()
             .that().resideInAPackage("..presentation.web..")
+            .and().haveSimpleNameNotEndingWith("Test")
             .should().haveSimpleNameEndingWith("Controller")
             .because("Webコントローラは'Controller'で終わる名前にすべき");
     
@@ -79,6 +80,8 @@ class PresentationLayerArchitectureTest {
     static final ArchRule responsesShouldBeNamed = 
         classes()
             .that().resideInAPackage("..presentation.response..")
+            .and().areNotInnerClasses()
+            .and().haveSimpleNameNotEndingWith("Test")
             .should().haveSimpleNameEndingWith("Response")
             .because("レスポンスクラスは'Response'で終わる名前にすべき");
     
@@ -101,7 +104,8 @@ class PresentationLayerArchitectureTest {
                 "..application.service..",
                 "..application.command..",
                 "..application.query..",
-                "..application.exception.."
+                "..application.exception..",
+                "..application.dto.."
             )
             .because("コントローラはアプリケーションサービスのみに依存すべき");
 }

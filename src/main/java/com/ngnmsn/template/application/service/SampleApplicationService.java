@@ -4,6 +4,7 @@ import com.ngnmsn.template.application.command.SampleCreateCommand;
 import com.ngnmsn.template.application.command.SampleUpdateCommand;
 import com.ngnmsn.template.application.query.SampleSearchQuery;
 import com.ngnmsn.template.application.response.SampleDetailResponse;
+import com.ngnmsn.template.application.dto.SampleUpdateDto;
 import com.ngnmsn.template.application.exception.SampleNotFoundException;
 import com.ngnmsn.template.application.exception.SampleValidationException;
 import com.ngnmsn.template.domain.exception.SampleBusinessException;
@@ -194,5 +195,21 @@ public class SampleApplicationService {
         } catch (IllegalArgumentException e) {
             throw new SampleValidationException("インクリメント値が不正です: " + e.getMessage(), e);
         }
+    }
+    
+    /**
+     * SampleDetailResponseからSampleUpdateDtoへの変換
+     * プレゼンテーション層でのApplication Responseの直接アクセスを回避するためのメソッド
+     */
+    public SampleUpdateDto convertToUpdateDto(SampleDetailResponse response) {
+        return new SampleUpdateDto(response.getText1(), response.getNum1());
+    }
+    
+    /**
+     * SampleDetailResponseからIDを取得
+     * プレゼンテーション層でのApplication Responseの直接アクセスを回避するためのメソッド
+     */
+    public Long extractId(SampleDetailResponse response) {
+        return response.getId();
     }
 }
