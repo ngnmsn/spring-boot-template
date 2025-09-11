@@ -18,6 +18,8 @@ class InfrastructureLayerArchitectureTest {
         classes()
             .that().resideInAPackage("..infrastructure.repository..")
             .and().areNotInterfaces()
+            .and().haveSimpleNameNotEndingWith("Test")
+            .and().haveSimpleNameNotEndingWith("Tests")
             .should().haveSimpleNameEndingWith("RepositoryAdapter")
             .orShould().haveSimpleNameEndingWith("Repository")
             .because("リポジトリ実装は'RepositoryAdapter'または'Repository'で終わる名前にすべき");

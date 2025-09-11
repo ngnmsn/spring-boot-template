@@ -1,6 +1,11 @@
 package com.ngnmsn.template.infrastructure.repository;
 
-import com.ngnmsn.template.application.port.SampleRepositoryPort;
+import com.ngnmsn.template.domain.repository.SampleRepositoryPort;
+import com.ngnmsn.template.domain.model.SampleSearchCriteria;
+import com.ngnmsn.template.domain.model.sample.DisplayId;
+import com.ngnmsn.template.domain.model.sample.Sample;
+import com.ngnmsn.template.domain.model.SampleText;
+import com.ngnmsn.template.domain.model.SampleNumber;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,37 +22,44 @@ class JooqSampleRepositoryAdapterIntegrationTest {
     
     @Test
     void shouldSearchExistingData() {
+        // Given
+        var criteria = new SampleSearchCriteria(null, null, 1, 10);
+        
         // When - Search for existing data
-        var results = sampleRepository.search(null, null, 1, 10);
+        var results = sampleRepository.search(criteria);
         
         // Then - Should return some results from test data
         assertThat(results).isNotNull();
-        assertThat(results.getSampleResultList()).isNotNull();
+        assertThat(results.getResults()).isNotNull();
     }
     
     @Test
     void shouldFindByDisplayId() {
+        // Given
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+        
         // When - Search for existing sample by display ID
-        var result = sampleRepository.findByDisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZABC");
+        var result = sampleRepository.findByDisplayId(displayId);
         
         // Then - Should find the existing sample
-        assertThat(result).isNotNull();
+        assertThat(result).isPresent();
     }
     
     @Test 
     void shouldInsertNewSample() {
         // Given
-        String displayId = "999TESTINTEGRATION999INTEGRATION999";
-        String text = "統合テスト";
-        Integer num = 999;
+        var displayId = new DisplayId("999TESTINTEGRATION999INTEGRATION999");
+        var text = new SampleText("統合テスト");
+        var num = new SampleNumber(999);
+        var sample = new Sample(null, displayId, text, num, null, null);
         
         // When
-        sampleRepository.insert(displayId, text, num);
+        sampleRepository.save(sample);
         
         // Then - Should be able to find the inserted sample
         var found = sampleRepository.findByDisplayId(displayId);
-        assertThat(found).isNotNull();
-        assertThat(found.getText1()).isEqualTo("統合テスト");
-        assertThat(found.getNum1()).isEqualTo(999);
+        assertThat(found).isPresent();
+        assertThat(found.get().getText1().getValue()).isEqualTo("統合テスト");
+        assertThat(found.get().getNum1().getValue()).isEqualTo(999);
     }
 }

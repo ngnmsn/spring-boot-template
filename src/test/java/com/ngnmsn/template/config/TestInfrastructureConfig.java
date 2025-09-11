@@ -1,6 +1,6 @@
 package com.ngnmsn.template.config;
 
-import com.ngnmsn.template.application.port.SampleRepositoryPort;
+import com.ngnmsn.template.domain.repository.SampleRepositoryPort;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
