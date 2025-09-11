@@ -11,12 +11,10 @@ import org.junit.jupiter.api.Test;
  */
 public class StringUtilTest {
 
-  private final StringUtil stringUtil = new StringUtil();
-
   @DisplayName("generateUuid()の正常系テスト")
   @Test
   public void testGenerateUuidSuccess() {
-    String result = stringUtil.generateUuid();
+    String result = StringUtil.generateUuid();
     assertThat(result.length(), is(32));
   }
 }
