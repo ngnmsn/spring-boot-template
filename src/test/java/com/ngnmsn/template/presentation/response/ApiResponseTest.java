@@ -2,17 +2,19 @@ package com.ngnmsn.template.presentation.response;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class ApiResponseTest {
     
     @Test
     void shouldCreateSuccessResponse() {
-        var data = "test data";
-        var response = ApiResponse.success(data);
-        
+        String data = "test data";
+        ApiResponse<String> response = ApiResponse.success(data);
+
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.getData()).isEqualTo(data);
         assertThat(response.getMessage()).isEqualTo("成功");
@@ -36,7 +38,7 @@ class ApiResponseTest {
     @Test
     void shouldCreateSuccessResponseWithoutData() {
         var message = "成功メッセージ";
-        var response = ApiResponse.success(message);
+        var response = ApiResponse.successMessage(message);
         
         assertThat(response.isSuccess()).isTrue();
         assertThat(response.getData()).isNull();
@@ -84,16 +86,17 @@ class ApiResponseTest {
     
     @Test
     void shouldReturnImmutableErrorsList() {
-        var errors = List.of("エラー1", "エラー2");
+        var errors = new ArrayList<>(List.of("エラー1", "エラー2"));
         var response = ApiResponse.error("メッセージ", errors);
-        
+
         var returnedErrors = response.getErrors();
         assertThat(returnedErrors).containsExactly("エラー1", "エラー2");
-        
+
         errors.clear();
         assertThat(response.getErrors()).containsExactly("エラー1", "エラー2");
-        
-        returnedErrors.add("新しいエラー");
-        assertThat(response.getErrors()).containsExactly("エラー1", "エラー2");
+
+        assertThat(returnedErrors).isInstanceOf(List.class);
+        assertThatThrownBy(() -> returnedErrors.add("新しいエラー"))
+                .isInstanceOf(UnsupportedOperationException.class);
     }
 }

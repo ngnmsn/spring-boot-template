@@ -19,16 +19,16 @@ public class ApiResponse<T> {
         this.timestamp = LocalDateTime.now();
     }
     
+    public static ApiResponse<Void> successMessage(String message) {
+        return new ApiResponse<>(true, message, null, null);
+    }
+
     public static <T> ApiResponse<T> success(T data) {
         return new ApiResponse<>(true, "成功", data, null);
     }
-    
+
     public static <T> ApiResponse<T> success(String message, T data) {
         return new ApiResponse<>(true, message, data, null);
-    }
-    
-    public static ApiResponse<Void> success(String message) {
-        return new ApiResponse<>(true, message, null, null);
     }
     
     public static <T> ApiResponse<T> error(String message) {
@@ -46,6 +46,6 @@ public class ApiResponse<T> {
     public boolean isSuccess() { return success; }
     public String getMessage() { return message; }
     public T getData() { return data; }
-    public List<String> getErrors() { return new ArrayList<>(errors); }
+    public List<String> getErrors() { return List.copyOf(errors); }
     public LocalDateTime getTimestamp() { return timestamp; }
 }

@@ -83,14 +83,14 @@ public class SampleApiController {
     public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         sampleApplicationService.deleteSample(id);
         
-        return ResponseEntity.ok(ApiResponse.success("サンプルが削除されました"));
+        return ResponseEntity.ok(ApiResponse.successMessage("サンプルが削除されました"));
     }
     
     @PostMapping("/bulk-delete")
     public ResponseEntity<ApiResponse<Void>> bulkDelete(@Valid @RequestBody BulkDeleteRequest request) {
         sampleApplicationService.bulkDeleteSamples(request.getIds());
         
-        return ResponseEntity.ok(ApiResponse.success(request.getIds().size() + "件のサンプルが削除されました"));
+        return ResponseEntity.ok(ApiResponse.successMessage(request.getIds().size() + "件のサンプルが削除されました"));
     }
     
     @GetMapping("/statistics")
