@@ -78,7 +78,7 @@ class SampleDomainServiceTest {
             .isInstanceOf(SampleBusinessException.class)
             .hasMessage("表示IDの生成に失敗しました。システム管理者に連絡してください");
         
-        verify(sampleRepository, times(11)).existsByDisplayId(any(DisplayId.class));
+        verify(sampleRepository, times(10)).existsByDisplayId(any(DisplayId.class));
     }
     
     @Test
@@ -160,7 +160,7 @@ class SampleDomainServiceTest {
         // Given
         var samples = List.of(
             createSampleWithValues("短いテキスト", 100),  // 短いテキスト、偶数
-            createSampleWithValues("これは非常に長いテキストの例です。50文字を超える長さになります。", 150), // 長いテキスト、偶数
+            createSampleWithValues("これは非常に長いテキストの例です。この文字列は50文字を確実に超える長さにするために追加の文字を含んでいます。", 150), // 長いテキスト、偶数
             createSampleWithValues("普通のテキスト", 75)   // 短いテキスト、奇数
         );
         var criteria = new SampleSearchCriteria(null, null, 1, 10);
@@ -201,7 +201,7 @@ class SampleDomainServiceTest {
     @Test
     void shouldGenerateRecommendationsForLongText() {
         // Given
-        var sample = createSampleWithValues("これは非常に長いテキストの例です。50文字を超える長さになります。", 100);
+        var sample = createSampleWithValues("これは非常に長いテキストの例です。この文字列は50文字を確実に超える長さにするために追加の文字を含んでいます。", 100);
         
         // When
         var recommendations = domainService.generateRecommendations(sample);
@@ -242,7 +242,7 @@ class SampleDomainServiceTest {
     void shouldGenerateMultipleRecommendations() {
         // Given
         var oldCreatedAt = new CreatedAt(LocalDateTime.now().minusMonths(8));
-        var sample = createSampleWithCreatedAt("これは非常に長いテキストの例です。50文字を超える長さになります。", 7000, oldCreatedAt);
+        var sample = createSampleWithCreatedAt("これは非常に長いテキストの例です。この文字列は50文字を確実に超える長さにするために追加の文字を含んでいます。", 7000, oldCreatedAt);
         
         // When
         var recommendations = domainService.generateRecommendations(sample);
