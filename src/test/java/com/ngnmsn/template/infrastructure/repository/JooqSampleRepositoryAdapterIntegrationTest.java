@@ -48,10 +48,10 @@ class JooqSampleRepositoryAdapterIntegrationTest {
     @Test 
     void shouldInsertNewSample() {
         // Given
-        var displayId = new DisplayId("999TESTINTEGRATION999INTEGRATION999");
+        var displayId = new DisplayId("999TEST999INTEGRATION999ABCD");
         var text = new SampleText("統合テスト");
         var num = new SampleNumber(999);
-        var sample = new Sample(null, displayId, text, num, null, null);
+        var sample = new Sample(displayId, text, num);
         
         // When
         sampleRepository.save(sample);

@@ -9,7 +9,10 @@ public class DisplayId {
 
   public DisplayId(String value) {
     if (value == null || value.trim().isEmpty()) {
-      throw new IllegalArgumentException("DisplayId cannot be null or empty");
+      throw new IllegalArgumentException("表示IDは必須です");
+    }
+    if (value.length() > 32) {
+      throw new IllegalArgumentException("表示IDは32文字以内である必要があります: " + value.length());
     }
     this.value = value;
   }

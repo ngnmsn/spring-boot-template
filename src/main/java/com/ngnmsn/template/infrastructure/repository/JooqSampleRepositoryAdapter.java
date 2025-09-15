@@ -78,7 +78,7 @@ public class JooqSampleRepositoryAdapter implements SampleRepositoryPort {
 
     @Override
     public void save(Sample sample) {
-        if (sample.getId() != null) {
+        if (sample.getId() != null && existsById(sample.getId())) {
             updateSample(sample);
         } else {
             insertSample(sample);
@@ -98,6 +98,14 @@ public class JooqSampleRepositoryAdapter implements SampleRepositoryPort {
             dsl.selectOne()
                 .from(SAMPLES)
                 .where(SAMPLES.DISPLAY_ID.eq(displayId.getValue()))
+        );
+    }
+
+    private boolean existsById(SampleId id) {
+        return dsl.fetchExists(
+            dsl.selectOne()
+                .from(SAMPLES)
+                .where(SAMPLES.ID.eq(ULong.valueOf(id.getValue())))
         );
     }
 
