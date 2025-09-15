@@ -91,6 +91,13 @@ jooq {
                         name = 'org.jooq.meta.mysql.MySQLDatabase'
                         inputSchema = 'template'
                         excludes = 'flyway_schema_history'
+                        forcedTypes {
+                            forcedType {
+                                name = 'LONG'
+                                includeExpression = '.*'
+                                includeTypes = 'BIGINT'
+                            }
+                        }
                     }
                     target {
                         packageName = 'com.ngnmsn.template'

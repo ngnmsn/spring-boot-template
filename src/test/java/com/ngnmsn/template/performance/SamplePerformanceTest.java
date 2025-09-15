@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("local")
 class SamplePerformanceTest {
     
     @Autowired
@@ -21,9 +21,10 @@ class SamplePerformanceTest {
     void measureSampleCreationPerformance() {
         var iterations = 100;
         var startTime = System.currentTimeMillis();
+        long timestamp = System.currentTimeMillis();
         
         for (int i = 0; i < iterations; i++) {
-            var command = new SampleCreateCommand("パフォーマンステスト" + i, i);
+            var command = new SampleCreateCommand("パフォーマンステスト" + timestamp + "_" + i, i);
             sampleApplicationService.createSample(command);
         }
         
@@ -44,7 +45,7 @@ class SamplePerformanceTest {
         
         var startTime = System.currentTimeMillis();
         
-        var query = new SampleSearchQuery(null, "テスト", 1, 20);
+        var query = new SampleSearchQuery(null, "テストデータ", 1, 20);
         var results = sampleApplicationService.search(query);
         
         var endTime = System.currentTimeMillis();
@@ -99,8 +100,9 @@ class SamplePerformanceTest {
     }
     
     private void prepareTestData(int count) {
+        long timestamp = System.currentTimeMillis();
         for (int i = 0; i < count; i++) {
-            var command = new SampleCreateCommand("テストデータ" + i, i);
+            var command = new SampleCreateCommand("テストデータ" + timestamp + "_" + i, i);
             sampleApplicationService.createSample(command);
         }
         
