@@ -10,7 +10,7 @@ class DisplayIdTest {
     
     @Test
     void shouldCreateDisplayIdWithValidFormat() {
-        var validId = "123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234";
+        var validId = "123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD";
         
         var displayId = new DisplayId(validId);
         
@@ -41,9 +41,9 @@ class DisplayIdTest {
     
     @Test
     void shouldImplementEqualsCorrectly() {
-        var id1 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
-        var id2 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
-        var id3 = new DisplayId("456ABCDEFGHIJKLMNOPQRSTUVWXYZ5678");
+        var id1 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
+        var id2 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
+        var id3 = new DisplayId("456ABCDEFGHIJKLMNOPQRSTUVWXYZEFGH");
         
         assertThat(id1).isEqualTo(id2);
         assertThat(id1).isNotEqualTo(id3);
@@ -53,15 +53,15 @@ class DisplayIdTest {
     
     @Test
     void shouldImplementHashCodeCorrectly() {
-        var id1 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
-        var id2 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var id1 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
+        var id2 = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD");
         
         assertThat(id1.hashCode()).isEqualTo(id2.hashCode());
     }
     
     @Test
     void shouldReturnValueAsString() {
-        var value = "123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234";
+        var value = "123ABCDEFGHIJKLMNOPQRSTUVWXYZABCD";
         var displayId = new DisplayId(value);
         
         assertThat(displayId.toString()).isEqualTo(value);
