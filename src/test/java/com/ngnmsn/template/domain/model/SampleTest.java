@@ -4,7 +4,11 @@ import com.ngnmsn.template.domain.exception.SampleBusinessException;
 import com.ngnmsn.template.domain.model.sample.DisplayId;
 import com.ngnmsn.template.domain.model.sample.Sample;
 import com.ngnmsn.template.domain.model.SampleId;
+import com.ngnmsn.template.domain.model.CreatedAt;
+import com.ngnmsn.template.domain.model.UpdatedAt;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,8 +82,16 @@ class SampleTest {
     
     @Test
     void shouldReturnTrueWhenCanBeDeleted() {
-        // Given
-        var sample = createValidSample();
+        // Given - 1日前の日時を指定
+        var pastCreatedAt = new CreatedAt(LocalDateTime.now().minusDays(2));
+        var sample = new Sample(
+            new SampleId(1L),
+            new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new SampleText("テスト"),
+            new SampleNumber(100),
+            pastCreatedAt,
+            UpdatedAt.now()
+        );
         
         // When
         boolean canDelete = sample.canBeDeleted();
