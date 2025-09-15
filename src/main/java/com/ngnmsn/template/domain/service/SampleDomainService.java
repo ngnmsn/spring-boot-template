@@ -164,7 +164,7 @@ public class SampleDomainService {
     // プライベートメソッド
     private DisplayId generateDisplayId() {
         var sequence = String.format("%03d", generateSequenceNumber());
-        var randomPart = generateRandomAlphabetic(30);
+        var randomPart = generateRandomAlphabetic(29);
         return new DisplayId(sequence + randomPart);
     }
     

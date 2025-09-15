@@ -361,7 +361,7 @@ class SampleApplicationServiceTest {
     
     // Helper methods
     private Sample createValidSample() {
-        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText("テスト");
         var number = new SampleNumber(123);
         return new Sample(displayId, text, number);
@@ -369,7 +369,7 @@ class SampleApplicationServiceTest {
     
     private Sample createDeletableSample() {
         var sampleId = SampleId.generate();
-        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText("削除可能なテキスト");
         var number = new SampleNumber(123);
         var createdAt = new CreatedAt(java.time.LocalDateTime.now().minusDays(2)); // 2日前作成
@@ -381,7 +381,7 @@ class SampleApplicationServiceTest {
     
     private Sample createUndeletableSample() {
         var sampleId = SampleId.generate();
-        var displayId = new DisplayId("002ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("002ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText("削除不可能なテキスト");
         var number = new SampleNumber(456);
         var createdAt = CreatedAt.now(); // 今作成

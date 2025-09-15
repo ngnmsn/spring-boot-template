@@ -18,7 +18,7 @@ class SampleTest {
     @Test
     void shouldCreateSampleSuccessfully() {
         // Given
-        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText("テストテキスト");
         var number = new SampleNumber(123);
         
@@ -86,7 +86,7 @@ class SampleTest {
         var pastCreatedAt = new CreatedAt(LocalDateTime.now().minusDays(2));
         var sample = new Sample(
             new SampleId(1L),
-            new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123"),
             new SampleText("テスト"),
             new SampleNumber(100),
             pastCreatedAt,
@@ -115,7 +115,7 @@ class SampleTest {
     
     @Test
     void shouldThrowExceptionWhenConstructorArgumentsAreNull() {
-        var displayId = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText("テスト");
         var number = new SampleNumber(100);
         
@@ -159,7 +159,7 @@ class SampleTest {
     void shouldReturnCorrectTextLength() {
         var longText = "a".repeat(80);
         var sample = new Sample(
-            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWX123"),
             new SampleText(longText),
             new SampleNumber(100)
         );
@@ -185,7 +185,7 @@ class SampleTest {
     @Test
     void shouldThrowExceptionWhenIncrementExceedsLimit() {
         var sample = new Sample(
-            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWX123"),
             new SampleText("テスト"),
             new SampleNumber(9990)
         );
@@ -201,17 +201,17 @@ class SampleTest {
         var id3 = new SampleId(2L);
         
         var sample1 = new Sample(id1, 
-            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWX123"),
             new SampleText("テスト1"), new SampleNumber(100),
             CreatedAt.now(), UpdatedAt.now());
             
         var sample2 = new Sample(id2,
-            new DisplayId("456ABCDEFGHIJKLMNOPQRSTUVWXYZ5678"),
+            new DisplayId("456ABCDEFGHIJKLMNOPQRSTUVWX567"),
             new SampleText("テスト2"), new SampleNumber(200),
             CreatedAt.now(), UpdatedAt.now());
             
         var sample3 = new Sample(id3,
-            new DisplayId("789ABCDEFGHIJKLMNOPQRSTUVWXYZ9012"),
+            new DisplayId("789ABCDEFGHIJKLMNOPQRSTUVWX901"),
             new SampleText("テスト3"), new SampleNumber(300),
             CreatedAt.now(), UpdatedAt.now());
         
@@ -221,7 +221,7 @@ class SampleTest {
     
     private Sample createValidSample() {
         return new Sample(
-            new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123"),
             new SampleText("テスト"),
             new SampleNumber(100)
         );

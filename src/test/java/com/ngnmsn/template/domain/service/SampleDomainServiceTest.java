@@ -50,7 +50,7 @@ class SampleDomainServiceTest {
         
         // Then
         assertThat(displayId).isNotNull();
-        assertThat(displayId.getValue()).matches("^[0-9]{3}[A-Z]{30}$");
+        assertThat(displayId.getValue()).matches("^[0-9]{3}[A-Z]{29}$");
     }
     
     @Test
@@ -299,7 +299,7 @@ class SampleDomainServiceTest {
     void shouldGenerateRecommendationsForVariousSamples() {
         // 長いテキストのサンプル
         var longTextSample = new Sample(
-            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWXYZ1234"),
+            new DisplayId("123ABCDEFGHIJKLMNOPQRSTUVWX123"),
             new SampleText("a".repeat(80)),
             new SampleNumber(100)
         );
@@ -311,14 +311,14 @@ class SampleDomainServiceTest {
     
     // Helper methods
     private Sample createValidSample() {
-        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText("テスト");
         var number = new SampleNumber(123);
         return new Sample(displayId, text, number);
     }
     
     private Sample createDeletableSample(SampleId sampleId) {
-        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText("テスト");
         var number = new SampleNumber(123);
         var createdAt = new CreatedAt(LocalDateTime.now().minusDays(2)); // 2日前作成（削除可能）
@@ -327,7 +327,7 @@ class SampleDomainServiceTest {
     }
     
     private Sample createUndeletableSample(SampleId sampleId) {
-        var displayId = new DisplayId("002ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("002ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText(""); // 空テキスト（削除不可）
         var number = new SampleNumber(456);
         var createdAt = CreatedAt.now(); // 今作成（削除不可）
@@ -336,7 +336,7 @@ class SampleDomainServiceTest {
     }
     
     private Sample createSampleWithValues(String textValue, Integer numberValue) {
-        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText(textValue);
         var number = new SampleNumber(numberValue);
         return new Sample(displayId, text, number);
@@ -344,7 +344,7 @@ class SampleDomainServiceTest {
     
     private Sample createSampleWithCreatedAt(String textValue, Integer numberValue, CreatedAt createdAt) {
         var sampleId = SampleId.generate();
-        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWXYZ1234");
+        var displayId = new DisplayId("001ABCDEFGHIJKLMNOPQRSTUVWX123");
         var text = new SampleText(textValue);
         var number = new SampleNumber(numberValue);
         var updatedAt = UpdatedAt.now();
