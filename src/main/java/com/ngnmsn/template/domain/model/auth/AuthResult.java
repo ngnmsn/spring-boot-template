@@ -2,8 +2,6 @@ package com.ngnmsn.template.domain.model.auth;
 
 import java.util.List;
 import lombok.Data;
-import org.jooq.types.ULong;
-
 /**
  * AuthResultクラス
  */
@@ -11,7 +9,7 @@ import org.jooq.types.ULong;
 public class AuthResult {
 
   String displayId;
-  ULong userGroupId;
+  Long userGroupId;
   String loginId;
   String password;
   String userName;

@@ -5,7 +5,7 @@
   <div class="container" id="content">
     <h2>Sample</h2>
     <div id="form">
-      <form method="post" th:action="@{/sample/create/confirm}" th:object="${sampleCreateForm}">
+      <form method="post" th:action="@{/sample/create/confirm}" th:object="${createForm}">
         <div id="form-input">
           <label class="form-label" for="text1">TEXT1<br>
             <input class="form-control" id="text1" name="text1" th:errorclass="is-invalid"

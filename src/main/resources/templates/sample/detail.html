@@ -4,29 +4,29 @@
 <th:block layout:fragment="content">
   <div class="container" id="content">
     <h2>Sample</h2>
-    <div id="form" th:object="${sampleResult}">
+    <div id="form" th:object="${sample}">
       <div id="form-input">
         <label class="form-label" for="displayId">ID</label>
         <div id="displayId-component">
           <p id="displayId"
-             th:text="${#strings.substring(sampleDetailResponse.sampleResult.displayId,0,8)}"></p>
+             th:text="${#strings.substring(sample.displayId,0,8)}"></p>
           <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
              th:data-bs-title="IDフル桁コピー"
-             th:data-id="${sampleDetailResponse.sampleResult.displayId}"></i>
+             th:data-id="${sample.displayId}"></i>
         </div>
         <label class="form-label" for="text1">TEXT1</label>
-        <p id="text1" th:text="${sampleDetailResponse.sampleResult.text1}"></p>
+        <p id="text1" th:text="${sample.text1}"></p>
         <label class="form-label" for="num1">NUM1</label>
-        <p id="num1" th:text="${sampleDetailResponse.sampleResult.num1}"></p>
+        <p id="num1" th:text="${sample.num1}"></p>
       </div>
     </div>
     <a class="btn btn-secondary" role="button" th:href="@{/sample/search/return}"
        th:text="一覧"></a>
     <a class="btn btn-secondary" role="button"
-       th:href="@{/sample/{displayId}/update(displayId=${sampleDetailResponse.sampleResult.displayId})}"
+       th:href="@{/sample/{displayId}/update(displayId=${sample.displayId})}"
        th:text="更新"></a>
     <a class="btn btn-secondary" role="button"
-       th:href="@{/sample/{displayId}/delete/confirm(displayId=${sampleDetailResponse.sampleResult.displayId})}"
+       th:href="@{/sample/{displayId}/delete/confirm(displayId=${sample.displayId})}"
        th:text="削除"></a>
   </div>
 </th:block>

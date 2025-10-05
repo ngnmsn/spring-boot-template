@@ -30,8 +30,8 @@ public class SecurityConfig {
     http
         .formLogin((form) -> form
             .loginPage("/login")
+            .defaultSuccessUrl("/samples", true)
             .permitAll()
-            .defaultSuccessUrl("/sample")
             .usernameParameter("loginId")
             .passwordParameter("password")
         )

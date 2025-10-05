@@ -8,16 +8,16 @@
       <div class="alert alert-warning" role="alert" th:if="${alertMessage}"
            th:text="${alertMessage}"></div>
       <form method="post"
-            th:action="@{/sample/{displayId}/update/confirm(displayId=${sampleUpdateResponse.sampleUpdateDisplayId})}"
-            th:object="${sampleUpdateForm}">
+            th:action="@{/sample/{displayId}/update/confirm(displayId=${sample.displayId})}"
+            th:object="${updateForm}">
         <div id="form-input">
           <label class="form-label" for="sampleUpdateDisplayId">ID</label>
           <div id="displayId-component">
             <p id="sampleUpdateDisplayId"
-               th:text="${#strings.substring(sampleUpdateResponse.sampleUpdateDisplayId,0,8)}"></p>
+               th:text="${#strings.substring(sample.displayId,0,8)}"></p>
             <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
                th:data-bs-title="IDフル桁コピー"
-               th:data-id="${sampleUpdateResponse.sampleUpdateDisplayId}"></i>
+               th:data-id="${sample.displayId}"></i>
           </div>
           <label class="form-label" for="text1">TEXT1<br>
             <input class="form-control" id="text1" name="text1" th:errorclass="is-invalid"
@@ -33,7 +33,7 @@
           </label><br>
         </div>
         <a class="btn btn-secondary" role="button"
-           th:href="@{/sample/{displayId}(displayId=${sampleUpdateResponse.sampleUpdateDisplayId})}"
+           th:href="@{/sample/{displayId}(displayId=${sample.displayId})}"
            th:text="キャンセル"></a>
         <input class="btn btn-primary" type="submit" value="確認">
       </form>
