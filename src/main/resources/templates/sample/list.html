@@ -6,7 +6,7 @@
     <h2>Sample</h2>
     <div id="search">
       <form class="bg-info" id="search-form" method="get" th:action="@{/sample/search}"
-            th:object="${sampleSearchForm}">
+            th:object="${searchForm}">
         <h4>Search</h4>
         <div id="search-input">
           <label class="form-label" for="displayId">ID<br>
@@ -28,17 +28,17 @@
       </div>
     </div>
     <div id="pagination"
-         th:if="!${#lists.isEmpty(sampleSearchResponse.sampleResults.sampleResultList)}">
+         th:if="!${#lists.isEmpty(results.results)}">
       <div id="pagination-number">
-        <p th:text="|全${sampleSearchResponse.sampleResults.resultCount}件|"></p>
+        <p th:text="|全${results.totalCount}件|"></p>
       </div>
       <nav>
         <ul class="pagination">
           <th:block
-              th:each="i : ${#numbers.sequence(1, (sampleSearchResponse.sampleResults.resultCount / sampleSearchForm.maxNumPerPage) + 1)}">
+              th:each="i : ${#numbers.sequence(1, results.totalPages)}">
             <li class="page-item"><a class="page-link"
-                                     th:classappend="${i == sampleSearchForm.page} ? active"
-                                     th:href="|/sample/search?displayId=${sampleSearchForm.displayId}&text1=${sampleSearchForm.text1}&page=${i}&maxNumPerPage=${sampleSearchForm.maxNumPerPage}|"
+                                     th:classappend="${i == searchForm.page} ? active"
+                                     th:href="|/sample/search?displayId=${searchForm.displayId}&text1=${searchForm.text1}&page=${i}&maxNumPerPage=${searchForm.maxNumPerPage}|"
                                      th:text="${i}"></a></li>
           </th:block>
         </ul>
@@ -50,16 +50,16 @@
         <th scope="col">TEXT1</th>
         <th scope="col">NUM1</th>
       </tr>
-      <th:block th:if="!${#lists.isEmpty(sampleSearchResponse.sampleResults.sampleResultList)}">
-        <tr th:each="sampleResult : ${sampleSearchResponse.sampleResults.sampleResultList}">
+      <th:block th:if="!${#lists.isEmpty(results.results)}">
+        <tr th:each="sample : ${results.results}">
           <td>
-            <a th:href="@{/sample/{displayId}(displayId=${sampleResult.displayId})}"
-               th:text="${#strings.substring(sampleResult.displayId,0,8)}"></a>
+            <a th:href="@{/sample/{displayId}(displayId=${sample.displayId})}"
+               th:text="${#strings.substring(sample.displayId,0,8)}"></a>
             <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
-               th:data-bs-title="IDフル桁コピー" th:data-id="${sampleResult.displayId}"></i>
+               th:data-bs-title="IDフル桁コピー" th:data-id="${sample.displayId}"></i>
           </td>
-          <td th:text="${sampleResult.text1}"></td>
-          <td th:text="${sampleResult.num1}"></td>
+          <td th:text="${sample.text1}"></td>
+          <td th:text="${sample.num1}"></td>
         </tr>
       </th:block>
     </table>

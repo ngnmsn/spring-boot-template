@@ -5,6 +5,7 @@ import com.ngnmsn.template.application.command.SampleUpdateCommand;
 import com.ngnmsn.template.application.query.SampleSearchQuery;
 import com.ngnmsn.template.application.response.SampleDetailResponse;
 import com.ngnmsn.template.application.dto.SampleUpdateDto;
+import com.ngnmsn.template.application.exception.SampleApplicationException;
 import com.ngnmsn.template.application.exception.SampleNotFoundException;
 import com.ngnmsn.template.application.exception.SampleValidationException;
 import com.ngnmsn.template.domain.exception.SampleBusinessException;
@@ -88,7 +89,7 @@ public class SampleApplicationService {
         } catch (IllegalArgumentException e) {
             throw new SampleValidationException("入力値が不正です: " + e.getMessage(), e);
         } catch (SampleBusinessException e) {
-            throw e; // ドメイン例外はそのまま再スロー
+            throw new SampleApplicationException(e.getMessage(), e);
         }
     }
     
@@ -116,12 +117,12 @@ public class SampleApplicationService {
             // レスポンス作成
             var recommendations = sampleDomainService.generateRecommendations(sample);
             return SampleDetailResponse.from(sample, recommendations);
-            
+
         } catch (SampleBusinessException e) {
-            throw e; // ドメイン例外はそのまま再スロー
+            throw new SampleApplicationException(e.getMessage(), e);
         }
     }
-    
+
     /**
      * サンプル削除ユースケース
      */
@@ -129,14 +130,18 @@ public class SampleApplicationService {
         var sampleId = new SampleId(id);
         var sample = sampleRepository.findById(sampleId)
             .orElseThrow(() -> new SampleNotFoundException("サンプルが見つかりません: " + id));
-        
-        // ドメインオブジェクトのビジネスロジックで削除可能かチェック
-        if (!sample.canBeDeleted()) {
-            throw new SampleBusinessException(
-                "このサンプルは削除できません。削除条件を満たしていません。");
+
+        try {
+            // ドメインオブジェクトのビジネスロジックで削除可能かチェック
+            if (!sample.canBeDeleted()) {
+                throw new SampleBusinessException(
+                    "このサンプルは削除できません。削除条件を満たしていません。");
+            }
+
+            sampleRepository.deleteById(sampleId);
+        } catch (SampleBusinessException e) {
+            throw new SampleApplicationException(e.getMessage(), e);
         }
-        
-        sampleRepository.deleteById(sampleId);
     }
     
     /**

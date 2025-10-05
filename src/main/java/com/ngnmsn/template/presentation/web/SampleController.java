@@ -4,6 +4,7 @@ import com.ngnmsn.template.application.service.SampleApplicationService;
 import com.ngnmsn.template.application.query.SampleSearchQuery;
 import com.ngnmsn.template.application.command.SampleCreateCommand;
 import com.ngnmsn.template.application.command.SampleUpdateCommand;
+import com.ngnmsn.template.application.exception.SampleApplicationException;
 import com.ngnmsn.template.application.exception.SampleNotFoundException;
 import com.ngnmsn.template.application.exception.SampleValidationException;
 import com.ngnmsn.template.presentation.form.sample.SampleSearchForm;
@@ -35,7 +36,7 @@ public class SampleController {
      */
     @GetMapping("/samples")
     public String search(@ModelAttribute SampleSearchForm form, Model model) {
-        // Form → Query 変換（単純なデータ変換のみ）
+        // Form → Query 変換(単純なデータ変換のみ)
         var query = new SampleSearchQuery(
             form.getDisplayId(),
             form.getText1(),
@@ -46,11 +47,11 @@ public class SampleController {
         // アプリケーションサービスに委譲
         var results = sampleApplicationService.search(query);
         
-        // モデルへの設定（単純な設定のみ）
+        // モデルへの設定(単純な設定のみ)
         model.addAttribute("results", results);
         model.addAttribute("searchForm", form);
         
-        return "sample/search";
+        return "sample/list";
     }
     
     /**
@@ -99,13 +100,14 @@ public class SampleController {
                         Model model,
                         RedirectAttributes redirectAttributes) {
         
-        // バリデーションエラーの確認（Spring Validationの結果のみ）
+        // バリデーションエラーの確認(Spring Validationの結果のみ)
         if (result.hasErrors()) {
+            model.addAttribute("createForm", form);
             return "sample/create";
         }
         
         try {
-            // Form → Command 変換（単純なデータ変換のみ）
+            // Form → Command 変換(単純なデータ変換のみ)
             var command = new SampleCreateCommand(form.getText1(), form.getNum1());
             
             // アプリケーションサービスに委譲
@@ -121,11 +123,19 @@ public class SampleController {
         } catch (SampleValidationException e) {
             // アプリケーション例外をプレゼンテーション用メッセージに変換
             model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("createForm", form);
             return "sample/create";
-            
+
+        } catch (SampleApplicationException e) {
+            // ビジネス例外をプレゼンテーション用メッセージに変換
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("createForm", form);
+            return "sample/create";
+
         } catch (Exception e) {
             // 予期しない例外をプレゼンテーション用メッセージに変換
             model.addAttribute("errorMessage", "処理中にエラーが発生しました");
+            model.addAttribute("createForm", form);
             return "sample/create";
         }
     }
@@ -143,18 +153,18 @@ public class SampleController {
         try {
             var sample = sampleApplicationService.findById(id);
             
-            // アプリケーションサービスを使用してDTO取得（直接アクセスを回避）
+            // アプリケーションサービスを使用してDTO取得(直接アクセスを回避)
             var sampleDto = sampleApplicationService.convertToUpdateDto(sample);
             
-            // DTOからFormに変換（プレゼンテーション層の責務）
+            // DTOからFormに変換(プレゼンテーション層の責務)
             var editForm = new SampleUpdateForm();
             editForm.setText1(sampleDto.getText1());
             editForm.setNum1(sampleDto.getNum1());
             
             model.addAttribute("sample", sample);
             model.addAttribute("updateForm", editForm);
-            
-            return "sample/edit";
+
+            return "sample/update";
             
         } catch (SampleNotFoundException e) {
             model.addAttribute("errorMessage", "サンプルが見つかりません");
@@ -266,7 +276,7 @@ public class SampleController {
      * 一括削除処理
      */
     @PostMapping("/samples/bulk-delete")
-    public String bulkDelete(@RequestParam("selectedIds") List<Long> selectedIds,
+    public String bulkDelete(@RequestParam(value = "selectedIds", required = false) List<Long> selectedIds,
                             RedirectAttributes redirectAttributes) {
         
         // 基本的なパラメータ検証

@@ -3,6 +3,7 @@ package com.ngnmsn.template.application.service;
 import com.ngnmsn.template.application.command.SampleCreateCommand;
 import com.ngnmsn.template.application.command.SampleUpdateCommand;
 import com.ngnmsn.template.application.query.SampleSearchQuery;
+import com.ngnmsn.template.application.exception.SampleApplicationException;
 import com.ngnmsn.template.application.exception.SampleNotFoundException;
 import com.ngnmsn.template.application.exception.SampleValidationException;
 import com.ngnmsn.template.domain.exception.SampleBusinessException;
@@ -89,13 +90,13 @@ class SampleApplicationServiceTest {
     void shouldRethrowBusinessExceptionWhenCreateSample() {
         // Given
         var command = new SampleCreateCommand("重複テキスト", 123);
-        
+
         when(sampleDomainService.createSampleWithDuplicationCheck("重複テキスト", 123))
             .thenThrow(new SampleBusinessException("同じテキストが既に存在します"));
-        
+
         // When & Then
         assertThatThrownBy(() -> applicationService.createSample(command))
-            .isInstanceOf(SampleBusinessException.class)
+            .isInstanceOf(SampleApplicationException.class)
             .hasMessage("同じテキストが既に存在します");
     }
     
@@ -218,15 +219,15 @@ class SampleApplicationServiceTest {
         var id = 1L;
         var command = new SampleUpdateCommand("無効なテキスト", 999);
         var sample = spy(createValidSample());
-        
+
         when(sampleRepository.findById(new SampleId(id)))
             .thenReturn(Optional.of(sample));
         doThrow(new SampleBusinessException("更新できません"))
             .when(sample).updateText("無効なテキスト");
-        
+
         // When & Then
         assertThatThrownBy(() -> applicationService.updateSample(id, command))
-            .isInstanceOf(SampleBusinessException.class)
+            .isInstanceOf(SampleApplicationException.class)
             .hasMessage("更新できません");
     }
     
@@ -266,13 +267,13 @@ class SampleApplicationServiceTest {
         var id = 1L;
         var sampleId = new SampleId(id);
         var sample = createUndeletableSample();
-        
+
         when(sampleRepository.findById(sampleId))
             .thenReturn(Optional.of(sample));
-        
+
         // When & Then
         assertThatThrownBy(() -> applicationService.deleteSample(id))
-            .isInstanceOf(SampleBusinessException.class)
+            .isInstanceOf(SampleApplicationException.class)
             .hasMessage("このサンプルは削除できません。削除条件を満たしていません。");
     }
     
