@@ -5,7 +5,7 @@
   <div class="container" id="content">
     <h2>Sample</h2>
     <div id="search">
-      <form class="bg-info" id="search-form" method="get" th:action="@{/sample/search}"
+      <form class="bg-info" id="search-form" method="get" th:action="@{/samples}"
             th:object="${searchForm}">
         <h4>Search</h4>
         <div id="search-input">
@@ -24,7 +24,7 @@
     </div>
     <div id="under-search">
       <div id="under-search-child">
-        <a class="btn btn-secondary" role="button" th:href="@{/sample/create}" th:text="作成"></a>
+        <a class="btn btn-secondary" role="button" th:href="@{/samples/create}" th:text="作成"></a>
       </div>
     </div>
     <div id="pagination"
@@ -38,7 +38,7 @@
               th:each="i : ${#numbers.sequence(1, results.totalPages)}">
             <li class="page-item"><a class="page-link"
                                      th:classappend="${i == searchForm.page} ? active"
-                                     th:href="|/sample/search?displayId=${searchForm.displayId}&text1=${searchForm.text1}&page=${i}&maxNumPerPage=${searchForm.maxNumPerPage}|"
+                                     th:href="|/samples?displayId=${searchForm.displayId}&text1=${searchForm.text1}&page=${i}&maxNumPerPage=${searchForm.maxNumPerPage}|"
                                      th:text="${i}"></a></li>
           </th:block>
         </ul>
@@ -53,13 +53,13 @@
       <th:block th:if="!${#lists.isEmpty(results.results)}">
         <tr th:each="sample : ${results.results}">
           <td>
-            <a th:href="@{/sample/{displayId}(displayId=${sample.displayId})}"
-               th:text="${#strings.substring(sample.displayId,0,8)}"></a>
+            <a th:href="@{/samples/{id}(id=${sample.id.value})}"
+               th:text="${#strings.substring(sample.displayId.value,0,8)}"></a>
             <i class="bi bi-copy" data-bs-toggle="tooltip" id="copy"
-               th:data-bs-title="IDフル桁コピー" th:data-id="${sample.displayId}"></i>
+               th:data-bs-title="IDフル桁コピー" th:data-id="${sample.displayId.value}"></i>
           </td>
-          <td th:text="${sample.text1}"></td>
-          <td th:text="${sample.num1}"></td>
+          <td th:text="${sample.text1.value}"></td>
+          <td th:text="${sample.num1.value}"></td>
         </tr>
       </th:block>
     </table>

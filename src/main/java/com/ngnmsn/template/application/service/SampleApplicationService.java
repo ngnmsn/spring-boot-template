@@ -59,12 +59,13 @@ public class SampleApplicationService {
     @Transactional(readOnly = true)
     public SampleSearchResults search(SampleSearchQuery query) {
         var criteria = new SampleSearchCriteria(
-            query.getDisplayId() != null ? new DisplayId(query.getDisplayId()) : null,
+            query.getDisplayId() != null && !query.getDisplayId().isEmpty()
+                ? new DisplayId(query.getDisplayId()) : null,
             query.getText1(),
             query.getPage(),
             query.getMaxNumPerPage()
         );
-        
+
         return sampleRepository.search(criteria);
     }
     
@@ -169,12 +170,13 @@ public class SampleApplicationService {
     @Transactional(readOnly = true)
     public SampleStatistics getStatistics(SampleSearchQuery query) {
         var criteria = new SampleSearchCriteria(
-            query.getDisplayId() != null ? new DisplayId(query.getDisplayId()) : null,
+            query.getDisplayId() != null && !query.getDisplayId().isEmpty()
+                ? new DisplayId(query.getDisplayId()) : null,
             query.getText1(),
             1, // 統計用は全件取得
             Integer.MAX_VALUE
         );
-        
+
         return sampleDomainService.calculateStatistics(criteria);
     }
     
